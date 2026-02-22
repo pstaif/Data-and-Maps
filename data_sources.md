@@ -1,0 +1,209 @@
+# Data Sources
+
+This document lists the data sources used across this repository, with connection examples.
+
+---
+
+## 1. U.S. Census Bureau — American Community Survey (ACS)
+
+The ACS is an annual survey conducted by the U.S. Census Bureau that provides detailed demographic, social, economic, and housing data for every community in the United States. Data is available at many geographic levels (state, county, tract, block group) and includes thousands of variables covering population, income, employment, education, race, and more.
+
+**How it works:** You make HTTP GET requests to the Census REST API, specifying the dataset (e.g. `acs/acs5`), the variables you want, and the geography. Results come back as JSON arrays.
+
+- **API Documentation:** [https://www.census.gov/data/developers/data-sets.html](https://www.census.gov/data/developers/data-sets.html)
+- **Variable Explorer:** [https://api.census.gov/data/2022/acs/acs5/variables.html](https://api.census.gov/data/2022/acs/acs5/variables.html)
+- **API Key Signup:** [https://api.census.gov/data/key_signup.html](https://api.census.gov/data/key_signup.html)
+- **API Key used in this repo:** `942e0a44c121ca03ced84b727df9b004f1f1367d`
+
+```python
+from census import Census
+
+CENSUS_API_KEY = "942e0a44c121ca03ced84b727df9b004f1f1367d"
+c = Census(CENSUS_API_KEY)
+
+# Fetch total population (B01003_001E) by state from ACS 5-Year 2022
+data = c.acs5.state(
+    fields=("NAME", "B01003_001E"),
+    state_fips="*",
+    year=2022
+)
+
+# data is a list of dicts, e.g.:
+# [{'NAME': 'Alabama', 'B01003_001E': 5024279, 'state': '01'}, ...]
+```
+
+**Alternative — direct REST API (no library needed):**
+
+```python
+import requests
+
+CENSUS_API_KEY = "942e0a44c121ca03ced84b727df9b004f1f1367d"
+
+url = "https://api.census.gov/data/2022/acs/acs5"
+params = {
+    "get": "NAME,B01003_001E",   # Total Population
+    "for": "state:*",            # All states
+    "key": CENSUS_API_KEY
+}
+
+response = requests.get(url, params=params)
+data = response.json()
+# First row is headers, rest is data
+# [['NAME', 'B01003_001E', 'state'], ['Alabama', '5024279', '01'], ...]
+```
+
+---
+
+## 2. World Bank — Indicators API v2
+
+The World Bank Indicators API provides access to hundreds of development indicators (GDP, population, life expectancy, trade, etc.) for every country and region in the world. Data spans decades and is updated regularly. No API key is required — it's completely open.
+
+**How it works:** You make GET requests specifying the country (ISO codes or `all`), the indicator code (e.g. `NY.GDP.MKTP.CD` for GDP), and optional filters like date range. Results come back as JSON with a metadata header and a data array.
+
+- **API Documentation:** [https://datahelpdesk.worldbank.org/knowledgebase/articles/889392](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392)
+- **Indicator List:** [https://api.worldbank.org/v2/indicator?format=json&per_page=50](https://api.worldbank.org/v2/indicator?format=json&per_page=50)
+- **API Key:** None required (open access)
+
+```python
+import requests
+import pandas as pd
+
+# Fetch GDP (current US$) for all countries, year 2023
+url = "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD"
+params = {
+    "format": "json",
+    "per_page": 300,
+    "date": "2023"
+}
+
+response = requests.get(url, params=params)
+raw = response.json()
+
+# raw[0] = metadata, raw[1] = list of records
+records = raw[1]
+
+# Build a clean DataFrame
+rows = []
+for r in records:
+    if r["value"] is not None:
+        rows.append({
+            "country": r["country"]["value"],
+            "iso3": r["countryiso3code"],
+            "year": r["date"],
+            "gdp": r["value"]
+        })
+
+df = pd.DataFrame(rows)
+print(df.sort_values("gdp", ascending=False).head(10))
+```
+
+**Common indicator codes:**
+
+| Code | Description |
+|------|-------------|
+| `NY.GDP.MKTP.CD` | GDP (current US$) |
+| `SP.POP.TOTL` | Total Population |
+| `SP.DYN.LE00.IN` | Life Expectancy at Birth |
+| `SI.POV.DDAY` | Poverty Headcount Ratio |
+| `SL.UEM.TOTL.ZS` | Unemployment Rate |
+
+---
+
+## 3. Eurostat — Statistics JSON API
+
+Eurostat is the statistical office of the European Union. Its JSON-stat REST API provides open access to hundreds of datasets covering demographics, economy, crime, migration, and more for all EU/EEA countries. **No API key is required** — all data is freely available.
+
+**How it works:** You make HTTP GET requests specifying the dataset code, output format (`JSON`), and filter dimensions (time period, geography, category, etc.). Results come back in JSON-stat 2.0 format with a flat `value` object keyed by position indices, plus `dimension` metadata to decode them.
+
+- **API Documentation:** [https://wikis.ec.europa.eu/display/EUROSTATHELP/API+Statistics](https://wikis.ec.europa.eu/display/EUROSTATHELP/API+Statistics)
+- **Data Browser (find dataset codes):** [https://ec.europa.eu/eurostat/databrowser/](https://ec.europa.eu/eurostat/databrowser/)
+- **API Key:** None required (open access)
+
+```python
+import requests
+import pandas as pd
+
+# ── Crime: intentional homicide per 100k inhabitants for major EU countries ──
+EUROSTAT_BASE = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data"
+
+COUNTRIES = ["DE", "FR", "IT", "ES", "NL", "BE", "SE", "AT", "PL", "PT",
+             "CZ", "DK", "FI", "IE", "EL", "RO", "HU", "BG", "HR"]
+
+crime_url = f"{EUROSTAT_BASE}/crim_off_cat"
+crime_params = {
+    "format": "JSON",
+    "lang": "en",
+    "sinceTimePeriod": "2022",
+    "iccs": "ICCS0101",       # Intentional homicide
+    "unit": "P_HTHAB",        # Per 100 000 inhabitants
+    "geo": COUNTRIES,
+}
+
+resp = requests.get(crime_url, params=crime_params)
+data = resp.json()
+
+# Decode JSON-stat → DataFrame
+geo_labels = data["dimension"]["geo"]["category"]["label"]   # {"DE": "Germany", ...}
+geo_index  = data["dimension"]["geo"]["category"]["index"]   # {"DE": 0, ...}
+time_index = data["dimension"]["time"]["category"]["index"]  # {"2022": 0, "2023": 1}
+n_geo  = len(geo_index)
+n_time = len(time_index)
+
+rows = []
+for geo_code, gi in geo_index.items():
+    for year, ti in time_index.items():
+        pos = str(gi * n_time + ti)
+        val = data["value"].get(pos)
+        if val is not None:
+            rows.append({"country": geo_labels[geo_code], "iso2": geo_code,
+                         "year": year, "homicide_rate": val})
+
+df_crime = pd.DataFrame(rows)
+print(df_crime.sort_values("homicide_rate", ascending=False).head(10))
+```
+
+```python
+# ── Migration: total immigration by country ──
+migr_url = f"{EUROSTAT_BASE}/migr_imm1ctz"
+migr_params = {
+    "format": "JSON",
+    "lang": "en",
+    "sinceTimePeriod": "2022",
+    "citizen": "TOTAL",
+    "age": "TOTAL",
+    "sex": "T",
+    "geo": COUNTRIES,
+}
+
+resp = requests.get(migr_url, params=migr_params)
+data = resp.json()
+
+# Same decoding pattern as above
+geo_labels = data["dimension"]["geo"]["category"]["label"]
+geo_index  = data["dimension"]["geo"]["category"]["index"]
+time_index = data["dimension"]["time"]["category"]["index"]
+n_geo  = len(geo_index)
+n_time = len(time_index)
+
+rows = []
+for geo_code, gi in geo_index.items():
+    for year, ti in time_index.items():
+        pos = str(gi * n_time + ti)
+        val = data["value"].get(pos)
+        if val is not None:
+            rows.append({"country": geo_labels[geo_code], "iso2": geo_code,
+                         "year": year, "immigrants": val})
+
+df_migr = pd.DataFrame(rows)
+print(df_migr.sort_values("immigrants", ascending=False).head(10))
+```
+
+**Common dataset codes:**
+
+| Code | Description |
+|------|-------------|
+| `crim_off_cat` | Police-recorded offences by category |
+| `migr_imm1ctz` | Immigration by citizenship, age, sex |
+| `migr_asyappctza` | Asylum applicants by citizenship |
+| `demo_pjan` | Population on 1 January |
+| `nama_10_gdp` | GDP and main components |
