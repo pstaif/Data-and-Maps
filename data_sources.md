@@ -102,10 +102,18 @@ print(df.sort_values("gdp", ascending=False).head(10))
 | Code | Description |
 |------|-------------|
 | `NY.GDP.MKTP.CD` | GDP (current US$) |
+| `NY.GDP.PCAP.CD` | GDP per capita (current US$) |
 | `SP.POP.TOTL` | Total Population |
 | `SP.DYN.LE00.IN` | Life Expectancy at Birth |
 | `SI.POV.DDAY` | Poverty Headcount Ratio |
 | `SL.UEM.TOTL.ZS` | Unemployment Rate |
+| `DT.ODA.ODAT.CD` | Net ODA Received (current US$) |
+| `SL.TLF.CACT.ZS` | Labour Force Participation Rate, total (% of pop. 15+) |
+| `SL.TLF.CACT.MA.ZS` | Labour Force Participation Rate, male (%) |
+| `SL.TLF.CACT.FE.ZS` | Labour Force Participation Rate, female (%) |
+| `NV.AGR.TOTL.ZS` | Agriculture, value added (% of GDP) |
+| `NV.IND.TOTL.ZS` | Industry, value added (% of GDP) |
+| `NV.SRV.TOTL.ZS` | Services, value added (% of GDP) |
 
 ---
 
@@ -287,3 +295,47 @@ print(df.head())
 | ICIO Tables | Inter-industry intermediate consumption flows (45 ISIC Rev.4 sectors × 76 countries) |
 | LFS (Labour Force Survey) | Employment, hours worked, earnings by age, gender, industry |
 | EAG (Education at a Glance) | Earnings by education level, age, and gender |
+
+---
+
+## 6. OpenStreetMap — Overpass API
+
+OpenStreetMap (OSM) is a collaborative, open-source map of the world. The **Overpass API** allows programmatic queries against the full OSM database to extract geographic features (roads, railways, land use, buildings, etc.) by tag, area, or bounding box. **No API key is required.**
+
+**How it works:** You POST an Overpass QL query to the API endpoint. Results come back as JSON with an `elements` array containing nodes, ways, and relations.
+
+- **Overpass Turbo (interactive):** [https://overpass-turbo.eu/](https://overpass-turbo.eu/)
+- **API Endpoint:** `https://overpass-api.de/api/interpreter`
+- **Wiki (tag reference):** [https://wiki.openstreetmap.org/wiki/Map_features](https://wiki.openstreetmap.org/wiki/Map_features)
+- **API Key:** None required (open access, but please be polite with rate limits)
+
+```python
+import requests
+
+OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+
+# Count major roads in a bounding box (south, west, north, east)
+query = """
+[out:json][timeout:60];
+(
+  nwr["highway"~"motorway|trunk|primary"](5.6,97.3,20.5,105.7);
+);
+out count;
+"""
+
+r = requests.post(OVERPASS_URL, data={"data": query}, timeout=120)
+data = r.json()
+count = int(data["elements"][0]["tags"]["total"])
+print(f"Major roads: {count}")
+```
+
+**Common tag filters used in this repo:**
+
+| Tag Filter | Description |
+|-----------|-------------|
+| `"highway"~"motorway\|trunk\|primary"` | Major roads (motorways, trunk, primary) |
+| `"railway"="rail"` | Railway lines |
+| `"landuse"="industrial"` | Industrial land use zones |
+| `"landuse"="quarry"` | Mining / quarry sites |
+| `"landuse"="farmland"` | Agricultural farmland |
+| `"landuse"="farmyard"` | Farm building complexes |
