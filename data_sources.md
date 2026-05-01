@@ -207,3 +207,83 @@ print(df_migr.sort_values("immigrants", ascending=False).head(10))
 | `migr_asyappctza` | Asylum applicants by citizenship |
 | `demo_pjan` | Population on 1 January |
 | `nama_10_gdp` | GDP and main components |
+
+---
+
+## 4. Bureau of Economic Analysis (BEA) — GDP-by-Industry API
+
+The BEA provides detailed economic accounts for the U.S. economy, including GDP broken down by industry sector (value added, gross output, compensation, etc.). The REST API requires a **free API key** obtained by registering.
+
+**How it works:** You make HTTP GET requests specifying the `DataSetName` (e.g. `GDPbyIndustry`), `TableID`, `Frequency`, `Year`, and `Industry` filters. Results come back as JSON with a `Data` array of records.
+
+- **API Documentation:** [https://apps.bea.gov/API/docs/index.htm](https://apps.bea.gov/API/docs/index.htm)
+- **API Key Signup:** [https://apps.bea.gov/api/signup/](https://apps.bea.gov/api/signup/)
+- **API Key used in this repo:** `F784B0EB-9FE2-4CFD-B650-2F510B52025C`
+
+```python
+import requests
+import pandas as pd
+
+BEA_API_KEY = "F784B0EB-9FE2-4CFD-B650-2F510B52025C"
+
+url = "https://apps.bea.gov/api/data/"
+params = {
+    "UserID":      BEA_API_KEY,
+    "method":      "GetData",
+    "DataSetName": "GDPbyIndustry",
+    "TableID":     "1",          # Value Added by Industry
+    "Frequency":   "A",          # Annual
+    "Year":        "2022,2023",
+    "Industry":    "ALL",
+    "ResultFormat":"JSON",
+}
+
+response = requests.get(url, params=params)
+data = response.json()
+
+# Navigate to the data records
+records = data["BEAAPI"]["Results"]["Data"]
+df = pd.DataFrame(records)
+print(df[["Year", "IndustryDescription", "DataValue"]].head(20))
+```
+
+**Common parameters:**
+
+| Parameter | Values | Description |
+|-----------|--------|-------------|
+| `TableID` | `1` | Value Added by Industry |
+| `TableID` | `5` | Gross Output by Industry |
+| `TableID` | `6` | Components of Value Added by Industry |
+| `TableID` | `10` | Real Value Added by Industry |
+| `Frequency` | `A`, `Q` | Annual, Quarterly |
+| `Industry` | `ALL`, `11`, `21`, `31-33`, etc. | All industries or specific NAICS codes |
+
+---
+
+## 5. OECD — Input-Output & Labour Statistics
+
+The OECD provides harmonised economic statistics across member countries, including Inter-Country Input-Output (ICIO) tables and Labour Force Statistics. Data can be accessed via the OECD Data Explorer REST API or downloaded as CSV/SDMX.
+
+- **Data Explorer:** [https://data-explorer.oecd.org/](https://data-explorer.oecd.org/)
+- **ICIO Tables:** [https://www.oecd.org/sti/ind/inter-country-input-output-tables.htm](https://www.oecd.org/sti/ind/inter-country-input-output-tables.htm)
+- **API Documentation:** [https://data-explorer.oecd.org/help](https://data-explorer.oecd.org/help)
+
+```python
+import requests
+import pandas as pd
+
+# Example: fetch labour force statistics
+url = "https://sdmx.oecd.org/public/rest/data/OECD.ELS.SAE,DSD_LFS@DF_LFS_INDIC,1.0/USA..._T._T.Y._T.A"
+headers = {"Accept": "application/vnd.sdmx.data+csv;version=2"}
+r = requests.get(url, headers=headers, timeout=30)
+df = pd.read_csv(io.StringIO(r.text))
+print(df.head())
+```
+
+**Key datasets used in this repo:**
+
+| Dataset | Description |
+|---------|-------------|
+| ICIO Tables | Inter-industry intermediate consumption flows (45 ISIC Rev.4 sectors × 76 countries) |
+| LFS (Labour Force Survey) | Employment, hours worked, earnings by age, gender, industry |
+| EAG (Education at a Glance) | Earnings by education level, age, and gender |

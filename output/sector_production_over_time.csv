@@ -1,0 +1,362 @@
+Year,Sector,ValueAdded
+2005,Agriculture,138
+2006,Agriculture,134
+2007,Agriculture,152
+2008,Agriculture,173
+2009,Agriculture,151
+2010,Agriculture,178
+2011,Agriculture,205
+2012,Agriculture,193
+2013,Agriculture,229
+2014,Agriculture,219
+2015,Agriculture,196
+2016,Agriculture,191
+2017,Agriculture,187
+2018,Agriculture,183
+2019,Agriculture,185
+2020,Agriculture,203
+2021,Agriculture,251
+2022,Agriculture,296
+2023,Agriculture,259
+2005,Mining,290
+2006,Mining,340
+2007,Mining,380
+2008,Mining,484
+2009,Mining,288
+2010,Mining,354
+2011,Mining,435
+2012,Mining,420
+2013,Mining,452
+2014,Mining,407
+2015,Mining,233
+2016,Mining,217
+2017,Mining,302
+2018,Mining,389
+2019,Mining,322
+2020,Mining,221
+2021,Mining,386
+2022,Mining,574
+2023,Mining,522
+2005,Utilities,303
+2006,Utilities,336
+2007,Utilities,354
+2008,Utilities,366
+2009,Utilities,381
+2010,Utilities,376
+2011,Utilities,390
+2012,Utilities,394
+2013,Utilities,410
+2014,Utilities,435
+2015,Utilities,417
+2016,Utilities,426
+2017,Utilities,442
+2018,Utilities,442
+2019,Utilities,468
+2020,Utilities,391
+2021,Utilities,433
+2022,Utilities,490
+2023,Utilities,502
+2005,Construction,668
+2006,Construction,703
+2007,Construction,698
+2008,Construction,642
+2009,Construction,543
+2010,Construction,527
+2011,Construction,544
+2012,Construction,579
+2013,Construction,607
+2014,Construction,651
+2015,Construction,707
+2016,Construction,749
+2017,Construction,793
+2018,Construction,846
+2019,Construction,891
+2020,Construction,862
+2021,Construction,919
+2022,Construction,1036
+2023,Construction,1151
+2005,Manufacturing,1613
+2006,Manufacturing,1699
+2007,Manufacturing,1785
+2008,Manufacturing,1772
+2009,Manufacturing,1687
+2010,Manufacturing,1837
+2011,Manufacturing,1927
+2012,Manufacturing,1991
+2013,Manufacturing,2050
+2014,Manufacturing,2104
+2015,Manufacturing,2145
+2016,Manufacturing,2102
+2017,Manufacturing,2197
+2018,Manufacturing,2328
+2019,Manufacturing,2382
+2020,Manufacturing,2284
+2021,Manufacturing,2686
+2022,Manufacturing,2984
+2023,Manufacturing,3056
+2005,Wholesale Trade,785
+2006,Wholesale Trade,832
+2007,Wholesale Trade,865
+2008,Wholesale Trade,860
+2009,Wholesale Trade,827
+2010,Wholesale Trade,873
+2011,Wholesale Trade,911
+2012,Wholesale Trade,953
+2013,Wholesale Trade,990
+2014,Wholesale Trade,1057
+2015,Wholesale Trade,1100
+2016,Wholesale Trade,1118
+2017,Wholesale Trade,1156
+2018,Wholesale Trade,1199
+2019,Wholesale Trade,1231
+2020,Wholesale Trade,1211
+2021,Wholesale Trade,1354
+2022,Wholesale Trade,1517
+2023,Wholesale Trade,1608
+2005,Retail Trade,782
+2006,Retail Trade,817
+2007,Retail Trade,842
+2008,Retail Trade,850
+2009,Retail Trade,849
+2010,Retail Trade,871
+2011,Retail Trade,903
+2012,Retail Trade,941
+2013,Retail Trade,980
+2014,Retail Trade,1039
+2015,Retail Trade,1094
+2016,Retail Trade,1121
+2017,Retail Trade,1166
+2018,Retail Trade,1217
+2019,Retail Trade,1275
+2020,Retail Trade,1323
+2021,Retail Trade,1496
+2022,Retail Trade,1598
+2023,Retail Trade,1697
+2005,Transportation,387
+2006,Transportation,408
+2007,Transportation,422
+2008,Transportation,420
+2009,Transportation,382
+2010,Transportation,422
+2011,Transportation,441
+2012,Transportation,467
+2013,Transportation,483
+2014,Transportation,494
+2015,Transportation,516
+2016,Transportation,526
+2017,Transportation,548
+2018,Transportation,572
+2019,Transportation,586
+2020,Transportation,493
+2021,Transportation,616
+2022,Transportation,710
+2023,Transportation,711
+2005,Information,590
+2006,Information,630
+2007,Information,674
+2008,Information,680
+2009,Information,666
+2010,Information,680
+2011,Information,700
+2012,Information,754
+2013,Information,774
+2014,Information,813
+2015,Information,881
+2016,Information,940
+2017,Information,1007
+2018,Information,1117
+2019,Information,1209
+2020,Information,1284
+2021,Information,1418
+2022,Information,1569
+2023,Information,1768
+2005,Finance & Insurance,1002
+2006,Finance & Insurance,1063
+2007,Finance & Insurance,1068
+2008,Finance & Insurance,973
+2009,Finance & Insurance,1066
+2010,Finance & Insurance,1117
+2011,Finance & Insurance,1151
+2012,Finance & Insurance,1212
+2013,Finance & Insurance,1271
+2014,Finance & Insurance,1302
+2015,Finance & Insurance,1359
+2016,Finance & Insurance,1417
+2017,Finance & Insurance,1422
+2018,Finance & Insurance,1486
+2019,Finance & Insurance,1533
+2020,Finance & Insurance,1491
+2021,Finance & Insurance,1618
+2022,Finance & Insurance,1773
+2023,Finance & Insurance,1858
+2005,Real Estate,1551
+2006,Real Estate,1616
+2007,Real Estate,1673
+2008,Real Estate,1715
+2009,Real Estate,1758
+2010,Real Estate,1801
+2011,Real Estate,1849
+2012,Real Estate,1940
+2013,Real Estate,2013
+2014,Real Estate,2129
+2015,Real Estate,2261
+2016,Real Estate,2374
+2017,Real Estate,2472
+2018,Real Estate,2590
+2019,Real Estate,2714
+2020,Real Estate,2897
+2021,Real Estate,3109
+2022,Real Estate,3327
+2023,Real Estate,3602
+2005,Professional & Technical,834
+2006,Professional & Technical,897
+2007,Professional & Technical,966
+2008,Professional & Technical,994
+2009,Professional & Technical,971
+2010,Professional & Technical,1011
+2011,Professional & Technical,1058
+2012,Professional & Technical,1121
+2013,Professional & Technical,1175
+2014,Professional & Technical,1240
+2015,Professional & Technical,1329
+2016,Professional & Technical,1389
+2017,Professional & Technical,1464
+2018,Professional & Technical,1548
+2019,Professional & Technical,1621
+2020,Professional & Technical,1606
+2021,Professional & Technical,1759
+2022,Professional & Technical,1888
+2023,Professional & Technical,2027
+2005,Management,248
+2006,Management,278
+2007,Management,292
+2008,Management,318
+2009,Management,318
+2010,Management,327
+2011,Management,339
+2012,Management,358
+2013,Management,374
+2014,Management,395
+2015,Management,417
+2016,Management,426
+2017,Management,442
+2018,Management,466
+2019,Management,493
+2020,Management,459
+2021,Management,493
+2022,Management,538
+2023,Management,585
+2005,Admin & Waste Mgmt,427
+2006,Admin & Waste Mgmt,452
+2007,Admin & Waste Mgmt,477
+2008,Admin & Waste Mgmt,477
+2009,Admin & Waste Mgmt,445
+2010,Admin & Waste Mgmt,474
+2011,Admin & Waste Mgmt,508
+2012,Admin & Waste Mgmt,537
+2013,Admin & Waste Mgmt,578
+2014,Admin & Waste Mgmt,613
+2015,Admin & Waste Mgmt,667
+2016,Admin & Waste Mgmt,683
+2017,Admin & Waste Mgmt,730
+2018,Admin & Waste Mgmt,769
+2019,Admin & Waste Mgmt,813
+2020,Admin & Waste Mgmt,735
+2021,Admin & Waste Mgmt,820
+2022,Admin & Waste Mgmt,919
+2023,Admin & Waste Mgmt,989
+2005,Education & Health,966
+2006,Education & Health,1026
+2007,Education & Health,1094
+2008,Education & Health,1161
+2009,Education & Health,1211
+2010,Education & Health,1233
+2011,Education & Health,1262
+2012,Education & Health,1315
+2013,Education & Health,1363
+2014,Education & Health,1443
+2015,Education & Health,1523
+2016,Education & Health,1582
+2017,Education & Health,1639
+2018,Education & Health,1708
+2019,Education & Health,1804
+2020,Education & Health,1908
+2021,Education & Health,1949
+2022,Education & Health,2067
+2023,Education & Health,2272
+2005,Arts & Entertainment,165
+2006,Arts & Entertainment,175
+2007,Arts & Entertainment,185
+2008,Arts & Entertainment,191
+2009,Arts & Entertainment,175
+2010,Arts & Entertainment,180
+2011,Arts & Entertainment,187
+2012,Arts & Entertainment,197
+2013,Arts & Entertainment,206
+2014,Arts & Entertainment,218
+2015,Arts & Entertainment,251
+2016,Arts & Entertainment,256
+2017,Arts & Entertainment,265
+2018,Arts & Entertainment,280
+2019,Arts & Entertainment,295
+2020,Arts & Entertainment,193
+2021,Arts & Entertainment,242
+2022,Arts & Entertainment,303
+2023,Arts & Entertainment,366
+2005,Accommodation & Food,386
+2006,Accommodation & Food,409
+2007,Accommodation & Food,430
+2008,Accommodation & Food,446
+2009,Accommodation & Food,429
+2010,Accommodation & Food,441
+2011,Accommodation & Food,457
+2012,Accommodation & Food,501
+2013,Accommodation & Food,523
+2014,Accommodation & Food,554
+2015,Accommodation & Food,605
+2016,Accommodation & Food,640
+2017,Accommodation & Food,663
+2018,Accommodation & Food,699
+2019,Accommodation & Food,739
+2020,Accommodation & Food,594
+2021,Accommodation & Food,771
+2022,Accommodation & Food,907
+2023,Accommodation & Food,1006
+2005,Other Services,290
+2006,Other Services,301
+2007,Other Services,314
+2008,Other Services,321
+2009,Other Services,317
+2010,Other Services,325
+2011,Other Services,334
+2012,Other Services,350
+2013,Other Services,367
+2014,Other Services,392
+2015,Other Services,416
+2016,Other Services,425
+2017,Other Services,439
+2018,Other Services,464
+2019,Other Services,489
+2020,Other Services,452
+2021,Other Services,502
+2022,Other Services,562
+2023,Other Services,615
+2005,Government,1614
+2006,Government,1700
+2007,Government,1803
+2008,Government,1927
+2009,Government,2014
+2010,Government,2022
+2011,Government,1999
+2012,Government,2031
+2013,Government,2036
+2014,Government,2103
+2015,Government,2178
+2016,Government,2223
+2017,Government,2278
+2018,Government,2354
+2019,Government,2490
+2020,Government,2768
+2021,Government,2904
+2022,Government,2997
+2023,Government,3218
