@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;background:rgba(12,14,24,0.9);border:1px solid rgba(218,165,32,0.75);border-radius:8px;padding:10px 12px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.3;box-shadow:0 8px 24px rgba(0,0,0,0.35);'><div style='font-weight:700;margin-bottom:6px;color:#ffffff;'>Resource type</div><div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DAA520;'></span><span>Oil</span></div>
+<div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#4682B4;'></span><span>Gas</span></div>
+<div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#B87333;'></span><span>Mineral</span></div>
+<div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFC800;'></span><span>Solar</span></div>
+<div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00BFFF;'></span><span>Desalination</span></div>
+<div style='display:flex;align-items:center;gap:8px;margin:3px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#A9A9A9;'></span><span>Refinery</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Bar height = relative production/capacity</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 24.5,
+    "longitude": 45.0,
+    "pitch": 45,
+    "zoom": 5
+  },
+  "layers": [
+    {
+      "@@type": "ColumnLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Ghawar\nOutput: 100/100",
+          "label_z": 320000.0,
+          "lat": 25.43,
+          "lon": 49.62,
+          "name": "Ghawar",
+          "notes": "World's largest conventional oil field, ~280 km long",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Shaybah\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 22.51,
+          "lon": 53.95,
+          "name": "Shaybah",
+          "notes": "Located in the Rub' al Khali (Empty Quarter)",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 80.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Safaniyah\nOutput: 80/100",
+          "label_z": 260000.0,
+          "lat": 28.28,
+          "lon": 48.75,
+          "name": "Safaniyah",
+          "notes": "World's largest offshore oil field",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Khurais\nOutput: 60/100",
+          "label_z": 200000.0,
+          "lat": 25.07,
+          "lon": 48.2,
+          "name": "Khurais",
+          "notes": "Khurais\u2013Abu Jifan\u2013Mazalij complex, ~150 km E of Riyadh",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Abqaiq\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 25.93,
+          "lon": 49.67,
+          "name": "Abqaiq",
+          "notes": "Major processing facility & field",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Berri\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.0,
+          "lon": 49.75,
+          "name": "Berri",
+          "notes": "Coastal/offshore field, Eastern Province",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Manifa\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 27.28,
+          "lon": 48.93,
+          "name": "Manifa",
+          "notes": "Shallow-water mega-field in Persian Gulf",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Zuluf\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.0,
+          "lon": 48.85,
+          "name": "Zuluf",
+          "notes": "Offshore field in northern Gulf waters",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Marjan\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.25,
+          "lon": 49.25,
+          "name": "Marjan",
+          "notes": "Offshore field, major expansion 2020s",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Haradh\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 24.13,
+          "lon": 49.07,
+          "name": "Haradh",
+          "notes": "Southern extension of Ghawar complex",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Khursaniyah\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 27.08,
+          "lon": 49.0,
+          "name": "Khursaniyah",
+          "notes": "Light crude & gas processing",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Qatif\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 26.58,
+          "lon": 50.0,
+          "name": "Qatif",
+          "notes": "Eastern Province coastal field",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Abu Sa'fah\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 27.25,
+          "lon": 50.17,
+          "name": "Abu Sa'fah",
+          "notes": "Shared production zone with Bahrain",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Karan\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 27.8,
+          "lon": 49.5,
+          "name": "Karan",
+          "notes": "First non-associated offshore gas field developed",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Hasbah\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.5,
+          "lon": 49.8,
+          "name": "Hasbah",
+          "notes": "Part of Wasit Gas Program",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Arabiyah\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.6,
+          "lon": 49.9,
+          "name": "Arabiyah",
+          "notes": "Part of Wasit Gas Program",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Midyan\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 28.35,
+          "lon": 36.5,
+          "name": "Midyan",
+          "notes": "Northwest Saudi Arabia, Tabuk Province",
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Jafurah\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 24.5,
+          "lon": 49.8,
+          "name": "Jafurah",
+          "notes": "Massive unconventional gas basin, under development",
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Mahd Ad Dhahab\nOutput: 20/100",
+          "label_z": 80000.0,
+          "lat": 23.5,
+          "lon": 40.87,
+          "name": "Mahd Ad Dhahab",
+          "notes": "Historic gold mine, Arabian Shield",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Ad Duwayhi\nOutput: 20/100",
+          "label_z": 80000.0,
+          "lat": 22.75,
+          "lon": 42.25,
+          "name": "Ad Duwayhi",
+          "notes": "Ma'aden operated, high-grade gold",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Bulghah\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 24.3,
+          "lon": 41.4,
+          "name": "Bulghah",
+          "notes": "Open-pit gold mine, Ma'aden",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Sukhaybarat\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 25.45,
+          "lon": 41.5,
+          "name": "Al Sukhaybarat",
+          "notes": "Underground gold mine",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Amar\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 22.85,
+          "lon": 44.55,
+          "name": "Al Amar",
+          "notes": "Underground gold-copper mine",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Jabal Sayid\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 23.85,
+          "lon": 40.94,
+          "name": "Jabal Sayid",
+          "notes": "Major copper mine, Al Madinah Province",
+          "subtype": "Copper",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Masane\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 19.0,
+          "lon": 43.5,
+          "name": "Al Masane",
+          "notes": "Copper-zinc-gold, Najran Province",
+          "subtype": "Copper/Zinc",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al-Jalamid\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 31.5,
+          "lon": 39.75,
+          "name": "Al-Jalamid",
+          "notes": "Hazm Al-Jalamid, Ma'aden phosphate complex",
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Umm Wu'al\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 31.2,
+          "lon": 37.25,
+          "name": "Umm Wu'al",
+          "notes": "Second phosphate project, Northern Border",
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Ba'itha\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 26.5,
+          "lon": 43.2,
+          "name": "Al Ba'itha",
+          "notes": "Bauxite mine, Qassim Province",
+          "subtype": "Bauxite",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Sudair Solar PV\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 25.98,
+          "lon": 45.52,
+          "name": "Sudair Solar PV",
+          "notes": "1.5 GW, Sudair Industrial City",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Sakaka Solar\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 29.95,
+          "lon": 40.2,
+          "name": "Sakaka Solar",
+          "notes": "300 MW, Al Jouf Province",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "NEOM Green H2\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.13,
+          "lon": 34.92,
+          "name": "NEOM Green H2",
+          "notes": "NEOM mega-project, green hydrogen",
+          "subtype": "PV + Wind",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Al Shuaibah Solar\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 21.3,
+          "lon": 39.1,
+          "name": "Al Shuaibah Solar",
+          "notes": "2.6 GW, near Jeddah",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Ar Rass Solar\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 25.87,
+          "lon": 43.5,
+          "name": "Ar Rass Solar",
+          "notes": "700 MW, Qassim Province",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Ras Al-Khair\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 27.54,
+          "lon": 49.14,
+          "name": "Ras Al-Khair",
+          "notes": "World's largest desalination plant",
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Jubail Desal\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 27.0,
+          "lon": 49.65,
+          "name": "Jubail Desal",
+          "notes": "Jubail Industrial City complex",
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Shuaiba Desal\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 20.67,
+          "lon": 39.53,
+          "name": "Shuaiba Desal",
+          "notes": "Red Sea coast, south of Jeddah",
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Yanbu Desal\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 24.05,
+          "lon": 38.0,
+          "name": "Yanbu Desal",
+          "notes": "Red Sea coast desalination",
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Ras Tanura Refinery\nOutput: 60/100",
+          "label_z": 200000.0,
+          "lat": 26.69,
+          "lon": 50.1,
+          "name": "Ras Tanura Refinery",
+          "notes": "Major export terminal & refinery",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Yanbu Refinery\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 23.92,
+          "lon": 38.28,
+          "name": "Yanbu Refinery",
+          "notes": "Red Sea coast refinery complex",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Jubail Refinery\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 27.01,
+          "lon": 49.66,
+          "name": "Jubail Refinery",
+          "notes": "SATORP JV with Total",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Riyadh Refinery\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 24.6,
+          "lon": 46.75,
+          "name": "Riyadh Refinery",
+          "notes": "Inland refinery for domestic supply",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Jazan Refinery\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 16.9,
+          "lon": 42.55,
+          "name": "Jazan Refinery",
+          "notes": "400 kbd, newest Aramco refinery",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Ras Al-Khair Smelter\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.55,
+          "lon": 49.15,
+          "name": "Ras Al-Khair Smelter",
+          "notes": "Ma'aden aluminium smelting complex",
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPosition": "@@=[lon, lat]",
+      "id": "f8abbcb8-baf5-4251-9bb9-f09218c98594",
+      "pickable": true,
+      "radius": 12000
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Ghawar\nOutput: 100/100",
+          "label_z": 320000.0,
+          "lat": 25.43,
+          "lon": 49.62,
+          "name": "Ghawar",
+          "notes": "World's largest conventional oil field, ~280 km long",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Shaybah\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 22.51,
+          "lon": 53.95,
+          "name": "Shaybah",
+          "notes": "Located in the Rub' al Khali (Empty Quarter)",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 80.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Safaniyah\nOutput: 80/100",
+          "label_z": 260000.0,
+          "lat": 28.28,
+          "lon": 48.75,
+          "name": "Safaniyah",
+          "notes": "World's largest offshore oil field",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Khurais\nOutput: 60/100",
+          "label_z": 200000.0,
+          "lat": 25.07,
+          "lon": 48.2,
+          "name": "Khurais",
+          "notes": "Khurais\u2013Abu Jifan\u2013Mazalij complex, ~150 km E of Riyadh",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Abqaiq\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 25.93,
+          "lon": 49.67,
+          "name": "Abqaiq",
+          "notes": "Major processing facility & field",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Berri\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.0,
+          "lon": 49.75,
+          "name": "Berri",
+          "notes": "Coastal/offshore field, Eastern Province",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Manifa\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 27.28,
+          "lon": 48.93,
+          "name": "Manifa",
+          "notes": "Shallow-water mega-field in Persian Gulf",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Zuluf\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.0,
+          "lon": 48.85,
+          "name": "Zuluf",
+          "notes": "Offshore field in northern Gulf waters",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Marjan\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.25,
+          "lon": 49.25,
+          "name": "Marjan",
+          "notes": "Offshore field, major expansion 2020s",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Haradh\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 24.13,
+          "lon": 49.07,
+          "name": "Haradh",
+          "notes": "Southern extension of Ghawar complex",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Khursaniyah\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 27.08,
+          "lon": 49.0,
+          "name": "Khursaniyah",
+          "notes": "Light crude & gas processing",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Qatif\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 26.58,
+          "lon": 50.0,
+          "name": "Qatif",
+          "notes": "Eastern Province coastal field",
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            218,
+            165,
+            32,
+            220
+          ],
+          "label_text": "Abu Sa'fah\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 27.25,
+          "lon": 50.17,
+          "name": "Abu Sa'fah",
+          "notes": "Shared production zone with Bahrain",
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Karan\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 27.8,
+          "lon": 49.5,
+          "name": "Karan",
+          "notes": "First non-associated offshore gas field developed",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Hasbah\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.5,
+          "lon": 49.8,
+          "name": "Hasbah",
+          "notes": "Part of Wasit Gas Program",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Arabiyah\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.6,
+          "lon": 49.9,
+          "name": "Arabiyah",
+          "notes": "Part of Wasit Gas Program",
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Midyan\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 28.35,
+          "lon": 36.5,
+          "name": "Midyan",
+          "notes": "Northwest Saudi Arabia, Tabuk Province",
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            70,
+            130,
+            180,
+            220
+          ],
+          "label_text": "Jafurah\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 24.5,
+          "lon": 49.8,
+          "name": "Jafurah",
+          "notes": "Massive unconventional gas basin, under development",
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Mahd Ad Dhahab\nOutput: 20/100",
+          "label_z": 80000.0,
+          "lat": 23.5,
+          "lon": 40.87,
+          "name": "Mahd Ad Dhahab",
+          "notes": "Historic gold mine, Arabian Shield",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Ad Duwayhi\nOutput: 20/100",
+          "label_z": 80000.0,
+          "lat": 22.75,
+          "lon": 42.25,
+          "name": "Ad Duwayhi",
+          "notes": "Ma'aden operated, high-grade gold",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Bulghah\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 24.3,
+          "lon": 41.4,
+          "name": "Bulghah",
+          "notes": "Open-pit gold mine, Ma'aden",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Sukhaybarat\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 25.45,
+          "lon": 41.5,
+          "name": "Al Sukhaybarat",
+          "notes": "Underground gold mine",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Amar\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 22.85,
+          "lon": 44.55,
+          "name": "Al Amar",
+          "notes": "Underground gold-copper mine",
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Jabal Sayid\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 23.85,
+          "lon": 40.94,
+          "name": "Jabal Sayid",
+          "notes": "Major copper mine, Al Madinah Province",
+          "subtype": "Copper",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Masane\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 19.0,
+          "lon": 43.5,
+          "name": "Al Masane",
+          "notes": "Copper-zinc-gold, Najran Province",
+          "subtype": "Copper/Zinc",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al-Jalamid\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 31.5,
+          "lon": 39.75,
+          "name": "Al-Jalamid",
+          "notes": "Hazm Al-Jalamid, Ma'aden phosphate complex",
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Umm Wu'al\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 31.2,
+          "lon": 37.25,
+          "name": "Umm Wu'al",
+          "notes": "Second phosphate project, Northern Border",
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            184,
+            115,
+            51,
+            220
+          ],
+          "label_text": "Al Ba'itha\nOutput: 30/100",
+          "label_z": 110000.0,
+          "lat": 26.5,
+          "lon": 43.2,
+          "name": "Al Ba'itha",
+          "notes": "Bauxite mine, Qassim Province",
+          "subtype": "Bauxite",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Sudair Solar PV\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 25.98,
+          "lon": 45.52,
+          "name": "Sudair Solar PV",
+          "notes": "1.5 GW, Sudair Industrial City",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Sakaka Solar\nOutput: 15/100",
+          "label_z": 65000.0,
+          "lat": 29.95,
+          "lon": 40.2,
+          "name": "Sakaka Solar",
+          "notes": "300 MW, Al Jouf Province",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "NEOM Green H2\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 28.13,
+          "lon": 34.92,
+          "name": "NEOM Green H2",
+          "notes": "NEOM mega-project, green hydrogen",
+          "subtype": "PV + Wind",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Al Shuaibah Solar\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 21.3,
+          "lon": 39.1,
+          "name": "Al Shuaibah Solar",
+          "notes": "2.6 GW, near Jeddah",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            255,
+            200,
+            0,
+            220
+          ],
+          "label_text": "Ar Rass Solar\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 25.87,
+          "lon": 43.5,
+          "name": "Ar Rass Solar",
+          "notes": "700 MW, Qassim Province",
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Ras Al-Khair\nOutput: 50/100",
+          "label_z": 170000.0,
+          "lat": 27.54,
+          "lon": 49.14,
+          "name": "Ras Al-Khair",
+          "notes": "World's largest desalination plant",
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Jubail Desal\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 27.0,
+          "lon": 49.65,
+          "name": "Jubail Desal",
+          "notes": "Jubail Industrial City complex",
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Shuaiba Desal\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 20.67,
+          "lon": 39.53,
+          "name": "Shuaiba Desal",
+          "notes": "Red Sea coast, south of Jeddah",
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            0,
+            191,
+            255,
+            220
+          ],
+          "label_text": "Yanbu Desal\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 24.05,
+          "lon": 38.0,
+          "name": "Yanbu Desal",
+          "notes": "Red Sea coast desalination",
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Ras Tanura Refinery\nOutput: 60/100",
+          "label_z": 200000.0,
+          "lat": 26.69,
+          "lon": 50.1,
+          "name": "Ras Tanura Refinery",
+          "notes": "Major export terminal & refinery",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Yanbu Refinery\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 23.92,
+          "lon": 38.28,
+          "name": "Yanbu Refinery",
+          "notes": "Red Sea coast refinery complex",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Jubail Refinery\nOutput: 45/100",
+          "label_z": 155000.0,
+          "lat": 27.01,
+          "lon": 49.66,
+          "name": "Jubail Refinery",
+          "notes": "SATORP JV with Total",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Riyadh Refinery\nOutput: 25/100",
+          "label_z": 95000.0,
+          "lat": 24.6,
+          "lon": 46.75,
+          "name": "Riyadh Refinery",
+          "notes": "Inland refinery for domestic supply",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Jazan Refinery\nOutput: 40/100",
+          "label_z": 140000.0,
+          "lat": 16.9,
+          "lon": 42.55,
+          "name": "Jazan Refinery",
+          "notes": "400 kbd, newest Aramco refinery",
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            169,
+            169,
+            169,
+            220
+          ],
+          "label_text": "Ras Al-Khair Smelter\nOutput: 35/100",
+          "label_z": 125000.0,
+          "lat": 27.55,
+          "lon": 49.15,
+          "name": "Ras Al-Khair Smelter",
+          "notes": "Ma'aden aluminium smelting complex",
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[lon, lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "629dc45b-3f01-4c9d-bba3-d914bf2235bc",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Relative Capacity: {capacity_scale}/100', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #daa520'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

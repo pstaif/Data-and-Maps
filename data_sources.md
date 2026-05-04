@@ -108,6 +108,10 @@ print(df.sort_values("gdp", ascending=False).head(10))
 | `SI.POV.DDAY` | Poverty Headcount Ratio |
 | `SL.UEM.TOTL.ZS` | Unemployment Rate |
 | `DT.ODA.ODAT.CD` | Net ODA Received (current US$) |
+| `NY.GDP.PETR.RT.ZS` | Oil rents (% of GDP) |
+| `NY.GDP.NGAS.RT.ZS` | Natural gas rents (% of GDP) |
+| `NY.GDP.COAL.RT.ZS` | Coal rents (% of GDP) |
+| `NY.GDP.FRST.RT.ZS` | Forest rents (% of GDP) |
 | `SL.TLF.CACT.ZS` | Labour Force Participation Rate, total (% of pop. 15+) |
 | `SL.TLF.CACT.MA.ZS` | Labour Force Participation Rate, male (%) |
 | `SL.TLF.CACT.FE.ZS` | Labour Force Participation Rate, female (%) |
