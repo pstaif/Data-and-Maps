@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 26.05,
+    "longitude": 50.55,
+    "pitch": 45,
+    "zoom": 9
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bahrain Field\nOil capacity: 45,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 26.04,
+          "lon": 50.55,
+          "metric_text": "Oil capacity: 45,000 bbl/d",
+          "name": "Bahrain Field",
+          "notes": "Awali oil field, Bahrain original producing field",
+          "plot_lat": 26.04,
+          "plot_lon": 50.48322112898853,
+          "polygon": [
+            [
+              50.52217547041189,
+              26.04
+            ],
+            [
+              50.50269829970021,
+              26.070310889132454
+            ],
+            [
+              50.46374395827686,
+              26.070310889132454
+            ],
+            [
+              50.44426678756518,
+              26.04
+            ],
+            [
+              50.46374395827686,
+              26.009689110867544
+            ],
+            [
+              50.50269829970021,
+              26.009689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Khaleej Al Bahrain\nResource estimate: 80 billion bbl oil in place",
+          "label_z": 125000.0,
+          "lat": 26.45,
+          "lon": 50.35,
+          "metric_text": "Resource estimate: 80 billion bbl oil in place",
+          "name": "Khaleej Al Bahrain",
+          "notes": "Offshore unconventional oil and gas discovery area",
+          "plot_lat": 26.45,
+          "plot_lon": 50.35,
+          "polygon": [
+            [
+              50.38909201963032,
+              26.45
+            ],
+            [
+              50.36954600981516,
+              26.480310889132454
+            ],
+            [
+              50.33045399018484,
+              26.480310889132454
+            ],
+            [
+              50.310907980369684,
+              26.45
+            ],
+            [
+              50.33045399018484,
+              26.419689110867544
+            ],
+            [
+              50.36954600981516,
+              26.419689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tatweer Gas\nGas output: 1.5 Bcf/d",
+          "label_z": 125000.0,
+          "lat": 26.03,
+          "lon": 50.58,
+          "metric_text": "Gas output: 1.5 Bcf/d",
+          "name": "Tatweer Gas",
+          "notes": "Associated and non-associated gas production operations",
+          "plot_lat": 26.03,
+          "plot_lon": 50.646773177860354,
+          "polygon": [
+            [
+              50.6857241982789,
+              26.03
+            ],
+            [
+              50.66624868806962,
+              26.060310889132456
+            ],
+            [
+              50.627297667651085,
+              26.060310889132456
+            ],
+            [
+              50.60782215744181,
+              26.03
+            ],
+            [
+              50.627297667651085,
+              25.999689110867546
+            ],
+            [
+              50.66624868806962,
+              25.999689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sitra Refinery\nRefining capacity: 267,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 26.15,
+          "lon": 50.63,
+          "metric_text": "Refining capacity: 267,000 bbl/d",
+          "name": "Sitra Refinery",
+          "notes": "Bahrain Petroleum Company refinery",
+          "plot_lat": 26.15,
+          "plot_lon": 50.63,
+          "polygon": [
+            [
+              50.66899098832917,
+              26.15
+            ],
+            [
+              50.64949549416459,
+              26.180310889132453
+            ],
+            [
+              50.610504505835415,
+              26.180310889132453
+            ],
+            [
+              50.591009011670835,
+              26.15
+            ],
+            [
+              50.610504505835415,
+              26.119689110867544
+            ],
+            [
+              50.64949549416459,
+              26.119689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Alba Smelter\nAluminium output: 1.6 million t/yr",
+          "label_z": 185000.0,
+          "lat": 26.1,
+          "lon": 50.57,
+          "metric_text": "Aluminium output: 1.6 million t/yr",
+          "name": "Alba Smelter",
+          "notes": "Large aluminium smelting complex",
+          "plot_lat": 26.1,
+          "plot_lon": 50.57,
+          "polygon": [
+            [
+              50.608974304291664,
+              26.1
+            ],
+            [
+              50.589487152145836,
+              26.130310889132456
+            ],
+            [
+              50.550512847854165,
+              26.130310889132456
+            ],
+            [
+              50.53102569570834,
+              26.1
+            ],
+            [
+              50.550512847854165,
+              26.069689110867547
+            ],
+            [
+              50.589487152145836,
+              26.069689110867547
+            ]
+          ],
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Al Dur Desalination\nWater capacity: 218,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 25.95,
+          "lon": 50.61,
+          "metric_text": "Water capacity: 218,000 m3/day",
+          "name": "Al Dur Desalination",
+          "notes": "Water and power production complex",
+          "plot_lat": 25.95,
+          "plot_lon": 50.61,
+          "polygon": [
+            [
+              50.64892451541626,
+              25.95
+            ],
+            [
+              50.629462257708134,
+              25.980310889132454
+            ],
+            [
+              50.590537742291865,
+              25.980310889132454
+            ],
+            [
+              50.57107548458374,
+              25.95
+            ],
+            [
+              50.590537742291865,
+              25.919689110867544
+            ],
+            [
+              50.629462257708134,
+              25.919689110867544
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Hidd Desalination\nWater capacity: 409,000 m3/day",
+          "label_z": 110000.0,
+          "lat": 26.22,
+          "lon": 50.66,
+          "metric_text": "Water capacity: 409,000 m3/day",
+          "name": "Hidd Desalination",
+          "notes": "Hidd power and water station",
+          "plot_lat": 26.22,
+          "plot_lon": 50.66,
+          "polygon": [
+            [
+              50.69901441993527,
+              26.22
+            ],
+            [
+              50.67950720996763,
+              26.250310889132454
+            ],
+            [
+              50.64049279003236,
+              26.250310889132454
+            ],
+            [
+              50.620985580064726,
+              26.22
+            ],
+            [
+              50.64049279003236,
+              26.189689110867544
+            ],
+            [
+              50.67950720996763,
+              26.189689110867544
+            ]
+          ],
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 18.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Askar Solar\nSolar capacity: 5 MW",
+          "label_z": 74000.0,
+          "lat": 26.06,
+          "lon": 50.62,
+          "metric_text": "Solar capacity: 5 MW",
+          "name": "Askar Solar",
+          "notes": "Representative solar deployment area in southern Bahrain",
+          "plot_lat": 26.06,
+          "plot_lon": 50.62,
+          "polygon": [
+            [
+              50.658960988693146,
+              26.06
+            ],
+            [
+              50.63948049434657,
+              26.090310889132454
+            ],
+            [
+              50.60051950565342,
+              26.090310889132454
+            ],
+            [
+              50.58103901130685,
+              26.06
+            ],
+            [
+              50.60051950565342,
+              26.029689110867544
+            ],
+            [
+              50.63948049434657,
+              26.029689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "f72c1039-ffe0-4deb-a64f-725771d95313",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bahrain Field\nOil capacity: 45,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 26.04,
+          "lon": 50.55,
+          "metric_text": "Oil capacity: 45,000 bbl/d",
+          "name": "Bahrain Field",
+          "notes": "Awali oil field, Bahrain original producing field",
+          "plot_lat": 26.04,
+          "plot_lon": 50.48322112898853,
+          "polygon": [
+            [
+              50.52217547041189,
+              26.04
+            ],
+            [
+              50.50269829970021,
+              26.070310889132454
+            ],
+            [
+              50.46374395827686,
+              26.070310889132454
+            ],
+            [
+              50.44426678756518,
+              26.04
+            ],
+            [
+              50.46374395827686,
+              26.009689110867544
+            ],
+            [
+              50.50269829970021,
+              26.009689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Khaleej Al Bahrain\nResource estimate: 80 billion bbl oil in place",
+          "label_z": 125000.0,
+          "lat": 26.45,
+          "lon": 50.35,
+          "metric_text": "Resource estimate: 80 billion bbl oil in place",
+          "name": "Khaleej Al Bahrain",
+          "notes": "Offshore unconventional oil and gas discovery area",
+          "plot_lat": 26.45,
+          "plot_lon": 50.35,
+          "polygon": [
+            [
+              50.38909201963032,
+              26.45
+            ],
+            [
+              50.36954600981516,
+              26.480310889132454
+            ],
+            [
+              50.33045399018484,
+              26.480310889132454
+            ],
+            [
+              50.310907980369684,
+              26.45
+            ],
+            [
+              50.33045399018484,
+              26.419689110867544
+            ],
+            [
+              50.36954600981516,
+              26.419689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tatweer Gas\nGas output: 1.5 Bcf/d",
+          "label_z": 125000.0,
+          "lat": 26.03,
+          "lon": 50.58,
+          "metric_text": "Gas output: 1.5 Bcf/d",
+          "name": "Tatweer Gas",
+          "notes": "Associated and non-associated gas production operations",
+          "plot_lat": 26.03,
+          "plot_lon": 50.646773177860354,
+          "polygon": [
+            [
+              50.6857241982789,
+              26.03
+            ],
+            [
+              50.66624868806962,
+              26.060310889132456
+            ],
+            [
+              50.627297667651085,
+              26.060310889132456
+            ],
+            [
+              50.60782215744181,
+              26.03
+            ],
+            [
+              50.627297667651085,
+              25.999689110867546
+            ],
+            [
+              50.66624868806962,
+              25.999689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sitra Refinery\nRefining capacity: 267,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 26.15,
+          "lon": 50.63,
+          "metric_text": "Refining capacity: 267,000 bbl/d",
+          "name": "Sitra Refinery",
+          "notes": "Bahrain Petroleum Company refinery",
+          "plot_lat": 26.15,
+          "plot_lon": 50.63,
+          "polygon": [
+            [
+              50.66899098832917,
+              26.15
+            ],
+            [
+              50.64949549416459,
+              26.180310889132453
+            ],
+            [
+              50.610504505835415,
+              26.180310889132453
+            ],
+            [
+              50.591009011670835,
+              26.15
+            ],
+            [
+              50.610504505835415,
+              26.119689110867544
+            ],
+            [
+              50.64949549416459,
+              26.119689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Alba Smelter\nAluminium output: 1.6 million t/yr",
+          "label_z": 185000.0,
+          "lat": 26.1,
+          "lon": 50.57,
+          "metric_text": "Aluminium output: 1.6 million t/yr",
+          "name": "Alba Smelter",
+          "notes": "Large aluminium smelting complex",
+          "plot_lat": 26.1,
+          "plot_lon": 50.57,
+          "polygon": [
+            [
+              50.608974304291664,
+              26.1
+            ],
+            [
+              50.589487152145836,
+              26.130310889132456
+            ],
+            [
+              50.550512847854165,
+              26.130310889132456
+            ],
+            [
+              50.53102569570834,
+              26.1
+            ],
+            [
+              50.550512847854165,
+              26.069689110867547
+            ],
+            [
+              50.589487152145836,
+              26.069689110867547
+            ]
+          ],
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Al Dur Desalination\nWater capacity: 218,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 25.95,
+          "lon": 50.61,
+          "metric_text": "Water capacity: 218,000 m3/day",
+          "name": "Al Dur Desalination",
+          "notes": "Water and power production complex",
+          "plot_lat": 25.95,
+          "plot_lon": 50.61,
+          "polygon": [
+            [
+              50.64892451541626,
+              25.95
+            ],
+            [
+              50.629462257708134,
+              25.980310889132454
+            ],
+            [
+              50.590537742291865,
+              25.980310889132454
+            ],
+            [
+              50.57107548458374,
+              25.95
+            ],
+            [
+              50.590537742291865,
+              25.919689110867544
+            ],
+            [
+              50.629462257708134,
+              25.919689110867544
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Hidd Desalination\nWater capacity: 409,000 m3/day",
+          "label_z": 110000.0,
+          "lat": 26.22,
+          "lon": 50.66,
+          "metric_text": "Water capacity: 409,000 m3/day",
+          "name": "Hidd Desalination",
+          "notes": "Hidd power and water station",
+          "plot_lat": 26.22,
+          "plot_lon": 50.66,
+          "polygon": [
+            [
+              50.69901441993527,
+              26.22
+            ],
+            [
+              50.67950720996763,
+              26.250310889132454
+            ],
+            [
+              50.64049279003236,
+              26.250310889132454
+            ],
+            [
+              50.620985580064726,
+              26.22
+            ],
+            [
+              50.64049279003236,
+              26.189689110867544
+            ],
+            [
+              50.67950720996763,
+              26.189689110867544
+            ]
+          ],
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 18.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Askar Solar\nSolar capacity: 5 MW",
+          "label_z": 74000.0,
+          "lat": 26.06,
+          "lon": 50.62,
+          "metric_text": "Solar capacity: 5 MW",
+          "name": "Askar Solar",
+          "notes": "Representative solar deployment area in southern Bahrain",
+          "plot_lat": 26.06,
+          "plot_lon": 50.62,
+          "polygon": [
+            [
+              50.658960988693146,
+              26.06
+            ],
+            [
+              50.63948049434657,
+              26.090310889132454
+            ],
+            [
+              50.60051950565342,
+              26.090310889132454
+            ],
+            [
+              50.58103901130685,
+              26.06
+            ],
+            [
+              50.60051950565342,
+              26.029689110867544
+            ],
+            [
+              50.63948049434657,
+              26.029689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "26b157c9-e199-40b4-8c26-c3b5bc5c6b37",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

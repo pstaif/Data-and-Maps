@@ -52,6 +52,23 @@ data = response.json()
 # [['NAME', 'B01003_001E', 'state'], ['Alabama', '5024279', '01'], ...]
 ```
 
+### ACS Public Use Microdata Sample (PUMS)
+
+The ACS PUMS files provide person- and household-level survey microdata with statistical weights. This repository uses 2024 ACS 1-year PUMS in `population_work_2.ipynb` for rectangular proportion views of disjoint race/ethnicity categories, SNAP-recipient household population, and a modeled federal income-tax proxy.
+
+- **PUMS data access:** [https://www.census.gov/programs-surveys/acs/microdata/access.html](https://www.census.gov/programs-surveys/acs/microdata/access.html)
+- **Microdata API guide:** [https://www.census.gov/data/developers/guidance/microdata-api-user-guide.Types_of_Microdata_API_Queries.html](https://www.census.gov/data/developers/guidance/microdata-api-user-guide.Types_of_Microdata_API_Queries.html)
+- **2024 ACS 1-year PUMS variables:** [https://api.census.gov/data/2024/acs/acs1/pums/variables.html](https://api.census.gov/data/2024/acs/acs1/pums/variables.html)
+
+Important usage notes:
+
+- Use `PWGTP` as the person weight when estimating counts of people.
+- `HISP` and `RAC1P` can be combined into disjoint categories by assigning all Hispanic/Latino people first, then classifying the remaining non-Hispanic population by race.
+- `FS` identifies whether a person lives in a household that received Food Stamps/SNAP in the past 12 months.
+- `PINCP` is person income; dollar values should be adjusted with `ADJINC` when needed.
+
+Tax caveat: IRS individual tax statistics do not directly report tax payments by race/ethnicity because tax returns do not collect race/ethnicity. The tax visualization in `population_work_2.ipynb` is therefore a transparent ACS-income-based estimate, not filed-return tax data. Treasury discusses this limitation and imputation approaches here: [https://home.treasury.gov/news/featured-stories/disparities-in-the-benefits-of-tax-expenditures-by-race-and-ethnicity](https://home.treasury.gov/news/featured-stories/disparities-in-the-benefits-of-tax-expenditures-by-race-and-ethnicity).
+
 ---
 
 ## 2. World Bank — Indicators API v2
@@ -222,14 +239,15 @@ print(df_migr.sort_values("immigrants", ascending=False).head(10))
 
 ---
 
-## 4. Bureau of Economic Analysis (BEA) — GDP-by-Industry API
+## 4. Bureau of Economic Analysis (BEA) — GDP-by-Industry and Input-Output APIs
 
-The BEA provides detailed economic accounts for the U.S. economy, including GDP broken down by industry sector (value added, gross output, compensation, etc.). The REST API requires a **free API key** obtained by registering.
+The BEA provides detailed economic accounts for the U.S. economy, including GDP broken down by industry sector (value added, gross output, compensation, etc.) and input-output accounts showing production relationships among industries and commodities. The REST API requires a **free API key** obtained by registering.
 
 **How it works:** You make HTTP GET requests specifying the `DataSetName` (e.g. `GDPbyIndustry`), `TableID`, `Frequency`, `Year`, and `Industry` filters. Results come back as JSON with a `Data` array of records.
 
 - **API Documentation:** [https://apps.bea.gov/API/docs/index.htm](https://apps.bea.gov/API/docs/index.htm)
 - **API Key Signup:** [https://apps.bea.gov/api/signup/](https://apps.bea.gov/api/signup/)
+- **Input-Output Accounts:** [https://www.bea.gov/data/industries/input-output-accounts-data](https://www.bea.gov/data/industries/input-output-accounts-data)
 - **API Key used in this repo:** `F784B0EB-9FE2-4CFD-B650-2F510B52025C`
 
 ```python
@@ -269,6 +287,55 @@ print(df[["Year", "IndustryDescription", "DataValue"]].head(20))
 | `TableID` | `10` | Real Value Added by Industry |
 | `Frequency` | `A`, `Q` | Annual, Quarterly |
 | `Industry` | `ALL`, `11`, `21`, `31-33`, etc. | All industries or specific NAICS codes |
+
+### BEA Input-Output Accounts
+
+The `InputOutput` API dataset provides make tables, use tables, and requirements tables. Use tables show how the supply of commodities is used by industries, final users, government, and exports. Summary-level use tables are one layer below the broad sector level while remaining available annually; the most detailed benchmark tables are much larger and only available for benchmark years.
+
+```python
+import requests
+import pandas as pd
+
+BEA_API_KEY = "F784B0EB-9FE2-4CFD-B650-2F510B52025C"
+url = "https://apps.bea.gov/api/data/"
+
+# 1) Look up official InputOutput table IDs.
+params = {
+    "UserID": BEA_API_KEY,
+    "method": "GetParameterValues",
+    "DataSetName": "InputOutput",
+    "ParameterName": "TableID",
+    "ResultFormat": "JSON",
+}
+tables = requests.get(url, params=params, timeout=45).json()
+table_values = pd.DataFrame(tables["BEAAPI"]["Results"]["ParamValue"])
+
+# 2) Fetch a Use table after selecting a TableID and year.
+params = {
+    "UserID": BEA_API_KEY,
+    "method": "GetData",
+    "DataSetName": "InputOutput",
+    "TableID": "258",  # Example: Use of Commodities by Industries - Sector
+    "Year": "2020",
+    "ResultFormat": "JSON",
+}
+data = requests.get(url, params=params, timeout=45).json()
+records = data["BEAAPI"]["Results"]["Data"]
+df = pd.DataFrame(records)
+print(df[["RowDescr", "ColDescr", "DataValue"]].head())
+```
+
+### Local Eora-Style Czech Sector Flows
+
+`sectors.ipynb` uses local Eora-style sector files in `/Users/pstaif/Desktop/Econ Ultimate Map/data/` instead of a live BEA API call. The flow matrix is a labeled Czech Republic intermediate transactions table for 2022; rows are source sectors and columns are destination sectors.
+
+| File | Use |
+|------|-----|
+| `CZE_Z_intermediate_2022_labeled.csv` | Numeric source-by-destination intermediate sector flows |
+| `CZE_sector_codebook.csv` | Sector code-to-label mapping |
+| `Eora26Structure.xlsx` | Eora26 classification/layout reference |
+
+The primary-sector Sankey cells use rows `CZE_A01`, `CZE_A02`, `CZE_A03`, and `CZE_B05` through `CZE_B09` flowing to all positive destination sectors, with smaller destinations grouped as `Other sectors`.
 
 ---
 

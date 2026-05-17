@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 33.9,
+    "longitude": 35.8,
+    "pitch": 45,
+    "zoom": 7.5
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Offshore Block 9\nExploration block: no commercial output yet",
+          "label_z": 110000.0,
+          "lat": 33.05,
+          "lon": 34.95,
+          "metric_text": "Exploration block: no commercial output yet",
+          "name": "Offshore Block 9",
+          "notes": "Southern offshore exploration block",
+          "plot_lat": 33.05,
+          "plot_lon": 34.95,
+          "polygon": [
+            [
+              34.99175639512281,
+              33.05
+            ],
+            [
+              34.970878197561404,
+              33.080310889132456
+            ],
+            [
+              34.9291218024386,
+              33.080310889132456
+            ],
+            [
+              34.90824360487719,
+              33.05
+            ],
+            [
+              34.9291218024386,
+              33.01968911086754
+            ],
+            [
+              34.970878197561404,
+              33.01968911086754
+            ]
+          ],
+          "subtype": "Offshore Exploration",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 24.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Offshore Block 4\nExploration block: no commercial output yet",
+          "label_z": 92000.0,
+          "lat": 34.1,
+          "lon": 34.95,
+          "metric_text": "Exploration block: no commercial output yet",
+          "name": "Offshore Block 4",
+          "notes": "Central offshore exploration block",
+          "plot_lat": 34.1,
+          "plot_lon": 34.95,
+          "polygon": [
+            [
+              34.99226745146048,
+              34.1
+            ],
+            [
+              34.97113372573024,
+              34.13031088913246
+            ],
+            [
+              34.928866274269765,
+              34.13031088913246
+            ],
+            [
+              34.90773254853953,
+              34.1
+            ],
+            [
+              34.928866274269765,
+              34.06968911086754
+            ],
+            [
+              34.97113372573024,
+              34.06968911086754
+            ]
+          ],
+          "subtype": "Offshore Exploration",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Tripoli Oil Installations\nOil storage: 250,000 m3",
+          "label_z": 95000.0,
+          "lat": 34.45,
+          "lon": 35.84,
+          "metric_text": "Oil storage: 250,000 m3",
+          "name": "Tripoli Oil Installations",
+          "notes": "Northern coastal oil storage and terminal site",
+          "plot_lat": 34.45,
+          "plot_lon": 35.84,
+          "polygon": [
+            [
+              35.882443784188546,
+              34.45
+            ],
+            [
+              35.86122189209428,
+              34.48031088913246
+            ],
+            [
+              35.81877810790573,
+              34.48031088913246
+            ],
+            [
+              35.79755621581146,
+              34.45
+            ],
+            [
+              35.81877810790573,
+              34.419689110867544
+            ],
+            [
+              35.86122189209428,
+              34.419689110867544
+            ]
+          ],
+          "subtype": "Oil Terminal",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Zahrani Oil Terminal\nOil storage: 180,000 m3",
+          "label_z": 95000.0,
+          "lat": 33.5,
+          "lon": 35.34,
+          "metric_text": "Oil storage: 180,000 m3",
+          "name": "Zahrani Oil Terminal",
+          "notes": "Southern coastal oil storage and terminal site",
+          "plot_lat": 33.5,
+          "plot_lon": 35.34,
+          "polygon": [
+            [
+              35.381972173016734,
+              33.5
+            ],
+            [
+              35.36098608650837,
+              33.53031088913246
+            ],
+            [
+              35.31901391349164,
+              33.53031088913246
+            ],
+            [
+              35.29802782698327,
+              33.5
+            ],
+            [
+              35.31901391349164,
+              33.46968911086754
+            ],
+            [
+              35.36098608650837,
+              33.46968911086754
+            ]
+          ],
+          "subtype": "Oil Terminal",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 28.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sibline Limestone\nCement capacity: 1.2 million t/yr",
+          "label_z": 104000.0,
+          "lat": 33.58,
+          "lon": 35.45,
+          "metric_text": "Cement capacity: 1.2 million t/yr",
+          "name": "Sibline Limestone",
+          "notes": "Cement and limestone production area",
+          "plot_lat": 33.58,
+          "plot_lon": 35.45,
+          "polygon": [
+            [
+              35.49201103915404,
+              33.58
+            ],
+            [
+              35.47100551957703,
+              33.61031088913246
+            ],
+            [
+              35.42899448042298,
+              33.61031088913246
+            ],
+            [
+              35.40798896084596,
+              33.58
+            ],
+            [
+              35.42899448042298,
+              33.54968911086754
+            ],
+            [
+              35.47100551957703,
+              33.54968911086754
+            ]
+          ],
+          "subtype": "Limestone",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Chekka Limestone\nCement capacity: 2 million t/yr",
+          "label_z": 110000.0,
+          "lat": 34.33,
+          "lon": 35.73,
+          "metric_text": "Cement capacity: 2 million t/yr",
+          "name": "Chekka Limestone",
+          "notes": "Northern coast cement and quarrying area",
+          "plot_lat": 34.33,
+          "plot_lon": 35.73,
+          "polygon": [
+            [
+              35.772382983503206,
+              34.33
+            ],
+            [
+              35.7511914917516,
+              34.36031088913246
+            ],
+            [
+              35.708808508248396,
+              34.36031088913246
+            ],
+            [
+              35.68761701649679,
+              34.33
+            ],
+            [
+              35.708808508248396,
+              34.29968911086754
+            ],
+            [
+              35.7511914917516,
+              34.29968911086754
+            ]
+          ],
+          "subtype": "Limestone",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 12.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Beirut River Solar\nSolar capacity: 1 MW",
+          "label_z": 56000.0,
+          "lat": 33.89,
+          "lon": 35.54,
+          "metric_text": "Solar capacity: 1 MW",
+          "name": "Beirut River Solar",
+          "notes": "Urban solar PV installation",
+          "plot_lat": 33.89,
+          "plot_lon": 35.54,
+          "polygon": [
+            [
+              35.58216310625604,
+              33.89
+            ],
+            [
+              35.56108155312802,
+              33.92031088913246
+            ],
+            [
+              35.51891844687198,
+              33.92031088913246
+            ],
+            [
+              35.49783689374396,
+              33.89
+            ],
+            [
+              35.51891844687198,
+              33.85968911086754
+            ],
+            [
+              35.56108155312802,
+              33.85968911086754
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Zahrani Solar\nSolar capacity: 12 MW",
+          "label_z": 65000.0,
+          "lat": 33.48,
+          "lon": 35.34,
+          "metric_text": "Solar capacity: 12 MW",
+          "name": "Zahrani Solar",
+          "notes": "Representative solar generation site near Zahrani",
+          "plot_lat": 33.48,
+          "plot_lon": 35.34,
+          "polygon": [
+            [
+              35.38196248049285,
+              33.48
+            ],
+            [
+              35.36098124024643,
+              33.510310889132455
+            ],
+            [
+              35.319018759753575,
+              33.510310889132455
+            ],
+            [
+              35.298037519507155,
+              33.48
+            ],
+            [
+              35.319018759753575,
+              33.44968911086754
+            ],
+            [
+              35.36098124024643,
+              33.44968911086754
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "b1635e72-cde1-4080-bc44-58307999b13f",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Offshore Block 9\nExploration block: no commercial output yet",
+          "label_z": 110000.0,
+          "lat": 33.05,
+          "lon": 34.95,
+          "metric_text": "Exploration block: no commercial output yet",
+          "name": "Offshore Block 9",
+          "notes": "Southern offshore exploration block",
+          "plot_lat": 33.05,
+          "plot_lon": 34.95,
+          "polygon": [
+            [
+              34.99175639512281,
+              33.05
+            ],
+            [
+              34.970878197561404,
+              33.080310889132456
+            ],
+            [
+              34.9291218024386,
+              33.080310889132456
+            ],
+            [
+              34.90824360487719,
+              33.05
+            ],
+            [
+              34.9291218024386,
+              33.01968911086754
+            ],
+            [
+              34.970878197561404,
+              33.01968911086754
+            ]
+          ],
+          "subtype": "Offshore Exploration",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 24.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Offshore Block 4\nExploration block: no commercial output yet",
+          "label_z": 92000.0,
+          "lat": 34.1,
+          "lon": 34.95,
+          "metric_text": "Exploration block: no commercial output yet",
+          "name": "Offshore Block 4",
+          "notes": "Central offshore exploration block",
+          "plot_lat": 34.1,
+          "plot_lon": 34.95,
+          "polygon": [
+            [
+              34.99226745146048,
+              34.1
+            ],
+            [
+              34.97113372573024,
+              34.13031088913246
+            ],
+            [
+              34.928866274269765,
+              34.13031088913246
+            ],
+            [
+              34.90773254853953,
+              34.1
+            ],
+            [
+              34.928866274269765,
+              34.06968911086754
+            ],
+            [
+              34.97113372573024,
+              34.06968911086754
+            ]
+          ],
+          "subtype": "Offshore Exploration",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Tripoli Oil Installations\nOil storage: 250,000 m3",
+          "label_z": 95000.0,
+          "lat": 34.45,
+          "lon": 35.84,
+          "metric_text": "Oil storage: 250,000 m3",
+          "name": "Tripoli Oil Installations",
+          "notes": "Northern coastal oil storage and terminal site",
+          "plot_lat": 34.45,
+          "plot_lon": 35.84,
+          "polygon": [
+            [
+              35.882443784188546,
+              34.45
+            ],
+            [
+              35.86122189209428,
+              34.48031088913246
+            ],
+            [
+              35.81877810790573,
+              34.48031088913246
+            ],
+            [
+              35.79755621581146,
+              34.45
+            ],
+            [
+              35.81877810790573,
+              34.419689110867544
+            ],
+            [
+              35.86122189209428,
+              34.419689110867544
+            ]
+          ],
+          "subtype": "Oil Terminal",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 25.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Zahrani Oil Terminal\nOil storage: 180,000 m3",
+          "label_z": 95000.0,
+          "lat": 33.5,
+          "lon": 35.34,
+          "metric_text": "Oil storage: 180,000 m3",
+          "name": "Zahrani Oil Terminal",
+          "notes": "Southern coastal oil storage and terminal site",
+          "plot_lat": 33.5,
+          "plot_lon": 35.34,
+          "polygon": [
+            [
+              35.381972173016734,
+              33.5
+            ],
+            [
+              35.36098608650837,
+              33.53031088913246
+            ],
+            [
+              35.31901391349164,
+              33.53031088913246
+            ],
+            [
+              35.29802782698327,
+              33.5
+            ],
+            [
+              35.31901391349164,
+              33.46968911086754
+            ],
+            [
+              35.36098608650837,
+              33.46968911086754
+            ]
+          ],
+          "subtype": "Oil Terminal",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 28.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sibline Limestone\nCement capacity: 1.2 million t/yr",
+          "label_z": 104000.0,
+          "lat": 33.58,
+          "lon": 35.45,
+          "metric_text": "Cement capacity: 1.2 million t/yr",
+          "name": "Sibline Limestone",
+          "notes": "Cement and limestone production area",
+          "plot_lat": 33.58,
+          "plot_lon": 35.45,
+          "polygon": [
+            [
+              35.49201103915404,
+              33.58
+            ],
+            [
+              35.47100551957703,
+              33.61031088913246
+            ],
+            [
+              35.42899448042298,
+              33.61031088913246
+            ],
+            [
+              35.40798896084596,
+              33.58
+            ],
+            [
+              35.42899448042298,
+              33.54968911086754
+            ],
+            [
+              35.47100551957703,
+              33.54968911086754
+            ]
+          ],
+          "subtype": "Limestone",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Chekka Limestone\nCement capacity: 2 million t/yr",
+          "label_z": 110000.0,
+          "lat": 34.33,
+          "lon": 35.73,
+          "metric_text": "Cement capacity: 2 million t/yr",
+          "name": "Chekka Limestone",
+          "notes": "Northern coast cement and quarrying area",
+          "plot_lat": 34.33,
+          "plot_lon": 35.73,
+          "polygon": [
+            [
+              35.772382983503206,
+              34.33
+            ],
+            [
+              35.7511914917516,
+              34.36031088913246
+            ],
+            [
+              35.708808508248396,
+              34.36031088913246
+            ],
+            [
+              35.68761701649679,
+              34.33
+            ],
+            [
+              35.708808508248396,
+              34.29968911086754
+            ],
+            [
+              35.7511914917516,
+              34.29968911086754
+            ]
+          ],
+          "subtype": "Limestone",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 12.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Beirut River Solar\nSolar capacity: 1 MW",
+          "label_z": 56000.0,
+          "lat": 33.89,
+          "lon": 35.54,
+          "metric_text": "Solar capacity: 1 MW",
+          "name": "Beirut River Solar",
+          "notes": "Urban solar PV installation",
+          "plot_lat": 33.89,
+          "plot_lon": 35.54,
+          "polygon": [
+            [
+              35.58216310625604,
+              33.89
+            ],
+            [
+              35.56108155312802,
+              33.92031088913246
+            ],
+            [
+              35.51891844687198,
+              33.92031088913246
+            ],
+            [
+              35.49783689374396,
+              33.89
+            ],
+            [
+              35.51891844687198,
+              33.85968911086754
+            ],
+            [
+              35.56108155312802,
+              33.85968911086754
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 15.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Zahrani Solar\nSolar capacity: 12 MW",
+          "label_z": 65000.0,
+          "lat": 33.48,
+          "lon": 35.34,
+          "metric_text": "Solar capacity: 12 MW",
+          "name": "Zahrani Solar",
+          "notes": "Representative solar generation site near Zahrani",
+          "plot_lat": 33.48,
+          "plot_lon": 35.34,
+          "polygon": [
+            [
+              35.38196248049285,
+              33.48
+            ],
+            [
+              35.36098124024643,
+              33.510310889132455
+            ],
+            [
+              35.319018759753575,
+              33.510310889132455
+            ],
+            [
+              35.298037519507155,
+              33.48
+            ],
+            [
+              35.319018759753575,
+              33.44968911086754
+            ],
+            [
+              35.36098124024643,
+              33.44968911086754
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "d4da1076-705f-45d3-b3e2-82f8403fec3b",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

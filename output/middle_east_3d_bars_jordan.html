@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 31.2,
+    "longitude": 36.6,
+    "pitch": 45,
+    "zoom": 6
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Risha Gas\nGas output: 16 MMcf/d",
+          "label_z": 110000.0,
+          "lat": 32.35,
+          "lon": 38.92,
+          "metric_text": "Gas output: 16 MMcf/d",
+          "name": "Risha Gas",
+          "notes": "Eastern Jordan gas field",
+          "plot_lat": 32.35,
+          "plot_lon": 38.92,
+          "polygon": [
+            [
+              38.96143015959025,
+              32.35
+            ],
+            [
+              38.940715079795126,
+              32.38031088913246
+            ],
+            [
+              38.89928492020488,
+              32.38031088913246
+            ],
+            [
+              38.87856984040975,
+              32.35
+            ],
+            [
+              38.89928492020488,
+              32.31968911086754
+            ],
+            [
+              38.940715079795126,
+              32.31968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 12.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Hamza Oil Field\nOil output: 1,000 bbl/d",
+          "label_z": 56000.0,
+          "lat": 31.52,
+          "lon": 36.33,
+          "metric_text": "Oil output: 1,000 bbl/d",
+          "name": "Hamza Oil Field",
+          "notes": "Small producing oil field",
+          "plot_lat": 31.52,
+          "plot_lon": 36.33,
+          "polygon": [
+            [
+              36.37105775445778,
+              31.52
+            ],
+            [
+              36.35052887722889,
+              31.550310889132454
+            ],
+            [
+              36.30947112277111,
+              31.550310889132454
+            ],
+            [
+              36.288942245542216,
+              31.52
+            ],
+            [
+              36.30947112277111,
+              31.489689110867545
+            ],
+            [
+              36.35052887722889,
+              31.489689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Arab Potash\nPotash output: 2.5 million t/yr",
+          "label_z": 215000.0,
+          "lat": 31.25,
+          "lon": 35.47,
+          "metric_text": "Potash output: 2.5 million t/yr",
+          "name": "Arab Potash",
+          "notes": "Dead Sea potash production complex",
+          "plot_lat": 31.25,
+          "plot_lon": 35.54018267269206,
+          "polygon": [
+            [
+              35.58112256509577,
+              31.25
+            ],
+            [
+              35.56065261889391,
+              31.280310889132455
+            ],
+            [
+              35.51971272649021,
+              31.280310889132455
+            ],
+            [
+              35.499242780288355,
+              31.25
+            ],
+            [
+              35.51971272649021,
+              31.219689110867545
+            ],
+            [
+              35.56065261889391,
+              31.219689110867545
+            ]
+          ],
+          "subtype": "Potash",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Jordan Bromine\nBromine output: 140,000 t/yr",
+          "label_z": 155000.0,
+          "lat": 31.2,
+          "lon": 35.45,
+          "metric_text": "Bromine output: 140,000 t/yr",
+          "name": "Jordan Bromine",
+          "notes": "Dead Sea bromine production",
+          "plot_lat": 31.2,
+          "plot_lon": 35.37985444588398,
+          "polygon": [
+            [
+              35.42077268578499,
+              31.2
+            ],
+            [
+              35.40031356583449,
+              31.230310889132454
+            ],
+            [
+              35.35939532593347,
+              31.230310889132454
+            ],
+            [
+              35.33893620598297,
+              31.2
+            ],
+            [
+              35.35939532593347,
+              31.169689110867544
+            ],
+            [
+              35.40031356583449,
+              31.169689110867544
+            ]
+          ],
+          "subtype": "Bromine",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Eshidiya Phosphate\nPhosphate output: 6 million t/yr",
+          "label_z": 200000.0,
+          "lat": 29.93,
+          "lon": 36.08,
+          "metric_text": "Phosphate output: 6 million t/yr",
+          "name": "Eshidiya Phosphate",
+          "notes": "Large phosphate mine in southern Jordan",
+          "plot_lat": 29.93,
+          "plot_lon": 36.08,
+          "polygon": [
+            [
+              36.12038606201902,
+              29.93
+            ],
+            [
+              36.10019303100951,
+              29.960310889132455
+            ],
+            [
+              36.059806968990486,
+              29.960310889132455
+            ],
+            [
+              36.039613937980974,
+              29.93
+            ],
+            [
+              36.059806968990486,
+              29.899689110867545
+            ],
+            [
+              36.10019303100951,
+              29.899689110867545
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Al-Abiad Phosphate\nPhosphate output: 1 million t/yr",
+          "label_z": 140000.0,
+          "lat": 31.58,
+          "lon": 36.05,
+          "metric_text": "Phosphate output: 1 million t/yr",
+          "name": "Al-Abiad Phosphate",
+          "notes": "Central Jordan phosphate mining area",
+          "plot_lat": 31.58,
+          "plot_lon": 36.05,
+          "polygon": [
+            [
+              36.09108416231365,
+              31.58
+            ],
+            [
+              36.07054208115682,
+              31.610310889132453
+            ],
+            [
+              36.02945791884317,
+              31.610310889132453
+            ],
+            [
+              36.008915837686345,
+              31.58
+            ],
+            [
+              36.02945791884317,
+              31.549689110867543
+            ],
+            [
+              36.07054208115682,
+              31.549689110867543
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Attarat Oil Shale\nPower capacity: 470 MW",
+          "label_z": 155000.0,
+          "lat": 31.1,
+          "lon": 36.28,
+          "metric_text": "Power capacity: 470 MW",
+          "name": "Attarat Oil Shale",
+          "notes": "Oil shale power and resource development area",
+          "plot_lat": 31.1,
+          "plot_lon": 36.28,
+          "polygon": [
+            [
+              36.320875096835394,
+              31.1
+            ],
+            [
+              36.3004375484177,
+              31.130310889132456
+            ],
+            [
+              36.259562451582305,
+              31.130310889132456
+            ],
+            [
+              36.23912490316461,
+              31.1
+            ],
+            [
+              36.259562451582305,
+              31.069689110867547
+            ],
+            [
+              36.3004375484177,
+              31.069689110867547
+            ]
+          ],
+          "subtype": "Oil Shale",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ma an Solar\nSolar capacity: 160 MW",
+          "label_z": 134000.0,
+          "lat": 30.2,
+          "lon": 35.73,
+          "metric_text": "Solar capacity: 160 MW",
+          "name": "Ma an Solar",
+          "notes": "Solar PV cluster in southern Jordan",
+          "plot_lat": 30.2,
+          "plot_lon": 35.73,
+          "polygon": [
+            [
+              35.77049637906934,
+              30.2
+            ],
+            [
+              35.750248189534666,
+              30.230310889132454
+            ],
+            [
+              35.70975181046533,
+              30.230310889132454
+            ],
+            [
+              35.68950362093065,
+              30.2
+            ],
+            [
+              35.70975181046533,
+              30.169689110867544
+            ],
+            [
+              35.750248189534666,
+              30.169689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Quweira Solar\nSolar capacity: 103 MW",
+          "label_z": 116000.0,
+          "lat": 29.8,
+          "lon": 35.3,
+          "metric_text": "Solar capacity: 103 MW",
+          "name": "Quweira Solar",
+          "notes": "Utility-scale solar project near Aqaba",
+          "plot_lat": 29.8,
+          "plot_lon": 35.3,
+          "polygon": [
+            [
+              35.3403334793568,
+              29.8
+            ],
+            [
+              35.3201667396784,
+              29.830310889132456
+            ],
+            [
+              35.279833260321595,
+              29.830310889132456
+            ],
+            [
+              35.259666520643194,
+              29.8
+            ],
+            [
+              35.279833260321595,
+              29.769689110867546
+            ],
+            [
+              35.3201667396784,
+              29.769689110867546
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "108e11b7-9714-43df-83a4-9cc543981dad",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Risha Gas\nGas output: 16 MMcf/d",
+          "label_z": 110000.0,
+          "lat": 32.35,
+          "lon": 38.92,
+          "metric_text": "Gas output: 16 MMcf/d",
+          "name": "Risha Gas",
+          "notes": "Eastern Jordan gas field",
+          "plot_lat": 32.35,
+          "plot_lon": 38.92,
+          "polygon": [
+            [
+              38.96143015959025,
+              32.35
+            ],
+            [
+              38.940715079795126,
+              32.38031088913246
+            ],
+            [
+              38.89928492020488,
+              32.38031088913246
+            ],
+            [
+              38.87856984040975,
+              32.35
+            ],
+            [
+              38.89928492020488,
+              32.31968911086754
+            ],
+            [
+              38.940715079795126,
+              32.31968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 12.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Hamza Oil Field\nOil output: 1,000 bbl/d",
+          "label_z": 56000.0,
+          "lat": 31.52,
+          "lon": 36.33,
+          "metric_text": "Oil output: 1,000 bbl/d",
+          "name": "Hamza Oil Field",
+          "notes": "Small producing oil field",
+          "plot_lat": 31.52,
+          "plot_lon": 36.33,
+          "polygon": [
+            [
+              36.37105775445778,
+              31.52
+            ],
+            [
+              36.35052887722889,
+              31.550310889132454
+            ],
+            [
+              36.30947112277111,
+              31.550310889132454
+            ],
+            [
+              36.288942245542216,
+              31.52
+            ],
+            [
+              36.30947112277111,
+              31.489689110867545
+            ],
+            [
+              36.35052887722889,
+              31.489689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Arab Potash\nPotash output: 2.5 million t/yr",
+          "label_z": 215000.0,
+          "lat": 31.25,
+          "lon": 35.47,
+          "metric_text": "Potash output: 2.5 million t/yr",
+          "name": "Arab Potash",
+          "notes": "Dead Sea potash production complex",
+          "plot_lat": 31.25,
+          "plot_lon": 35.54018267269206,
+          "polygon": [
+            [
+              35.58112256509577,
+              31.25
+            ],
+            [
+              35.56065261889391,
+              31.280310889132455
+            ],
+            [
+              35.51971272649021,
+              31.280310889132455
+            ],
+            [
+              35.499242780288355,
+              31.25
+            ],
+            [
+              35.51971272649021,
+              31.219689110867545
+            ],
+            [
+              35.56065261889391,
+              31.219689110867545
+            ]
+          ],
+          "subtype": "Potash",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Jordan Bromine\nBromine output: 140,000 t/yr",
+          "label_z": 155000.0,
+          "lat": 31.2,
+          "lon": 35.45,
+          "metric_text": "Bromine output: 140,000 t/yr",
+          "name": "Jordan Bromine",
+          "notes": "Dead Sea bromine production",
+          "plot_lat": 31.2,
+          "plot_lon": 35.37985444588398,
+          "polygon": [
+            [
+              35.42077268578499,
+              31.2
+            ],
+            [
+              35.40031356583449,
+              31.230310889132454
+            ],
+            [
+              35.35939532593347,
+              31.230310889132454
+            ],
+            [
+              35.33893620598297,
+              31.2
+            ],
+            [
+              35.35939532593347,
+              31.169689110867544
+            ],
+            [
+              35.40031356583449,
+              31.169689110867544
+            ]
+          ],
+          "subtype": "Bromine",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Eshidiya Phosphate\nPhosphate output: 6 million t/yr",
+          "label_z": 200000.0,
+          "lat": 29.93,
+          "lon": 36.08,
+          "metric_text": "Phosphate output: 6 million t/yr",
+          "name": "Eshidiya Phosphate",
+          "notes": "Large phosphate mine in southern Jordan",
+          "plot_lat": 29.93,
+          "plot_lon": 36.08,
+          "polygon": [
+            [
+              36.12038606201902,
+              29.93
+            ],
+            [
+              36.10019303100951,
+              29.960310889132455
+            ],
+            [
+              36.059806968990486,
+              29.960310889132455
+            ],
+            [
+              36.039613937980974,
+              29.93
+            ],
+            [
+              36.059806968990486,
+              29.899689110867545
+            ],
+            [
+              36.10019303100951,
+              29.899689110867545
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Al-Abiad Phosphate\nPhosphate output: 1 million t/yr",
+          "label_z": 140000.0,
+          "lat": 31.58,
+          "lon": 36.05,
+          "metric_text": "Phosphate output: 1 million t/yr",
+          "name": "Al-Abiad Phosphate",
+          "notes": "Central Jordan phosphate mining area",
+          "plot_lat": 31.58,
+          "plot_lon": 36.05,
+          "polygon": [
+            [
+              36.09108416231365,
+              31.58
+            ],
+            [
+              36.07054208115682,
+              31.610310889132453
+            ],
+            [
+              36.02945791884317,
+              31.610310889132453
+            ],
+            [
+              36.008915837686345,
+              31.58
+            ],
+            [
+              36.02945791884317,
+              31.549689110867543
+            ],
+            [
+              36.07054208115682,
+              31.549689110867543
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Attarat Oil Shale\nPower capacity: 470 MW",
+          "label_z": 155000.0,
+          "lat": 31.1,
+          "lon": 36.28,
+          "metric_text": "Power capacity: 470 MW",
+          "name": "Attarat Oil Shale",
+          "notes": "Oil shale power and resource development area",
+          "plot_lat": 31.1,
+          "plot_lon": 36.28,
+          "polygon": [
+            [
+              36.320875096835394,
+              31.1
+            ],
+            [
+              36.3004375484177,
+              31.130310889132456
+            ],
+            [
+              36.259562451582305,
+              31.130310889132456
+            ],
+            [
+              36.23912490316461,
+              31.1
+            ],
+            [
+              36.259562451582305,
+              31.069689110867547
+            ],
+            [
+              36.3004375484177,
+              31.069689110867547
+            ]
+          ],
+          "subtype": "Oil Shale",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ma an Solar\nSolar capacity: 160 MW",
+          "label_z": 134000.0,
+          "lat": 30.2,
+          "lon": 35.73,
+          "metric_text": "Solar capacity: 160 MW",
+          "name": "Ma an Solar",
+          "notes": "Solar PV cluster in southern Jordan",
+          "plot_lat": 30.2,
+          "plot_lon": 35.73,
+          "polygon": [
+            [
+              35.77049637906934,
+              30.2
+            ],
+            [
+              35.750248189534666,
+              30.230310889132454
+            ],
+            [
+              35.70975181046533,
+              30.230310889132454
+            ],
+            [
+              35.68950362093065,
+              30.2
+            ],
+            [
+              35.70975181046533,
+              30.169689110867544
+            ],
+            [
+              35.750248189534666,
+              30.169689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Quweira Solar\nSolar capacity: 103 MW",
+          "label_z": 116000.0,
+          "lat": 29.8,
+          "lon": 35.3,
+          "metric_text": "Solar capacity: 103 MW",
+          "name": "Quweira Solar",
+          "notes": "Utility-scale solar project near Aqaba",
+          "plot_lat": 29.8,
+          "plot_lon": 35.3,
+          "polygon": [
+            [
+              35.3403334793568,
+              29.8
+            ],
+            [
+              35.3201667396784,
+              29.830310889132456
+            ],
+            [
+              35.279833260321595,
+              29.830310889132456
+            ],
+            [
+              35.259666520643194,
+              29.8
+            ],
+            [
+              35.279833260321595,
+              29.769689110867546
+            ],
+            [
+              35.3201667396784,
+              29.769689110867546
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "f5fd7dd7-20f4-4564-ab65-f254e2955dc5",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

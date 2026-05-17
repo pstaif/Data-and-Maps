@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 31.8,
+    "longitude": 53.0,
+    "pitch": 45,
+    "zoom": 4.4
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "South Pars\nGas reserves: 1,200 Tcf",
+          "label_z": 320000.0,
+          "lat": 27.5,
+          "lon": 52.6,
+          "metric_text": "Gas reserves: 1,200 Tcf",
+          "name": "South Pars",
+          "notes": "Iranian side of the North Field/South Pars gas reservoir",
+          "plot_lat": 27.5,
+          "plot_lon": 52.6,
+          "polygon": [
+            [
+              52.639458368140325,
+              27.5
+            ],
+            [
+              52.61972918407016,
+              27.530310889132455
+            ],
+            [
+              52.58027081592984,
+              27.530310889132455
+            ],
+            [
+              52.56054163185968,
+              27.5
+            ],
+            [
+              52.58027081592984,
+              27.469689110867545
+            ],
+            [
+              52.61972918407016,
+              27.469689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 85.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Ahvaz\nOil reserves: 65 billion bbl",
+          "label_z": 275000.0,
+          "lat": 31.32,
+          "lon": 48.68,
+          "metric_text": "Oil reserves: 65 billion bbl",
+          "name": "Ahvaz",
+          "notes": "Giant oil field in Khuzestan",
+          "plot_lat": 31.32,
+          "plot_lon": 48.68,
+          "polygon": [
+            [
+              48.720970296886314,
+              31.32
+            ],
+            [
+              48.70048514844316,
+              31.350310889132455
+            ],
+            [
+              48.65951485155684,
+              31.350310889132455
+            ],
+            [
+              48.639029703113685,
+              31.32
+            ],
+            [
+              48.65951485155684,
+              31.289689110867545
+            ],
+            [
+              48.70048514844316,
+              31.289689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marun\nOil reserves: 22 billion bbl",
+          "label_z": 245000.0,
+          "lat": 30.75,
+          "lon": 49.05,
+          "metric_text": "Oil reserves: 22 billion bbl",
+          "name": "Marun",
+          "notes": "Major southwestern oil field",
+          "plot_lat": 30.75,
+          "plot_lon": 49.05,
+          "polygon": [
+            [
+              49.09072578413611,
+              30.75
+            ],
+            [
+              49.070362892068054,
+              30.780310889132455
+            ],
+            [
+              49.02963710793194,
+              30.780310889132455
+            ],
+            [
+              49.00927421586388,
+              30.75
+            ],
+            [
+              49.02963710793194,
+              30.719689110867545
+            ],
+            [
+              49.070362892068054,
+              30.719689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Gachsaran\nOil reserves: 53 billion bbl",
+          "label_z": 230000.0,
+          "lat": 30.36,
+          "lon": 50.8,
+          "metric_text": "Oil reserves: 53 billion bbl",
+          "name": "Gachsaran",
+          "notes": "Large Zagros oil field",
+          "plot_lat": 30.36,
+          "plot_lon": 50.8,
+          "polygon": [
+            [
+              50.84056246288217,
+              30.36
+            ],
+            [
+              50.82028123144108,
+              30.390310889132454
+            ],
+            [
+              50.779718768558915,
+              30.390310889132454
+            ],
+            [
+              50.759437537117826,
+              30.36
+            ],
+            [
+              50.779718768558915,
+              30.329689110867545
+            ],
+            [
+              50.82028123144108,
+              30.329689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Azadegan\nOil reserves: 32 billion bbl",
+          "label_z": 215000.0,
+          "lat": 31.4,
+          "lon": 47.72,
+          "metric_text": "Oil reserves: 32 billion bbl",
+          "name": "Azadegan",
+          "notes": "Large oil field near the Iraq border",
+          "plot_lat": 31.4,
+          "plot_lon": 47.72,
+          "polygon": [
+            [
+              47.76100517521831,
+              31.4
+            ],
+            [
+              47.74050258760915,
+              31.430310889132453
+            ],
+            [
+              47.69949741239085,
+              31.430310889132453
+            ],
+            [
+              47.67899482478169,
+              31.4
+            ],
+            [
+              47.69949741239085,
+              31.369689110867544
+            ],
+            [
+              47.74050258760915,
+              31.369689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Yadavaran\nOil reserves: 12 billion bbl",
+          "label_z": 185000.0,
+          "lat": 31.02,
+          "lon": 48.1,
+          "metric_text": "Oil reserves: 12 billion bbl",
+          "name": "Yadavaran",
+          "notes": "Southwestern oil field near Abadan plain",
+          "plot_lat": 31.02,
+          "plot_lon": 48.1,
+          "polygon": [
+            [
+              48.14084073732362,
+              31.02
+            ],
+            [
+              48.12042036866181,
+              31.050310889132454
+            ],
+            [
+              48.07957963133819,
+              31.050310889132454
+            ],
+            [
+              48.05915926267638,
+              31.02
+            ],
+            [
+              48.07957963133819,
+              30.989689110867545
+            ],
+            [
+              48.12042036866181,
+              30.989689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sarcheshmeh\nCopper output: 280,000 t/yr",
+          "label_z": 185000.0,
+          "lat": 30.0,
+          "lon": 55.8,
+          "metric_text": "Copper output: 280,000 t/yr",
+          "name": "Sarcheshmeh",
+          "notes": "Major copper mining and smelting complex",
+          "plot_lat": 30.0,
+          "plot_lon": 55.8,
+          "polygon": [
+            [
+              55.84041451884327,
+              30.0
+            ],
+            [
+              55.820207259421636,
+              30.030310889132455
+            ],
+            [
+              55.77979274057836,
+              30.030310889132455
+            ],
+            [
+              55.759585481156726,
+              30.0
+            ],
+            [
+              55.77979274057836,
+              29.969689110867545
+            ],
+            [
+              55.820207259421636,
+              29.969689110867545
+            ]
+          ],
+          "subtype": "Copper",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Chadormalu\nIron ore output: 10 million t/yr",
+          "label_z": 155000.0,
+          "lat": 32.31,
+          "lon": 55.53,
+          "metric_text": "Iron ore output: 10 million t/yr",
+          "name": "Chadormalu",
+          "notes": "Large central Iran iron ore mine",
+          "plot_lat": 32.31,
+          "plot_lon": 55.53,
+          "polygon": [
+            [
+              55.57141185762004,
+              32.31
+            ],
+            [
+              55.550705928810025,
+              32.34031088913246
+            ],
+            [
+              55.50929407118998,
+              32.34031088913246
+            ],
+            [
+              55.48858814237996,
+              32.31
+            ],
+            [
+              55.50929407118998,
+              32.279689110867544
+            ],
+            [
+              55.550705928810025,
+              32.279689110867544
+            ]
+          ],
+          "subtype": "Iron Ore",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Abadan Refinery\nRefining capacity: 400,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 30.34,
+          "lon": 48.28,
+          "metric_text": "Refining capacity: 400,000 bbl/d",
+          "name": "Abadan Refinery",
+          "notes": "Historic refinery near the Shatt al-Arab",
+          "plot_lat": 30.34,
+          "plot_lon": 48.28,
+          "polygon": [
+            [
+              48.32055417331116,
+              30.34
+            ],
+            [
+              48.300277086655576,
+              30.370310889132455
+            ],
+            [
+              48.259722913344426,
+              30.370310889132455
+            ],
+            [
+              48.23944582668884,
+              30.34
+            ],
+            [
+              48.259722913344426,
+              30.309689110867545
+            ],
+            [
+              48.300277086655576,
+              30.309689110867545
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Esfahan Refinery\nRefining capacity: 375,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 32.73,
+          "lon": 51.75,
+          "metric_text": "Refining capacity: 375,000 bbl/d",
+          "name": "Esfahan Refinery",
+          "notes": "Major inland refining complex",
+          "plot_lat": 32.73,
+          "plot_lon": 51.75,
+          "polygon": [
+            [
+              51.79160585290536,
+              32.73
+            ],
+            [
+              51.77080292645268,
+              32.760310889132455
+            ],
+            [
+              51.72919707354732,
+              32.760310889132455
+            ],
+            [
+              51.70839414709464,
+              32.73
+            ],
+            [
+              51.72919707354732,
+              32.69968911086754
+            ],
+            [
+              51.77080292645268,
+              32.69968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "d5c3f8c6-83d6-4822-b1e5-97fcfd1c1ab0",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "South Pars\nGas reserves: 1,200 Tcf",
+          "label_z": 320000.0,
+          "lat": 27.5,
+          "lon": 52.6,
+          "metric_text": "Gas reserves: 1,200 Tcf",
+          "name": "South Pars",
+          "notes": "Iranian side of the North Field/South Pars gas reservoir",
+          "plot_lat": 27.5,
+          "plot_lon": 52.6,
+          "polygon": [
+            [
+              52.639458368140325,
+              27.5
+            ],
+            [
+              52.61972918407016,
+              27.530310889132455
+            ],
+            [
+              52.58027081592984,
+              27.530310889132455
+            ],
+            [
+              52.56054163185968,
+              27.5
+            ],
+            [
+              52.58027081592984,
+              27.469689110867545
+            ],
+            [
+              52.61972918407016,
+              27.469689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 85.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Ahvaz\nOil reserves: 65 billion bbl",
+          "label_z": 275000.0,
+          "lat": 31.32,
+          "lon": 48.68,
+          "metric_text": "Oil reserves: 65 billion bbl",
+          "name": "Ahvaz",
+          "notes": "Giant oil field in Khuzestan",
+          "plot_lat": 31.32,
+          "plot_lon": 48.68,
+          "polygon": [
+            [
+              48.720970296886314,
+              31.32
+            ],
+            [
+              48.70048514844316,
+              31.350310889132455
+            ],
+            [
+              48.65951485155684,
+              31.350310889132455
+            ],
+            [
+              48.639029703113685,
+              31.32
+            ],
+            [
+              48.65951485155684,
+              31.289689110867545
+            ],
+            [
+              48.70048514844316,
+              31.289689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marun\nOil reserves: 22 billion bbl",
+          "label_z": 245000.0,
+          "lat": 30.75,
+          "lon": 49.05,
+          "metric_text": "Oil reserves: 22 billion bbl",
+          "name": "Marun",
+          "notes": "Major southwestern oil field",
+          "plot_lat": 30.75,
+          "plot_lon": 49.05,
+          "polygon": [
+            [
+              49.09072578413611,
+              30.75
+            ],
+            [
+              49.070362892068054,
+              30.780310889132455
+            ],
+            [
+              49.02963710793194,
+              30.780310889132455
+            ],
+            [
+              49.00927421586388,
+              30.75
+            ],
+            [
+              49.02963710793194,
+              30.719689110867545
+            ],
+            [
+              49.070362892068054,
+              30.719689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Gachsaran\nOil reserves: 53 billion bbl",
+          "label_z": 230000.0,
+          "lat": 30.36,
+          "lon": 50.8,
+          "metric_text": "Oil reserves: 53 billion bbl",
+          "name": "Gachsaran",
+          "notes": "Large Zagros oil field",
+          "plot_lat": 30.36,
+          "plot_lon": 50.8,
+          "polygon": [
+            [
+              50.84056246288217,
+              30.36
+            ],
+            [
+              50.82028123144108,
+              30.390310889132454
+            ],
+            [
+              50.779718768558915,
+              30.390310889132454
+            ],
+            [
+              50.759437537117826,
+              30.36
+            ],
+            [
+              50.779718768558915,
+              30.329689110867545
+            ],
+            [
+              50.82028123144108,
+              30.329689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Azadegan\nOil reserves: 32 billion bbl",
+          "label_z": 215000.0,
+          "lat": 31.4,
+          "lon": 47.72,
+          "metric_text": "Oil reserves: 32 billion bbl",
+          "name": "Azadegan",
+          "notes": "Large oil field near the Iraq border",
+          "plot_lat": 31.4,
+          "plot_lon": 47.72,
+          "polygon": [
+            [
+              47.76100517521831,
+              31.4
+            ],
+            [
+              47.74050258760915,
+              31.430310889132453
+            ],
+            [
+              47.69949741239085,
+              31.430310889132453
+            ],
+            [
+              47.67899482478169,
+              31.4
+            ],
+            [
+              47.69949741239085,
+              31.369689110867544
+            ],
+            [
+              47.74050258760915,
+              31.369689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Yadavaran\nOil reserves: 12 billion bbl",
+          "label_z": 185000.0,
+          "lat": 31.02,
+          "lon": 48.1,
+          "metric_text": "Oil reserves: 12 billion bbl",
+          "name": "Yadavaran",
+          "notes": "Southwestern oil field near Abadan plain",
+          "plot_lat": 31.02,
+          "plot_lon": 48.1,
+          "polygon": [
+            [
+              48.14084073732362,
+              31.02
+            ],
+            [
+              48.12042036866181,
+              31.050310889132454
+            ],
+            [
+              48.07957963133819,
+              31.050310889132454
+            ],
+            [
+              48.05915926267638,
+              31.02
+            ],
+            [
+              48.07957963133819,
+              30.989689110867545
+            ],
+            [
+              48.12042036866181,
+              30.989689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sarcheshmeh\nCopper output: 280,000 t/yr",
+          "label_z": 185000.0,
+          "lat": 30.0,
+          "lon": 55.8,
+          "metric_text": "Copper output: 280,000 t/yr",
+          "name": "Sarcheshmeh",
+          "notes": "Major copper mining and smelting complex",
+          "plot_lat": 30.0,
+          "plot_lon": 55.8,
+          "polygon": [
+            [
+              55.84041451884327,
+              30.0
+            ],
+            [
+              55.820207259421636,
+              30.030310889132455
+            ],
+            [
+              55.77979274057836,
+              30.030310889132455
+            ],
+            [
+              55.759585481156726,
+              30.0
+            ],
+            [
+              55.77979274057836,
+              29.969689110867545
+            ],
+            [
+              55.820207259421636,
+              29.969689110867545
+            ]
+          ],
+          "subtype": "Copper",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Chadormalu\nIron ore output: 10 million t/yr",
+          "label_z": 155000.0,
+          "lat": 32.31,
+          "lon": 55.53,
+          "metric_text": "Iron ore output: 10 million t/yr",
+          "name": "Chadormalu",
+          "notes": "Large central Iran iron ore mine",
+          "plot_lat": 32.31,
+          "plot_lon": 55.53,
+          "polygon": [
+            [
+              55.57141185762004,
+              32.31
+            ],
+            [
+              55.550705928810025,
+              32.34031088913246
+            ],
+            [
+              55.50929407118998,
+              32.34031088913246
+            ],
+            [
+              55.48858814237996,
+              32.31
+            ],
+            [
+              55.50929407118998,
+              32.279689110867544
+            ],
+            [
+              55.550705928810025,
+              32.279689110867544
+            ]
+          ],
+          "subtype": "Iron Ore",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Abadan Refinery\nRefining capacity: 400,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 30.34,
+          "lon": 48.28,
+          "metric_text": "Refining capacity: 400,000 bbl/d",
+          "name": "Abadan Refinery",
+          "notes": "Historic refinery near the Shatt al-Arab",
+          "plot_lat": 30.34,
+          "plot_lon": 48.28,
+          "polygon": [
+            [
+              48.32055417331116,
+              30.34
+            ],
+            [
+              48.300277086655576,
+              30.370310889132455
+            ],
+            [
+              48.259722913344426,
+              30.370310889132455
+            ],
+            [
+              48.23944582668884,
+              30.34
+            ],
+            [
+              48.259722913344426,
+              30.309689110867545
+            ],
+            [
+              48.300277086655576,
+              30.309689110867545
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Esfahan Refinery\nRefining capacity: 375,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 32.73,
+          "lon": 51.75,
+          "metric_text": "Refining capacity: 375,000 bbl/d",
+          "name": "Esfahan Refinery",
+          "notes": "Major inland refining complex",
+          "plot_lat": 32.73,
+          "plot_lon": 51.75,
+          "polygon": [
+            [
+              51.79160585290536,
+              32.73
+            ],
+            [
+              51.77080292645268,
+              32.760310889132455
+            ],
+            [
+              51.72919707354732,
+              32.760310889132455
+            ],
+            [
+              51.70839414709464,
+              32.73
+            ],
+            [
+              51.72919707354732,
+              32.69968911086754
+            ],
+            [
+              51.77080292645268,
+              32.69968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "7d6b1b78-f107-48ef-a019-5ac40d3fc328",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

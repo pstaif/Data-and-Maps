@@ -1,0 +1,161 @@
+Agriculture production value, latest available World Bank data (USD):
+🇨🇳 China — $1.27T
+🇮🇳 India — $636.74B
+🇺🇸 United States — $223.72B
+🇮🇩 Indonesia — $176.05B
+🇧🇷 Brazil — $125.73B
+🇵🇰 Pakistan — $88.22B
+🇹🇷 Turkey — $79.11B
+🇲🇽 Mexico — $69.14B
+🇳🇬 Nigeria — $65.27B
+🇷🇺 Russia — $59.64B
+🇻🇳 Vietnam — $56.52B
+🇪🇬 Egypt — $53.35B
+🇪🇹 Ethiopia — $52.07B
+🇮🇷 Iran — $51.33B
+🇧🇩 Bangladesh — $50.25B
+🇮🇹 Italy — $47.55B
+🇪🇸 Spain — $47.51B
+🇹🇭 Thailand — $45.87B
+🇩🇪 Germany — $42.84B
+🇵🇭 Philippines — $41.93B
+🇯🇵 Japan — $39.50B
+🇨🇴 Colombia — $38.88B
+🇩🇿 Algeria — $37.60B
+🇦🇷 Argentina — $37.06B
+🇦🇺 Australia — $35.77B
+🇲🇾 Malaysia — $34.32B
+🇨🇦 Canada — $32.32B
+🇸🇦 Saudi Arabia — $31.44B
+🇰🇷 South Korea — $27.35B
+🇰🇪 Kenya — $27.04B
+🇬🇧 United Kingdom — $23.52B
+🇵🇱 Poland — $23.31B
+🇦🇴 Angola — $22.29B
+🇵🇪 Peru — $21.22B
+🇺🇿 Uzbekistan — $21.07B
+🇳🇱 Netherlands — $21.01B
+🇹🇿 United Republic of Tanzania — $18.39B
+🇬🇭 Ghana — $17.19B
+🇲🇦 Morocco — $16.97B
+🇲🇲 Myanmar — $15.43B
+🇨🇮 Ivory Coast — $13.82B
+🇺🇦 Ukraine — $13.56B
+🇺🇬 Uganda — $13.27B
+🇨🇱 Chile — $12.92B
+🇪🇨 Ecuador — $11.81B
+🇳🇿 New Zealand — $11.40B
+🇰🇿 Kazakhstan — $11.32B
+🇿🇦 South Africa — $11.28B
+🇬🇹 Guatemala — $11.07B
+🇸🇩 Sudan — $11.02B
+🇷🇴 Romania — $10.76B
+🇸🇾 Syria — $10.17B
+🇨🇲 Cameroon — $9.84B
+🇬🇷 Greece — $9.65B
+🇮🇶 Iraq — $9.49B
+🇳🇵 Nepal — $9.39B
+🇲🇱 Mali — $8.91B
+🇸🇪 Sweden — $8.59B
+🇱🇰 Sri Lanka — $8.21B
+🇬🇳 Guinea — $7.74B
+🇰🇭 Cambodia — $7.68B
+🇫🇮 Finland — $7.37B
+🇹🇩 Chad — $7.36B
+🇮🇱 Israel — $6.93B
+🇳🇪 Niger — $6.85B
+🇨🇩 Democratic Republic of the Congo — $6.84B
+🇨🇿 Czech Republic — $6.59B
+🇦🇹 Austria — $6.51B
+🇵🇹 Portugal — $6.33B
+🇹🇲 Turkmenistan — $6.25B
+🇮🇪 Ireland — $6.22B
+🇭🇺 Hungary — $6.04B
+🇦🇫 Afghanistan — $5.96B
+🇨🇭 Switzerland — $5.89B
+🇲🇿 Mozambique — $5.73B
+🇩🇴 Dominican Republic — $5.54B
+🇸🇳 Senegal — $5.46B
+🇧🇪 Belgium — $5.31B
+🇵🇬 Papua New Guinea — $5.23B
+🇧🇾 Belarus — $5.22B
+🇧🇯 Benin — $5.21B
+🇺🇾 Uruguay — $5.20B
+🇹🇳 Tunisia — $5.00B
+🇧🇴 Bolivia — $4.84B
+🇧🇫 Burkina Faso — $4.84B
+🇵🇾 Paraguay — $4.76B
+🇦🇪 United Arab Emirates — $4.25B
+🇦🇿 Azerbaijan — $4.20B
+🇦🇱 Albania — $4.18B
+🇭🇳 Honduras — $4.16B
+🇭🇹 Haiti — $4.00B
+🇩🇰 Denmark — $3.94B
+🇲🇬 Madagascar — $3.91B
+🇿🇼 Zimbabwe — $3.61B
+🇲🇼 Malawi — $3.60B
+🇷🇼 Rwanda — $3.50B
+🇨🇷 Costa Rica — $3.40B
+🇨🇺 Cuba — $2.96B
+🇷🇸 Republic of Serbia — $2.86B
+🇳🇮 Nicaragua — $2.84B
+🇹🇯 Tajikistan — $2.80B
+🇴🇲 Oman — $2.79B
+🇱🇦 Laos — $2.77B
+🇯🇴 Jordan — $2.70B
+🇭🇷 Croatia — $2.69B
+🇧🇬 Bulgaria — $2.66B
+🇵🇦 Panama — $2.32B
+🇹🇬 Togo — $2.27B
+🇸🇰 Slovakia — $2.23B
+🇱🇹 Lithuania — $2.18B
+🇲🇷 Mauritania — $2.11B
+🇸🇱 Sierra Leone — $2.03B
+🇦🇲 Armenia — $2.03B
+🇬🇾 Guyana — $1.88B
+🇬🇪 Georgia — $1.88B
+🇱🇻 Latvia — $1.77B
+🇯🇲 Jamaica — $1.75B
+🇲🇳 Mongolia — $1.73B
+🇱🇷 Liberia — $1.62B
+🇸🇻 El Salvador — $1.55B
+🇰🇬 Kyrgyzstan — $1.50B
+🇨🇬 Republic of the Congo — $1.48B
+🇬🇦 Gabon — $1.37B
+🇧🇦 Bosnia and Herzegovina — $1.34B
+🇮🇸 Iceland — $1.32B
+🇲🇩 Moldova — $1.29B
+🇱🇾 Libya — $1.16B
+🇸🇮 Slovenia — $1.12B
+🇧🇮 Burundi — $1.08B
+🇲🇰 North Macedonia — $1.03B
+🇵🇸 Palestine — $1.02B
+🇳🇦 Namibia — $975.01M
+🇬🇼 Guinea-Bissau — $935.44M
+🇵🇷 Puerto Rico — $883.30M
+🇰🇼 Kuwait — $789.89M
+🇫🇯 Fiji — $787.20M
+🇨🇫 Central African Republic — $767.63M
+🇪🇪 Estonia — $762.05M
+🇿🇲 Zambia — $717.02M
+🇶🇦 Qatar — $629.67M
+🇬🇱 Greenland — $550.81M
+🇬🇲 Gambia — $491.40M
+🇸🇧 Solomon Islands — $470.85M
+🇧🇹 Bhutan — $451.73M
+🇨🇾 Cyprus — $434.73M
+🇬🇶 Equatorial Guinea — $402.00M
+🇹🇱 East Timor — $376.12M
+🇧🇼 Botswana — $332.19M
+🇸🇿 eSwatini — $314.72M
+🇸🇷 Suriname — $299.02M
+🇲🇪 Montenegro — $288.91M
+🇻🇺 Vanuatu — $256.43M
+🇧🇿 Belize — $254.62M
+🇹🇹 Trinidad and Tobago — $199.33M
+🇱🇺 Luxembourg — $195.41M
+🇱🇧 Lebanon — $194.05M
+🇧🇳 Brunei — $180.17M
+🇱🇸 Lesotho — $147.72M
+🇩🇯 Djibouti — $104.30M
+🇧🇸 The Bahamas — $81.50M

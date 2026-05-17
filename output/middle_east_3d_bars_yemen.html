@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 15.6,
+    "longitude": 47.5,
+    "pitch": 45,
+    "zoom": 5.4
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Masila Block 14\nOil capacity: 120,000 bbl/d peak",
+          "label_z": 185000.0,
+          "lat": 15.42,
+          "lon": 49.02,
+          "metric_text": "Oil capacity: 120,000 bbl/d peak",
+          "name": "Masila Block 14",
+          "notes": "Hadramawt oil production area",
+          "plot_lat": 15.42,
+          "plot_lon": 49.02,
+          "polygon": [
+            [
+              49.056306954175824,
+              15.42
+            ],
+            [
+              49.03815347708792,
+              15.450310889132455
+            ],
+            [
+              49.00184652291209,
+              15.450310889132455
+            ],
+            [
+              48.98369304582418,
+              15.42
+            ],
+            [
+              49.00184652291209,
+              15.389689110867545
+            ],
+            [
+              49.03815347708792,
+              15.389689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marib-Jawf Basin\nOil capacity: 200,000 bbl/d peak",
+          "label_z": 170000.0,
+          "lat": 15.47,
+          "lon": 45.32,
+          "metric_text": "Oil capacity: 200,000 bbl/d peak",
+          "name": "Marib-Jawf Basin",
+          "notes": "Central Yemen oil and gas producing basin",
+          "plot_lat": 15.521961524227066,
+          "plot_lon": 45.28887224927339,
+          "polygon": [
+            [
+              45.32519709071726,
+              15.521961524227066
+            ],
+            [
+              45.307034669995325,
+              15.552272413359521
+            ],
+            [
+              45.27070982855145,
+              15.552272413359521
+            ],
+            [
+              45.25254740782952,
+              15.521961524227066
+            ],
+            [
+              45.27070982855145,
+              15.491650635094611
+            ],
+            [
+              45.307034669995325,
+              15.491650635094611
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Shabwa Block S1\nOil capacity: 50,000 bbl/d peak",
+          "label_z": 134000.0,
+          "lat": 14.8,
+          "lon": 46.75,
+          "metric_text": "Oil capacity: 50,000 bbl/d peak",
+          "name": "Shabwa Block S1",
+          "notes": "Shabwa governorate oil block",
+          "plot_lat": 14.8,
+          "plot_lon": 46.75,
+          "polygon": [
+            [
+              46.78620102741879,
+              14.8
+            ],
+            [
+              46.7681005137094,
+              14.830310889132456
+            ],
+            [
+              46.7318994862906,
+              14.830310889132456
+            ],
+            [
+              46.71379897258121,
+              14.8
+            ],
+            [
+              46.7318994862906,
+              14.769689110867546
+            ],
+            [
+              46.7681005137094,
+              14.769689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Jannah Hunt\nOil capacity: 45,000 bbl/d peak",
+          "label_z": 125000.0,
+          "lat": 15.23,
+          "lon": 45.9,
+          "metric_text": "Oil capacity: 45,000 bbl/d peak",
+          "name": "Jannah Hunt",
+          "notes": "Oil field area east of Marib",
+          "plot_lat": 15.23,
+          "plot_lon": 45.9,
+          "polygon": [
+            [
+              45.93627397537777,
+              15.23
+            ],
+            [
+              45.91813698768888,
+              15.260310889132455
+            ],
+            [
+              45.881863012311115,
+              15.260310889132455
+            ],
+            [
+              45.863726024622224,
+              15.23
+            ],
+            [
+              45.881863012311115,
+              15.199689110867546
+            ],
+            [
+              45.91813698768888,
+              15.199689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Marib Gas\nGas reserves: 10 Tcf",
+          "label_z": 155000.0,
+          "lat": 15.43,
+          "lon": 45.33,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Marib Gas",
+          "notes": "Gas resources feeding power and LNG value chain",
+          "plot_lat": 15.43,
+          "plot_lon": 45.39224349021806,
+          "polygon": [
+            [
+              45.42855219284526,
+              15.43
+            ],
+            [
+              45.410397841531655,
+              15.460310889132455
+            ],
+            [
+              45.37408913890446,
+              15.460310889132455
+            ],
+            [
+              45.355934787590854,
+              15.43
+            ],
+            [
+              45.37408913890446,
+              15.399689110867545
+            ],
+            [
+              45.410397841531655,
+              15.399689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Balhaf LNG\nLNG capacity: 6.7 million t/yr",
+          "label_z": 185000.0,
+          "lat": 13.98,
+          "lon": 48.18,
+          "metric_text": "LNG capacity: 6.7 million t/yr",
+          "name": "Balhaf LNG",
+          "notes": "LNG liquefaction and export terminal on the Gulf of Aden",
+          "plot_lat": 13.98,
+          "plot_lon": 48.18,
+          "polygon": [
+            [
+              48.21606834012886,
+              13.98
+            ],
+            [
+              48.19803417006443,
+              14.010310889132455
+            ],
+            [
+              48.16196582993557,
+              14.010310889132455
+            ],
+            [
+              48.14393165987114,
+              13.98
+            ],
+            [
+              48.16196582993557,
+              13.949689110867546
+            ],
+            [
+              48.19803417006443,
+              13.949689110867546
+            ]
+          ],
+          "subtype": "LNG Export",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Aden Refinery\nRefining capacity: 150,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 12.79,
+          "lon": 44.99,
+          "metric_text": "Refining capacity: 150,000 bbl/d",
+          "name": "Aden Refinery",
+          "notes": "Aden coastal refinery complex",
+          "plot_lat": 12.79,
+          "plot_lon": 44.99,
+          "polygon": [
+            [
+              45.025890515213675,
+              12.79
+            ],
+            [
+              45.007945257606835,
+              12.820310889132454
+            ],
+            [
+              44.97205474239317,
+              12.820310889132454
+            ],
+            [
+              44.95410948478633,
+              12.79
+            ],
+            [
+              44.97205474239317,
+              12.759689110867544
+            ],
+            [
+              45.007945257606835,
+              12.759689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 22.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Marib Refinery\nRefining capacity: 10,000 bbl/d",
+          "label_z": 86000.0,
+          "lat": 15.46,
+          "lon": 45.32,
+          "metric_text": "Refining capacity: 10,000 bbl/d",
+          "name": "Marib Refinery",
+          "notes": "Small refinery serving inland production",
+          "plot_lat": 15.408038475772935,
+          "plot_lon": 45.28887375231736,
+          "polygon": [
+            [
+              45.325178616752495,
+              15.408038475772935
+            ],
+            [
+              45.30702618453493,
+              15.43834936490539
+            ],
+            [
+              45.27072132009979,
+              15.43834936490539
+            ],
+            [
+              45.25256888788222,
+              15.408038475772935
+            ],
+            [
+              45.27072132009979,
+              15.37772758664048
+            ],
+            [
+              45.30702618453493,
+              15.37772758664048
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Jawf Solar\nSolar resource: 2,200 kWh/m2/yr",
+          "label_z": 80000.0,
+          "lat": 16.6,
+          "lon": 44.6,
+          "metric_text": "Solar resource: 2,200 kWh/m2/yr",
+          "name": "Al Jawf Solar",
+          "notes": "Representative high-irradiance solar resource area",
+          "plot_lat": 16.6,
+          "plot_lon": 44.6,
+          "polygon": [
+            [
+              44.636522149151645,
+              16.6
+            ],
+            [
+              44.61826107457582,
+              16.630310889132456
+            ],
+            [
+              44.58173892542418,
+              16.630310889132456
+            ],
+            [
+              44.56347785084836,
+              16.6
+            ],
+            [
+              44.58173892542418,
+              16.569689110867547
+            ],
+            [
+              44.61826107457582,
+              16.569689110867547
+            ]
+          ],
+          "subtype": "PV Potential",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "174aabc4-7356-43bd-b9b7-e74bd4fbc391",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Masila Block 14\nOil capacity: 120,000 bbl/d peak",
+          "label_z": 185000.0,
+          "lat": 15.42,
+          "lon": 49.02,
+          "metric_text": "Oil capacity: 120,000 bbl/d peak",
+          "name": "Masila Block 14",
+          "notes": "Hadramawt oil production area",
+          "plot_lat": 15.42,
+          "plot_lon": 49.02,
+          "polygon": [
+            [
+              49.056306954175824,
+              15.42
+            ],
+            [
+              49.03815347708792,
+              15.450310889132455
+            ],
+            [
+              49.00184652291209,
+              15.450310889132455
+            ],
+            [
+              48.98369304582418,
+              15.42
+            ],
+            [
+              49.00184652291209,
+              15.389689110867545
+            ],
+            [
+              49.03815347708792,
+              15.389689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marib-Jawf Basin\nOil capacity: 200,000 bbl/d peak",
+          "label_z": 170000.0,
+          "lat": 15.47,
+          "lon": 45.32,
+          "metric_text": "Oil capacity: 200,000 bbl/d peak",
+          "name": "Marib-Jawf Basin",
+          "notes": "Central Yemen oil and gas producing basin",
+          "plot_lat": 15.521961524227066,
+          "plot_lon": 45.28887224927339,
+          "polygon": [
+            [
+              45.32519709071726,
+              15.521961524227066
+            ],
+            [
+              45.307034669995325,
+              15.552272413359521
+            ],
+            [
+              45.27070982855145,
+              15.552272413359521
+            ],
+            [
+              45.25254740782952,
+              15.521961524227066
+            ],
+            [
+              45.27070982855145,
+              15.491650635094611
+            ],
+            [
+              45.307034669995325,
+              15.491650635094611
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Shabwa Block S1\nOil capacity: 50,000 bbl/d peak",
+          "label_z": 134000.0,
+          "lat": 14.8,
+          "lon": 46.75,
+          "metric_text": "Oil capacity: 50,000 bbl/d peak",
+          "name": "Shabwa Block S1",
+          "notes": "Shabwa governorate oil block",
+          "plot_lat": 14.8,
+          "plot_lon": 46.75,
+          "polygon": [
+            [
+              46.78620102741879,
+              14.8
+            ],
+            [
+              46.7681005137094,
+              14.830310889132456
+            ],
+            [
+              46.7318994862906,
+              14.830310889132456
+            ],
+            [
+              46.71379897258121,
+              14.8
+            ],
+            [
+              46.7318994862906,
+              14.769689110867546
+            ],
+            [
+              46.7681005137094,
+              14.769689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Jannah Hunt\nOil capacity: 45,000 bbl/d peak",
+          "label_z": 125000.0,
+          "lat": 15.23,
+          "lon": 45.9,
+          "metric_text": "Oil capacity: 45,000 bbl/d peak",
+          "name": "Jannah Hunt",
+          "notes": "Oil field area east of Marib",
+          "plot_lat": 15.23,
+          "plot_lon": 45.9,
+          "polygon": [
+            [
+              45.93627397537777,
+              15.23
+            ],
+            [
+              45.91813698768888,
+              15.260310889132455
+            ],
+            [
+              45.881863012311115,
+              15.260310889132455
+            ],
+            [
+              45.863726024622224,
+              15.23
+            ],
+            [
+              45.881863012311115,
+              15.199689110867546
+            ],
+            [
+              45.91813698768888,
+              15.199689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Marib Gas\nGas reserves: 10 Tcf",
+          "label_z": 155000.0,
+          "lat": 15.43,
+          "lon": 45.33,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Marib Gas",
+          "notes": "Gas resources feeding power and LNG value chain",
+          "plot_lat": 15.43,
+          "plot_lon": 45.39224349021806,
+          "polygon": [
+            [
+              45.42855219284526,
+              15.43
+            ],
+            [
+              45.410397841531655,
+              15.460310889132455
+            ],
+            [
+              45.37408913890446,
+              15.460310889132455
+            ],
+            [
+              45.355934787590854,
+              15.43
+            ],
+            [
+              45.37408913890446,
+              15.399689110867545
+            ],
+            [
+              45.410397841531655,
+              15.399689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Balhaf LNG\nLNG capacity: 6.7 million t/yr",
+          "label_z": 185000.0,
+          "lat": 13.98,
+          "lon": 48.18,
+          "metric_text": "LNG capacity: 6.7 million t/yr",
+          "name": "Balhaf LNG",
+          "notes": "LNG liquefaction and export terminal on the Gulf of Aden",
+          "plot_lat": 13.98,
+          "plot_lon": 48.18,
+          "polygon": [
+            [
+              48.21606834012886,
+              13.98
+            ],
+            [
+              48.19803417006443,
+              14.010310889132455
+            ],
+            [
+              48.16196582993557,
+              14.010310889132455
+            ],
+            [
+              48.14393165987114,
+              13.98
+            ],
+            [
+              48.16196582993557,
+              13.949689110867546
+            ],
+            [
+              48.19803417006443,
+              13.949689110867546
+            ]
+          ],
+          "subtype": "LNG Export",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Aden Refinery\nRefining capacity: 150,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 12.79,
+          "lon": 44.99,
+          "metric_text": "Refining capacity: 150,000 bbl/d",
+          "name": "Aden Refinery",
+          "notes": "Aden coastal refinery complex",
+          "plot_lat": 12.79,
+          "plot_lon": 44.99,
+          "polygon": [
+            [
+              45.025890515213675,
+              12.79
+            ],
+            [
+              45.007945257606835,
+              12.820310889132454
+            ],
+            [
+              44.97205474239317,
+              12.820310889132454
+            ],
+            [
+              44.95410948478633,
+              12.79
+            ],
+            [
+              44.97205474239317,
+              12.759689110867544
+            ],
+            [
+              45.007945257606835,
+              12.759689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 22.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Marib Refinery\nRefining capacity: 10,000 bbl/d",
+          "label_z": 86000.0,
+          "lat": 15.46,
+          "lon": 45.32,
+          "metric_text": "Refining capacity: 10,000 bbl/d",
+          "name": "Marib Refinery",
+          "notes": "Small refinery serving inland production",
+          "plot_lat": 15.408038475772935,
+          "plot_lon": 45.28887375231736,
+          "polygon": [
+            [
+              45.325178616752495,
+              15.408038475772935
+            ],
+            [
+              45.30702618453493,
+              15.43834936490539
+            ],
+            [
+              45.27072132009979,
+              15.43834936490539
+            ],
+            [
+              45.25256888788222,
+              15.408038475772935
+            ],
+            [
+              45.27072132009979,
+              15.37772758664048
+            ],
+            [
+              45.30702618453493,
+              15.37772758664048
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 20.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Jawf Solar\nSolar resource: 2,200 kWh/m2/yr",
+          "label_z": 80000.0,
+          "lat": 16.6,
+          "lon": 44.6,
+          "metric_text": "Solar resource: 2,200 kWh/m2/yr",
+          "name": "Al Jawf Solar",
+          "notes": "Representative high-irradiance solar resource area",
+          "plot_lat": 16.6,
+          "plot_lon": 44.6,
+          "polygon": [
+            [
+              44.636522149151645,
+              16.6
+            ],
+            [
+              44.61826107457582,
+              16.630310889132456
+            ],
+            [
+              44.58173892542418,
+              16.630310889132456
+            ],
+            [
+              44.56347785084836,
+              16.6
+            ],
+            [
+              44.58173892542418,
+              16.569689110867547
+            ],
+            [
+              44.61826107457582,
+              16.569689110867547
+            ]
+          ],
+          "subtype": "PV Potential",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "1a7b76c3-78a7-4624-9efc-940ad7c1adce",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

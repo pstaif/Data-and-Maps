@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 31.5,
+    "longitude": 35.0,
+    "pitch": 45,
+    "zoom": 6.4
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 80.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Leviathan\nGas reserves: 22 Tcf",
+          "label_z": 260000.0,
+          "lat": 33.1,
+          "lon": 33.7,
+          "metric_text": "Gas reserves: 22 Tcf",
+          "name": "Leviathan",
+          "notes": "Large offshore Mediterranean gas field",
+          "plot_lat": 33.1,
+          "plot_lon": 33.7,
+          "polygon": [
+            [
+              33.74178013371983,
+              33.1
+            ],
+            [
+              33.720890066859916,
+              33.13031088913246
+            ],
+            [
+              33.67910993314009,
+              33.13031088913246
+            ],
+            [
+              33.65821986628018,
+              33.1
+            ],
+            [
+              33.67910993314009,
+              33.06968911086754
+            ],
+            [
+              33.720890066859916,
+              33.06968911086754
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tamar\nGas reserves: 10 Tcf",
+          "label_z": 215000.0,
+          "lat": 32.9,
+          "lon": 34.1,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Tamar",
+          "notes": "Major offshore gas field west of Haifa",
+          "plot_lat": 32.9,
+          "plot_lon": 34.1,
+          "polygon": [
+            [
+              34.141685531129504,
+              32.9
+            ],
+            [
+              34.12084276556475,
+              32.93031088913246
+            ],
+            [
+              34.07915723443525,
+              32.93031088913246
+            ],
+            [
+              34.0583144688705,
+              32.9
+            ],
+            [
+              34.07915723443525,
+              32.86968911086754
+            ],
+            [
+              34.12084276556475,
+              32.86968911086754
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Karish\nGas reserves: 1.4 Tcf",
+          "label_z": 155000.0,
+          "lat": 33.2,
+          "lon": 34.0,
+          "metric_text": "Gas reserves: 1.4 Tcf",
+          "name": "Karish",
+          "notes": "Eastern Mediterranean offshore gas field",
+          "plot_lat": 33.2,
+          "plot_lon": 34.0,
+          "polygon": [
+            [
+              34.04182778763033,
+              33.2
+            ],
+            [
+              34.02091389381516,
+              33.23031088913246
+            ],
+            [
+              33.97908610618484,
+              33.23031088913246
+            ],
+            [
+              33.95817221236967,
+              33.2
+            ],
+            [
+              33.97908610618484,
+              33.169689110867544
+            ],
+            [
+              34.02091389381516,
+              33.169689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tanin\nGas reserves: 1.2 Tcf",
+          "label_z": 110000.0,
+          "lat": 33.27,
+          "lon": 34.12,
+          "metric_text": "Gas reserves: 1.2 Tcf",
+          "name": "Tanin",
+          "notes": "Offshore gas discovery north of Karish",
+          "plot_lat": 33.27,
+          "plot_lon": 34.12,
+          "polygon": [
+            [
+              34.161861286041756,
+              33.27
+            ],
+            [
+              34.14093064302087,
+              33.30031088913246
+            ],
+            [
+              34.09906935697912,
+              33.30031088913246
+            ],
+            [
+              34.07813871395824,
+              33.27
+            ],
+            [
+              34.09906935697912,
+              33.239689110867545
+            ],
+            [
+              34.14093064302087,
+              33.239689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Dead Sea Works\nPotash output: 4 million t/yr",
+          "label_z": 200000.0,
+          "lat": 31.05,
+          "lon": 35.38,
+          "metric_text": "Potash output: 4 million t/yr",
+          "name": "Dead Sea Works",
+          "notes": "Dead Sea potash and mineral extraction complex",
+          "plot_lat": 31.05,
+          "plot_lon": 35.38,
+          "polygon": [
+            [
+              35.420853606036175,
+              31.05
+            ],
+            [
+              35.40042680301809,
+              31.080310889132456
+            ],
+            [
+              35.35957319698192,
+              31.080310889132456
+            ],
+            [
+              35.33914639396383,
+              31.05
+            ],
+            [
+              35.35957319698191,
+              31.019689110867546
+            ],
+            [
+              35.40042680301809,
+              31.019689110867546
+            ]
+          ],
+          "subtype": "Potash",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Haifa Refinery\nRefining capacity: 197,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 32.8,
+          "lon": 35.05,
+          "metric_text": "Refining capacity: 197,000 bbl/d",
+          "name": "Haifa Refinery",
+          "notes": "Northern coastal refining complex",
+          "plot_lat": 32.8,
+          "plot_lon": 35.05,
+          "polygon": [
+            [
+              35.09163858027959,
+              32.8
+            ],
+            [
+              35.070819290139795,
+              32.830310889132456
+            ],
+            [
+              35.0291807098602,
+              32.830310889132456
+            ],
+            [
+              35.0083614197204,
+              32.8
+            ],
+            [
+              35.0291807098602,
+              32.76968911086754
+            ],
+            [
+              35.070819290139795,
+              32.76968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ashdod Refinery\nRefining capacity: 100,000 bbl/d",
+          "label_z": 134000.0,
+          "lat": 31.83,
+          "lon": 34.65,
+          "metric_text": "Refining capacity: 100,000 bbl/d",
+          "name": "Ashdod Refinery",
+          "notes": "Southern coastal refinery",
+          "plot_lat": 31.83,
+          "plot_lon": 34.65,
+          "polygon": [
+            [
+              34.69119504892095,
+              31.83
+            ],
+            [
+              34.670597524460476,
+              31.860310889132453
+            ],
+            [
+              34.62940247553952,
+              31.860310889132453
+            ],
+            [
+              34.608804951079044,
+              31.83
+            ],
+            [
+              34.62940247553952,
+              31.799689110867543
+            ],
+            [
+              34.670597524460476,
+              31.799689110867543
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Sorek Desalination\nWater capacity: 624,000 m3/day",
+          "label_z": 185000.0,
+          "lat": 31.93,
+          "lon": 34.7,
+          "metric_text": "Water capacity: 624,000 m3/day",
+          "name": "Sorek Desalination",
+          "notes": "Large reverse-osmosis desalination plant",
+          "plot_lat": 31.93,
+          "plot_lon": 34.7,
+          "polygon": [
+            [
+              34.74123979154199,
+              31.93
+            ],
+            [
+              34.720619895770994,
+              31.960310889132455
+            ],
+            [
+              34.67938010422901,
+              31.960310889132455
+            ],
+            [
+              34.65876020845801,
+              31.93
+            ],
+            [
+              34.67938010422901,
+              31.899689110867545
+            ],
+            [
+              34.720619895770994,
+              31.899689110867545
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 48.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Hadera Desalination\nWater capacity: 525,000 m3/day",
+          "label_z": 164000.0,
+          "lat": 32.47,
+          "lon": 34.88,
+          "metric_text": "Water capacity: 525,000 m3/day",
+          "name": "Hadera Desalination",
+          "notes": "Major Mediterranean desalination plant",
+          "plot_lat": 32.47,
+          "plot_lon": 34.88,
+          "polygon": [
+            [
+              34.92148528413415,
+              32.47
+            ],
+            [
+              34.90074264206707,
+              32.50031088913246
+            ],
+            [
+              34.85925735793293,
+              32.50031088913246
+            ],
+            [
+              34.838514715865855,
+              32.47
+            ],
+            [
+              34.85925735793293,
+              32.43968911086754
+            ],
+            [
+              34.90074264206707,
+              32.43968911086754
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ashalim Solar\nSolar capacity: 250 MW",
+          "label_z": 125000.0,
+          "lat": 30.96,
+          "lon": 34.7,
+          "metric_text": "Solar capacity: 250 MW",
+          "name": "Ashalim Solar",
+          "notes": "Negev solar power complex",
+          "plot_lat": 30.96,
+          "plot_lon": 34.7,
+          "polygon": [
+            [
+              34.74081505775617,
+              30.96
+            ],
+            [
+              34.72040752887809,
+              30.990310889132456
+            ],
+            [
+              34.679592471121914,
+              30.990310889132456
+            ],
+            [
+              34.65918494224383,
+              30.96
+            ],
+            [
+              34.679592471121914,
+              30.929689110867546
+            ],
+            [
+              34.72040752887809,
+              30.929689110867546
+            ]
+          ],
+          "subtype": "CSP + PV",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "cdc76d6c-1d50-47b2-b982-9fd3cb71b20b",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 80.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Leviathan\nGas reserves: 22 Tcf",
+          "label_z": 260000.0,
+          "lat": 33.1,
+          "lon": 33.7,
+          "metric_text": "Gas reserves: 22 Tcf",
+          "name": "Leviathan",
+          "notes": "Large offshore Mediterranean gas field",
+          "plot_lat": 33.1,
+          "plot_lon": 33.7,
+          "polygon": [
+            [
+              33.74178013371983,
+              33.1
+            ],
+            [
+              33.720890066859916,
+              33.13031088913246
+            ],
+            [
+              33.67910993314009,
+              33.13031088913246
+            ],
+            [
+              33.65821986628018,
+              33.1
+            ],
+            [
+              33.67910993314009,
+              33.06968911086754
+            ],
+            [
+              33.720890066859916,
+              33.06968911086754
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tamar\nGas reserves: 10 Tcf",
+          "label_z": 215000.0,
+          "lat": 32.9,
+          "lon": 34.1,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Tamar",
+          "notes": "Major offshore gas field west of Haifa",
+          "plot_lat": 32.9,
+          "plot_lon": 34.1,
+          "polygon": [
+            [
+              34.141685531129504,
+              32.9
+            ],
+            [
+              34.12084276556475,
+              32.93031088913246
+            ],
+            [
+              34.07915723443525,
+              32.93031088913246
+            ],
+            [
+              34.0583144688705,
+              32.9
+            ],
+            [
+              34.07915723443525,
+              32.86968911086754
+            ],
+            [
+              34.12084276556475,
+              32.86968911086754
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Karish\nGas reserves: 1.4 Tcf",
+          "label_z": 155000.0,
+          "lat": 33.2,
+          "lon": 34.0,
+          "metric_text": "Gas reserves: 1.4 Tcf",
+          "name": "Karish",
+          "notes": "Eastern Mediterranean offshore gas field",
+          "plot_lat": 33.2,
+          "plot_lon": 34.0,
+          "polygon": [
+            [
+              34.04182778763033,
+              33.2
+            ],
+            [
+              34.02091389381516,
+              33.23031088913246
+            ],
+            [
+              33.97908610618484,
+              33.23031088913246
+            ],
+            [
+              33.95817221236967,
+              33.2
+            ],
+            [
+              33.97908610618484,
+              33.169689110867544
+            ],
+            [
+              34.02091389381516,
+              33.169689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Tanin\nGas reserves: 1.2 Tcf",
+          "label_z": 110000.0,
+          "lat": 33.27,
+          "lon": 34.12,
+          "metric_text": "Gas reserves: 1.2 Tcf",
+          "name": "Tanin",
+          "notes": "Offshore gas discovery north of Karish",
+          "plot_lat": 33.27,
+          "plot_lon": 34.12,
+          "polygon": [
+            [
+              34.161861286041756,
+              33.27
+            ],
+            [
+              34.14093064302087,
+              33.30031088913246
+            ],
+            [
+              34.09906935697912,
+              33.30031088913246
+            ],
+            [
+              34.07813871395824,
+              33.27
+            ],
+            [
+              34.09906935697912,
+              33.239689110867545
+            ],
+            [
+              34.14093064302087,
+              33.239689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Dead Sea Works\nPotash output: 4 million t/yr",
+          "label_z": 200000.0,
+          "lat": 31.05,
+          "lon": 35.38,
+          "metric_text": "Potash output: 4 million t/yr",
+          "name": "Dead Sea Works",
+          "notes": "Dead Sea potash and mineral extraction complex",
+          "plot_lat": 31.05,
+          "plot_lon": 35.38,
+          "polygon": [
+            [
+              35.420853606036175,
+              31.05
+            ],
+            [
+              35.40042680301809,
+              31.080310889132456
+            ],
+            [
+              35.35957319698192,
+              31.080310889132456
+            ],
+            [
+              35.33914639396383,
+              31.05
+            ],
+            [
+              35.35957319698191,
+              31.019689110867546
+            ],
+            [
+              35.40042680301809,
+              31.019689110867546
+            ]
+          ],
+          "subtype": "Potash",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Haifa Refinery\nRefining capacity: 197,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 32.8,
+          "lon": 35.05,
+          "metric_text": "Refining capacity: 197,000 bbl/d",
+          "name": "Haifa Refinery",
+          "notes": "Northern coastal refining complex",
+          "plot_lat": 32.8,
+          "plot_lon": 35.05,
+          "polygon": [
+            [
+              35.09163858027959,
+              32.8
+            ],
+            [
+              35.070819290139795,
+              32.830310889132456
+            ],
+            [
+              35.0291807098602,
+              32.830310889132456
+            ],
+            [
+              35.0083614197204,
+              32.8
+            ],
+            [
+              35.0291807098602,
+              32.76968911086754
+            ],
+            [
+              35.070819290139795,
+              32.76968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ashdod Refinery\nRefining capacity: 100,000 bbl/d",
+          "label_z": 134000.0,
+          "lat": 31.83,
+          "lon": 34.65,
+          "metric_text": "Refining capacity: 100,000 bbl/d",
+          "name": "Ashdod Refinery",
+          "notes": "Southern coastal refinery",
+          "plot_lat": 31.83,
+          "plot_lon": 34.65,
+          "polygon": [
+            [
+              34.69119504892095,
+              31.83
+            ],
+            [
+              34.670597524460476,
+              31.860310889132453
+            ],
+            [
+              34.62940247553952,
+              31.860310889132453
+            ],
+            [
+              34.608804951079044,
+              31.83
+            ],
+            [
+              34.62940247553952,
+              31.799689110867543
+            ],
+            [
+              34.670597524460476,
+              31.799689110867543
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Sorek Desalination\nWater capacity: 624,000 m3/day",
+          "label_z": 185000.0,
+          "lat": 31.93,
+          "lon": 34.7,
+          "metric_text": "Water capacity: 624,000 m3/day",
+          "name": "Sorek Desalination",
+          "notes": "Large reverse-osmosis desalination plant",
+          "plot_lat": 31.93,
+          "plot_lon": 34.7,
+          "polygon": [
+            [
+              34.74123979154199,
+              31.93
+            ],
+            [
+              34.720619895770994,
+              31.960310889132455
+            ],
+            [
+              34.67938010422901,
+              31.960310889132455
+            ],
+            [
+              34.65876020845801,
+              31.93
+            ],
+            [
+              34.67938010422901,
+              31.899689110867545
+            ],
+            [
+              34.720619895770994,
+              31.899689110867545
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 48.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Hadera Desalination\nWater capacity: 525,000 m3/day",
+          "label_z": 164000.0,
+          "lat": 32.47,
+          "lon": 34.88,
+          "metric_text": "Water capacity: 525,000 m3/day",
+          "name": "Hadera Desalination",
+          "notes": "Major Mediterranean desalination plant",
+          "plot_lat": 32.47,
+          "plot_lon": 34.88,
+          "polygon": [
+            [
+              34.92148528413415,
+              32.47
+            ],
+            [
+              34.90074264206707,
+              32.50031088913246
+            ],
+            [
+              34.85925735793293,
+              32.50031088913246
+            ],
+            [
+              34.838514715865855,
+              32.47
+            ],
+            [
+              34.85925735793293,
+              32.43968911086754
+            ],
+            [
+              34.90074264206707,
+              32.43968911086754
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ashalim Solar\nSolar capacity: 250 MW",
+          "label_z": 125000.0,
+          "lat": 30.96,
+          "lon": 34.7,
+          "metric_text": "Solar capacity: 250 MW",
+          "name": "Ashalim Solar",
+          "notes": "Negev solar power complex",
+          "plot_lat": 30.96,
+          "plot_lon": 34.7,
+          "polygon": [
+            [
+              34.74081505775617,
+              30.96
+            ],
+            [
+              34.72040752887809,
+              30.990310889132456
+            ],
+            [
+              34.679592471121914,
+              30.990310889132456
+            ],
+            [
+              34.65918494224383,
+              30.96
+            ],
+            [
+              34.679592471121914,
+              30.929689110867546
+            ],
+            [
+              34.72040752887809,
+              30.929689110867546
+            ]
+          ],
+          "subtype": "CSP + PV",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "39331f35-4c4f-4ef9-b212-b082908eb052",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

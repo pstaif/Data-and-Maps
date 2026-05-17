@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 21.0,
+    "longitude": 57.0,
+    "pitch": 45,
+    "zoom": 5.4
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Fahud\nOil capacity: 100,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 22.33,
+          "lon": 56.48,
+          "metric_text": "Oil capacity: 100,000 bbl/d",
+          "name": "Fahud",
+          "notes": "Major northern Oman oil field",
+          "plot_lat": 22.33,
+          "plot_lon": 56.48,
+          "polygon": [
+            [
+              56.51783739161069,
+              22.33
+            ],
+            [
+              56.498918695805344,
+              22.360310889132453
+            ],
+            [
+              56.46108130419465,
+              22.360310889132453
+            ],
+            [
+              56.4421626083893,
+              22.33
+            ],
+            [
+              56.46108130419465,
+              22.299689110867543
+            ],
+            [
+              56.498918695805344,
+              22.299689110867543
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Yibal\nOil capacity: 40,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 22.19,
+          "lon": 56.08,
+          "metric_text": "Oil capacity: 40,000 bbl/d",
+          "name": "Yibal",
+          "notes": "Long-producing field in northern Oman",
+          "plot_lat": 22.19,
+          "plot_lon": 56.08,
+          "polygon": [
+            [
+              56.11779956766083,
+              22.19
+            ],
+            [
+              56.09889978383042,
+              22.220310889132456
+            ],
+            [
+              56.06110021616958,
+              22.220310889132456
+            ],
+            [
+              56.042200432339165,
+              22.19
+            ],
+            [
+              56.06110021616958,
+              22.159689110867546
+            ],
+            [
+              56.09889978383042,
+              22.159689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marmul\nOil capacity: 80,000 bbl/d",
+          "label_z": 146000.0,
+          "lat": 18.16,
+          "lon": 55.18,
+          "metric_text": "Oil capacity: 80,000 bbl/d",
+          "name": "Marmul",
+          "notes": "Southern Oman oil field",
+          "plot_lat": 18.16,
+          "plot_lon": 55.18,
+          "polygon": [
+            [
+              55.21683474331966,
+              18.16
+            ],
+            [
+              55.19841737165983,
+              18.190310889132455
+            ],
+            [
+              55.16158262834017,
+              18.190310889132455
+            ],
+            [
+              55.14316525668034,
+              18.16
+            ],
+            [
+              55.16158262834017,
+              18.129689110867545
+            ],
+            [
+              55.19841737165983,
+              18.129689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Mukhaizna\nOil capacity: 120,000 bbl/d",
+          "label_z": 170000.0,
+          "lat": 19.52,
+          "lon": 56.42,
+          "metric_text": "Oil capacity: 120,000 bbl/d",
+          "name": "Mukhaizna",
+          "notes": "Heavy oil field using enhanced recovery",
+          "plot_lat": 19.52,
+          "plot_lon": 56.42,
+          "polygon": [
+            [
+              56.4571342969442,
+              19.52
+            ],
+            [
+              56.4385671484721,
+              19.550310889132454
+            ],
+            [
+              56.4014328515279,
+              19.550310889132454
+            ],
+            [
+              56.382865703055806,
+              19.52
+            ],
+            [
+              56.4014328515279,
+              19.489689110867545
+            ],
+            [
+              56.4385671484721,
+              19.489689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Khazzan\nGas capacity: 1.5 Bcf/d",
+          "label_z": 215000.0,
+          "lat": 22.1,
+          "lon": 56.8,
+          "metric_text": "Gas capacity: 1.5 Bcf/d",
+          "name": "Khazzan",
+          "notes": "Tight gas development in Block 61",
+          "plot_lat": 22.1,
+          "plot_lon": 56.8,
+          "polygon": [
+            [
+              56.837775411178676,
+              22.1
+            ],
+            [
+              56.81888770558933,
+              22.130310889132456
+            ],
+            [
+              56.78111229441066,
+              22.130310889132456
+            ],
+            [
+              56.76222458882132,
+              22.1
+            ],
+            [
+              56.78111229441066,
+              22.069689110867547
+            ],
+            [
+              56.81888770558933,
+              22.069689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Saih Rawl\nGas capacity: 500 MMcf/d",
+          "label_z": 170000.0,
+          "lat": 22.32,
+          "lon": 56.76,
+          "metric_text": "Gas capacity: 500 MMcf/d",
+          "name": "Saih Rawl",
+          "notes": "Gas field feeding LNG and domestic supply",
+          "plot_lat": 22.32,
+          "plot_lon": 56.76,
+          "polygon": [
+            [
+              56.797834679896354,
+              22.32
+            ],
+            [
+              56.77891733994818,
+              22.350310889132455
+            ],
+            [
+              56.741082660051816,
+              22.350310889132455
+            ],
+            [
+              56.72216532010364,
+              22.32
+            ],
+            [
+              56.741082660051816,
+              22.289689110867545
+            ],
+            [
+              56.77891733994818,
+              22.289689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sohar Refinery\nRefining capacity: 198,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 24.47,
+          "lon": 56.63,
+          "metric_text": "Refining capacity: 198,000 bbl/d",
+          "name": "Sohar Refinery",
+          "notes": "Major refinery and industrial port complex",
+          "plot_lat": 24.47,
+          "plot_lon": 56.56407884874425,
+          "polygon": [
+            [
+              56.60253285364344,
+              24.47
+            ],
+            [
+              56.58330585119385,
+              24.500310889132454
+            ],
+            [
+              56.544851846294655,
+              24.500310889132454
+            ],
+            [
+              56.525624843845065,
+              24.47
+            ],
+            [
+              56.544851846294655,
+              24.439689110867544
+            ],
+            [
+              56.58330585119385,
+              24.439689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Mina Al Fahal Refinery\nRefining capacity: 106,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 23.63,
+          "lon": 58.52,
+          "metric_text": "Refining capacity: 106,000 bbl/d",
+          "name": "Mina Al Fahal Refinery",
+          "notes": "Muscat-area refinery",
+          "plot_lat": 23.63,
+          "plot_lon": 58.52,
+          "polygon": [
+            [
+              58.558203226643684,
+              23.63
+            ],
+            [
+              58.53910161332185,
+              23.660310889132454
+            ],
+            [
+              58.50089838667816,
+              23.660310889132454
+            ],
+            [
+              58.48179677335632,
+              23.63
+            ],
+            [
+              58.50089838667816,
+              23.599689110867544
+            ],
+            [
+              58.53910161332185,
+              23.599689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ibri Solar\nSolar capacity: 500 MW",
+          "label_z": 134000.0,
+          "lat": 23.27,
+          "lon": 56.52,
+          "metric_text": "Solar capacity: 500 MW",
+          "name": "Ibri Solar",
+          "notes": "Large utility-scale solar PV plant",
+          "plot_lat": 23.27,
+          "plot_lon": 56.52,
+          "polygon": [
+            [
+              56.5580992455107,
+              23.27
+            ],
+            [
+              56.53904962275535,
+              23.300310889132454
+            ],
+            [
+              56.500950377244656,
+              23.300310889132454
+            ],
+            [
+              56.48190075448931,
+              23.27
+            ],
+            [
+              56.500950377244656,
+              23.239689110867545
+            ],
+            [
+              56.53904962275535,
+              23.239689110867545
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sohar Aluminium\nAluminium output: 395,000 t/yr",
+          "label_z": 140000.0,
+          "lat": 24.48,
+          "lon": 56.6,
+          "metric_text": "Aluminium output: 395,000 t/yr",
+          "name": "Sohar Aluminium",
+          "notes": "Aluminium smelting complex at Sohar",
+          "plot_lat": 24.48,
+          "plot_lon": 56.66592638872025,
+          "polygon": [
+            [
+              56.704383448807064,
+              24.48
+            ],
+            [
+              56.68515491876366,
+              24.510310889132455
+            ],
+            [
+              56.646697858676845,
+              24.510310889132455
+            ],
+            [
+              56.62746932863344,
+              24.48
+            ],
+            [
+              56.646697858676845,
+              24.449689110867546
+            ],
+            [
+              56.68515491876366,
+              24.449689110867546
+            ]
+          ],
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "7198f5a8-7ef5-4370-8a4b-cd26ae2707cd",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Fahud\nOil capacity: 100,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 22.33,
+          "lon": 56.48,
+          "metric_text": "Oil capacity: 100,000 bbl/d",
+          "name": "Fahud",
+          "notes": "Major northern Oman oil field",
+          "plot_lat": 22.33,
+          "plot_lon": 56.48,
+          "polygon": [
+            [
+              56.51783739161069,
+              22.33
+            ],
+            [
+              56.498918695805344,
+              22.360310889132453
+            ],
+            [
+              56.46108130419465,
+              22.360310889132453
+            ],
+            [
+              56.4421626083893,
+              22.33
+            ],
+            [
+              56.46108130419465,
+              22.299689110867543
+            ],
+            [
+              56.498918695805344,
+              22.299689110867543
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Yibal\nOil capacity: 40,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 22.19,
+          "lon": 56.08,
+          "metric_text": "Oil capacity: 40,000 bbl/d",
+          "name": "Yibal",
+          "notes": "Long-producing field in northern Oman",
+          "plot_lat": 22.19,
+          "plot_lon": 56.08,
+          "polygon": [
+            [
+              56.11779956766083,
+              22.19
+            ],
+            [
+              56.09889978383042,
+              22.220310889132456
+            ],
+            [
+              56.06110021616958,
+              22.220310889132456
+            ],
+            [
+              56.042200432339165,
+              22.19
+            ],
+            [
+              56.06110021616958,
+              22.159689110867546
+            ],
+            [
+              56.09889978383042,
+              22.159689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Marmul\nOil capacity: 80,000 bbl/d",
+          "label_z": 146000.0,
+          "lat": 18.16,
+          "lon": 55.18,
+          "metric_text": "Oil capacity: 80,000 bbl/d",
+          "name": "Marmul",
+          "notes": "Southern Oman oil field",
+          "plot_lat": 18.16,
+          "plot_lon": 55.18,
+          "polygon": [
+            [
+              55.21683474331966,
+              18.16
+            ],
+            [
+              55.19841737165983,
+              18.190310889132455
+            ],
+            [
+              55.16158262834017,
+              18.190310889132455
+            ],
+            [
+              55.14316525668034,
+              18.16
+            ],
+            [
+              55.16158262834017,
+              18.129689110867545
+            ],
+            [
+              55.19841737165983,
+              18.129689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Mukhaizna\nOil capacity: 120,000 bbl/d",
+          "label_z": 170000.0,
+          "lat": 19.52,
+          "lon": 56.42,
+          "metric_text": "Oil capacity: 120,000 bbl/d",
+          "name": "Mukhaizna",
+          "notes": "Heavy oil field using enhanced recovery",
+          "plot_lat": 19.52,
+          "plot_lon": 56.42,
+          "polygon": [
+            [
+              56.4571342969442,
+              19.52
+            ],
+            [
+              56.4385671484721,
+              19.550310889132454
+            ],
+            [
+              56.4014328515279,
+              19.550310889132454
+            ],
+            [
+              56.382865703055806,
+              19.52
+            ],
+            [
+              56.4014328515279,
+              19.489689110867545
+            ],
+            [
+              56.4385671484721,
+              19.489689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Khazzan\nGas capacity: 1.5 Bcf/d",
+          "label_z": 215000.0,
+          "lat": 22.1,
+          "lon": 56.8,
+          "metric_text": "Gas capacity: 1.5 Bcf/d",
+          "name": "Khazzan",
+          "notes": "Tight gas development in Block 61",
+          "plot_lat": 22.1,
+          "plot_lon": 56.8,
+          "polygon": [
+            [
+              56.837775411178676,
+              22.1
+            ],
+            [
+              56.81888770558933,
+              22.130310889132456
+            ],
+            [
+              56.78111229441066,
+              22.130310889132456
+            ],
+            [
+              56.76222458882132,
+              22.1
+            ],
+            [
+              56.78111229441066,
+              22.069689110867547
+            ],
+            [
+              56.81888770558933,
+              22.069689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Saih Rawl\nGas capacity: 500 MMcf/d",
+          "label_z": 170000.0,
+          "lat": 22.32,
+          "lon": 56.76,
+          "metric_text": "Gas capacity: 500 MMcf/d",
+          "name": "Saih Rawl",
+          "notes": "Gas field feeding LNG and domestic supply",
+          "plot_lat": 22.32,
+          "plot_lon": 56.76,
+          "polygon": [
+            [
+              56.797834679896354,
+              22.32
+            ],
+            [
+              56.77891733994818,
+              22.350310889132455
+            ],
+            [
+              56.741082660051816,
+              22.350310889132455
+            ],
+            [
+              56.72216532010364,
+              22.32
+            ],
+            [
+              56.741082660051816,
+              22.289689110867545
+            ],
+            [
+              56.77891733994818,
+              22.289689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sohar Refinery\nRefining capacity: 198,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 24.47,
+          "lon": 56.63,
+          "metric_text": "Refining capacity: 198,000 bbl/d",
+          "name": "Sohar Refinery",
+          "notes": "Major refinery and industrial port complex",
+          "plot_lat": 24.47,
+          "plot_lon": 56.56407884874425,
+          "polygon": [
+            [
+              56.60253285364344,
+              24.47
+            ],
+            [
+              56.58330585119385,
+              24.500310889132454
+            ],
+            [
+              56.544851846294655,
+              24.500310889132454
+            ],
+            [
+              56.525624843845065,
+              24.47
+            ],
+            [
+              56.544851846294655,
+              24.439689110867544
+            ],
+            [
+              56.58330585119385,
+              24.439689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Mina Al Fahal Refinery\nRefining capacity: 106,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 23.63,
+          "lon": 58.52,
+          "metric_text": "Refining capacity: 106,000 bbl/d",
+          "name": "Mina Al Fahal Refinery",
+          "notes": "Muscat-area refinery",
+          "plot_lat": 23.63,
+          "plot_lon": 58.52,
+          "polygon": [
+            [
+              58.558203226643684,
+              23.63
+            ],
+            [
+              58.53910161332185,
+              23.660310889132454
+            ],
+            [
+              58.50089838667816,
+              23.660310889132454
+            ],
+            [
+              58.48179677335632,
+              23.63
+            ],
+            [
+              58.50089838667816,
+              23.599689110867544
+            ],
+            [
+              58.53910161332185,
+              23.599689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Ibri Solar\nSolar capacity: 500 MW",
+          "label_z": 134000.0,
+          "lat": 23.27,
+          "lon": 56.52,
+          "metric_text": "Solar capacity: 500 MW",
+          "name": "Ibri Solar",
+          "notes": "Large utility-scale solar PV plant",
+          "plot_lat": 23.27,
+          "plot_lon": 56.52,
+          "polygon": [
+            [
+              56.5580992455107,
+              23.27
+            ],
+            [
+              56.53904962275535,
+              23.300310889132454
+            ],
+            [
+              56.500950377244656,
+              23.300310889132454
+            ],
+            [
+              56.48190075448931,
+              23.27
+            ],
+            [
+              56.500950377244656,
+              23.239689110867545
+            ],
+            [
+              56.53904962275535,
+              23.239689110867545
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Sohar Aluminium\nAluminium output: 395,000 t/yr",
+          "label_z": 140000.0,
+          "lat": 24.48,
+          "lon": 56.6,
+          "metric_text": "Aluminium output: 395,000 t/yr",
+          "name": "Sohar Aluminium",
+          "notes": "Aluminium smelting complex at Sohar",
+          "plot_lat": 24.48,
+          "plot_lon": 56.66592638872025,
+          "polygon": [
+            [
+              56.704383448807064,
+              24.48
+            ],
+            [
+              56.68515491876366,
+              24.510310889132455
+            ],
+            [
+              56.646697858676845,
+              24.510310889132455
+            ],
+            [
+              56.62746932863344,
+              24.48
+            ],
+            [
+              56.646697858676845,
+              24.449689110867546
+            ],
+            [
+              56.68515491876366,
+              24.449689110867546
+            ]
+          ],
+          "subtype": "Aluminium Smelter",
+          "type": "Refinery"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "03f7d5b2-cd09-4d30-b47e-575b616c8979",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

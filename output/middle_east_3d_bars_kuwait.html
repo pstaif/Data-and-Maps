@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 29.3,
+    "longitude": 47.6,
+    "pitch": 45,
+    "zoom": 7
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Burgan\nOil reserves: 66-70 billion bbl",
+          "label_z": 320000.0,
+          "lat": 29.08,
+          "lon": 47.97,
+          "metric_text": "Oil reserves: 66-70 billion bbl",
+          "name": "Burgan",
+          "notes": "One of the largest conventional oil fields globally",
+          "plot_lat": 29.08,
+          "plot_lon": 47.97,
+          "polygon": [
+            [
+              48.01004842734229,
+              29.08
+            ],
+            [
+              47.99002421367114,
+              29.110310889132453
+            ],
+            [
+              47.94997578632886,
+              29.110310889132453
+            ],
+            [
+              47.92995157265771,
+              29.08
+            ],
+            [
+              47.94997578632886,
+              29.049689110867543
+            ],
+            [
+              47.99002421367114,
+              29.049689110867543
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Raudhatain\nOil capacity: 230,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 29.77,
+          "lon": 47.71,
+          "metric_text": "Oil capacity: 230,000 bbl/d",
+          "name": "Raudhatain",
+          "notes": "Northern Kuwait oil field",
+          "plot_lat": 29.77,
+          "plot_lon": 47.71,
+          "polygon": [
+            [
+              47.75032139379501,
+              29.77
+            ],
+            [
+              47.73016069689751,
+              29.800310889132454
+            ],
+            [
+              47.689839303102495,
+              29.800310889132454
+            ],
+            [
+              47.66967860620499,
+              29.77
+            ],
+            [
+              47.689839303102495,
+              29.739689110867545
+            ],
+            [
+              47.73016069689751,
+              29.739689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Sabriya\nOil capacity: 120,000 bbl/d",
+          "label_z": 170000.0,
+          "lat": 29.84,
+          "lon": 47.88,
+          "metric_text": "Oil capacity: 120,000 bbl/d",
+          "name": "Sabriya",
+          "notes": "Northern Kuwait field with Jurassic reservoirs nearby",
+          "plot_lat": 29.84,
+          "plot_lon": 47.88,
+          "polygon": [
+            [
+              47.920349621927414,
+              29.84
+            ],
+            [
+              47.900174810963705,
+              29.870310889132455
+            ],
+            [
+              47.8598251890363,
+              29.870310889132455
+            ],
+            [
+              47.83965037807259,
+              29.84
+            ],
+            [
+              47.8598251890363,
+              29.809689110867545
+            ],
+            [
+              47.900174810963705,
+              29.809689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Minagish\nOil capacity: 190,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 29.07,
+          "lon": 47.07,
+          "metric_text": "Oil capacity: 190,000 bbl/d",
+          "name": "Minagish",
+          "notes": "West Kuwait oil field",
+          "plot_lat": 29.07,
+          "plot_lon": 47.07,
+          "polygon": [
+            [
+              47.11004454106896,
+              29.07
+            ],
+            [
+              47.09002227053448,
+              29.100310889132455
+            ],
+            [
+              47.04997772946552,
+              29.100310889132455
+            ],
+            [
+              47.02995545893104,
+              29.07
+            ],
+            [
+              47.04997772946552,
+              29.039689110867545
+            ],
+            [
+              47.09002227053448,
+              29.039689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Umm Gudair\nOil capacity: 110,000 bbl/d",
+          "label_z": 140000.0,
+          "lat": 28.97,
+          "lon": 47.3,
+          "metric_text": "Oil capacity: 110,000 bbl/d",
+          "name": "Umm Gudair",
+          "notes": "West Kuwait oil field",
+          "plot_lat": 28.97,
+          "plot_lon": 47.3,
+          "polygon": [
+            [
+              47.34000578675885,
+              28.97
+            ],
+            [
+              47.320002893379424,
+              29.000310889132454
+            ],
+            [
+              47.27999710662057,
+              29.000310889132454
+            ],
+            [
+              47.25999421324114,
+              28.97
+            ],
+            [
+              47.27999710662057,
+              28.939689110867544
+            ],
+            [
+              47.320002893379424,
+              28.939689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Jurassic Gas\nGas capacity: 600 MMcf/d",
+          "label_z": 134000.0,
+          "lat": 29.7,
+          "lon": 47.85,
+          "metric_text": "Gas capacity: 600 MMcf/d",
+          "name": "Jurassic Gas",
+          "notes": "Northern Kuwait non-associated gas development",
+          "plot_lat": 29.7,
+          "plot_lon": 47.85,
+          "polygon": [
+            [
+              47.89029326523185,
+              29.7
+            ],
+            [
+              47.87014663261593,
+              29.730310889132454
+            ],
+            [
+              47.829853367384075,
+              29.730310889132454
+            ],
+            [
+              47.809706734768156,
+              29.7
+            ],
+            [
+              47.829853367384075,
+              29.669689110867544
+            ],
+            [
+              47.87014663261593,
+              29.669689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Mina Al Ahmadi Refinery\nRefining capacity: 466,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 29.08,
+          "lon": 48.13,
+          "metric_text": "Refining capacity: 466,000 bbl/d",
+          "name": "Mina Al Ahmadi Refinery",
+          "notes": "Major refining and export complex",
+          "plot_lat": 29.08,
+          "plot_lon": 48.13,
+          "polygon": [
+            [
+              48.170048427342294,
+              29.08
+            ],
+            [
+              48.150024213671145,
+              29.110310889132453
+            ],
+            [
+              48.10997578632886,
+              29.110310889132453
+            ],
+            [
+              48.08995157265771,
+              29.08
+            ],
+            [
+              48.10997578632886,
+              29.049689110867543
+            ],
+            [
+              48.150024213671145,
+              29.049689110867543
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Al Zour Refinery\nRefining capacity: 615,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 28.73,
+          "lon": 48.27,
+          "metric_text": "Refining capacity: 615,000 bbl/d",
+          "name": "Al Zour Refinery",
+          "notes": "Large newer refining complex",
+          "plot_lat": 28.73,
+          "plot_lon": 48.27,
+          "polygon": [
+            [
+              48.30991357688614,
+              28.73
+            ],
+            [
+              48.28995678844307,
+              28.760310889132455
+            ],
+            [
+              48.250043211556935,
+              28.760310889132455
+            ],
+            [
+              48.23008642311387,
+              28.73
+            ],
+            [
+              48.250043211556935,
+              28.699689110867546
+            ],
+            [
+              48.28995678844307,
+              28.699689110867546
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Doha Desalination\nWater capacity: 250,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 29.36,
+          "lon": 47.8,
+          "metric_text": "Water capacity: 250,000 m3/day",
+          "name": "Doha Desalination",
+          "notes": "Kuwait Bay desalination and power site",
+          "plot_lat": 29.36,
+          "plot_lon": 47.8,
+          "polygon": [
+            [
+              47.84015804765284,
+              29.36
+            ],
+            [
+              47.820079023826416,
+              29.390310889132454
+            ],
+            [
+              47.77992097617358,
+              29.390310889132454
+            ],
+            [
+              47.75984195234715,
+              29.36
+            ],
+            [
+              47.77992097617358,
+              29.329689110867545
+            ],
+            [
+              47.820079023826416,
+              29.329689110867545
+            ]
+          ],
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Shagaya Renewables\nRenewable capacity: 70 MW",
+          "label_z": 110000.0,
+          "lat": 29.2,
+          "lon": 46.67,
+          "metric_text": "Renewable capacity: 70 MW",
+          "name": "Shagaya Renewables",
+          "notes": "Renewable energy park in western Kuwait",
+          "plot_lat": 29.2,
+          "plot_lon": 46.67,
+          "polygon": [
+            [
+              46.71009521687144,
+              29.2
+            ],
+            [
+              46.69004760843572,
+              29.230310889132454
+            ],
+            [
+              46.649952391564284,
+              29.230310889132454
+            ],
+            [
+              46.629904783128566,
+              29.2
+            ],
+            [
+              46.649952391564284,
+              29.169689110867544
+            ],
+            [
+              46.69004760843572,
+              29.169689110867544
+            ]
+          ],
+          "subtype": "PV + CSP + Wind",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "08a2c3f7-94b6-4951-8293-5f66339f1c98",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Burgan\nOil reserves: 66-70 billion bbl",
+          "label_z": 320000.0,
+          "lat": 29.08,
+          "lon": 47.97,
+          "metric_text": "Oil reserves: 66-70 billion bbl",
+          "name": "Burgan",
+          "notes": "One of the largest conventional oil fields globally",
+          "plot_lat": 29.08,
+          "plot_lon": 47.97,
+          "polygon": [
+            [
+              48.01004842734229,
+              29.08
+            ],
+            [
+              47.99002421367114,
+              29.110310889132453
+            ],
+            [
+              47.94997578632886,
+              29.110310889132453
+            ],
+            [
+              47.92995157265771,
+              29.08
+            ],
+            [
+              47.94997578632886,
+              29.049689110867543
+            ],
+            [
+              47.99002421367114,
+              29.049689110867543
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Raudhatain\nOil capacity: 230,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 29.77,
+          "lon": 47.71,
+          "metric_text": "Oil capacity: 230,000 bbl/d",
+          "name": "Raudhatain",
+          "notes": "Northern Kuwait oil field",
+          "plot_lat": 29.77,
+          "plot_lon": 47.71,
+          "polygon": [
+            [
+              47.75032139379501,
+              29.77
+            ],
+            [
+              47.73016069689751,
+              29.800310889132454
+            ],
+            [
+              47.689839303102495,
+              29.800310889132454
+            ],
+            [
+              47.66967860620499,
+              29.77
+            ],
+            [
+              47.689839303102495,
+              29.739689110867545
+            ],
+            [
+              47.73016069689751,
+              29.739689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 50.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Sabriya\nOil capacity: 120,000 bbl/d",
+          "label_z": 170000.0,
+          "lat": 29.84,
+          "lon": 47.88,
+          "metric_text": "Oil capacity: 120,000 bbl/d",
+          "name": "Sabriya",
+          "notes": "Northern Kuwait field with Jurassic reservoirs nearby",
+          "plot_lat": 29.84,
+          "plot_lon": 47.88,
+          "polygon": [
+            [
+              47.920349621927414,
+              29.84
+            ],
+            [
+              47.900174810963705,
+              29.870310889132455
+            ],
+            [
+              47.8598251890363,
+              29.870310889132455
+            ],
+            [
+              47.83965037807259,
+              29.84
+            ],
+            [
+              47.8598251890363,
+              29.809689110867545
+            ],
+            [
+              47.900174810963705,
+              29.809689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Minagish\nOil capacity: 190,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 29.07,
+          "lon": 47.07,
+          "metric_text": "Oil capacity: 190,000 bbl/d",
+          "name": "Minagish",
+          "notes": "West Kuwait oil field",
+          "plot_lat": 29.07,
+          "plot_lon": 47.07,
+          "polygon": [
+            [
+              47.11004454106896,
+              29.07
+            ],
+            [
+              47.09002227053448,
+              29.100310889132455
+            ],
+            [
+              47.04997772946552,
+              29.100310889132455
+            ],
+            [
+              47.02995545893104,
+              29.07
+            ],
+            [
+              47.04997772946552,
+              29.039689110867545
+            ],
+            [
+              47.09002227053448,
+              29.039689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Umm Gudair\nOil capacity: 110,000 bbl/d",
+          "label_z": 140000.0,
+          "lat": 28.97,
+          "lon": 47.3,
+          "metric_text": "Oil capacity: 110,000 bbl/d",
+          "name": "Umm Gudair",
+          "notes": "West Kuwait oil field",
+          "plot_lat": 28.97,
+          "plot_lon": 47.3,
+          "polygon": [
+            [
+              47.34000578675885,
+              28.97
+            ],
+            [
+              47.320002893379424,
+              29.000310889132454
+            ],
+            [
+              47.27999710662057,
+              29.000310889132454
+            ],
+            [
+              47.25999421324114,
+              28.97
+            ],
+            [
+              47.27999710662057,
+              28.939689110867544
+            ],
+            [
+              47.320002893379424,
+              28.939689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Jurassic Gas\nGas capacity: 600 MMcf/d",
+          "label_z": 134000.0,
+          "lat": 29.7,
+          "lon": 47.85,
+          "metric_text": "Gas capacity: 600 MMcf/d",
+          "name": "Jurassic Gas",
+          "notes": "Northern Kuwait non-associated gas development",
+          "plot_lat": 29.7,
+          "plot_lon": 47.85,
+          "polygon": [
+            [
+              47.89029326523185,
+              29.7
+            ],
+            [
+              47.87014663261593,
+              29.730310889132454
+            ],
+            [
+              47.829853367384075,
+              29.730310889132454
+            ],
+            [
+              47.809706734768156,
+              29.7
+            ],
+            [
+              47.829853367384075,
+              29.669689110867544
+            ],
+            [
+              47.87014663261593,
+              29.669689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Mina Al Ahmadi Refinery\nRefining capacity: 466,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 29.08,
+          "lon": 48.13,
+          "metric_text": "Refining capacity: 466,000 bbl/d",
+          "name": "Mina Al Ahmadi Refinery",
+          "notes": "Major refining and export complex",
+          "plot_lat": 29.08,
+          "plot_lon": 48.13,
+          "polygon": [
+            [
+              48.170048427342294,
+              29.08
+            ],
+            [
+              48.150024213671145,
+              29.110310889132453
+            ],
+            [
+              48.10997578632886,
+              29.110310889132453
+            ],
+            [
+              48.08995157265771,
+              29.08
+            ],
+            [
+              48.10997578632886,
+              29.049689110867543
+            ],
+            [
+              48.150024213671145,
+              29.049689110867543
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Al Zour Refinery\nRefining capacity: 615,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 28.73,
+          "lon": 48.27,
+          "metric_text": "Refining capacity: 615,000 bbl/d",
+          "name": "Al Zour Refinery",
+          "notes": "Large newer refining complex",
+          "plot_lat": 28.73,
+          "plot_lon": 48.27,
+          "polygon": [
+            [
+              48.30991357688614,
+              28.73
+            ],
+            [
+              48.28995678844307,
+              28.760310889132455
+            ],
+            [
+              48.250043211556935,
+              28.760310889132455
+            ],
+            [
+              48.23008642311387,
+              28.73
+            ],
+            [
+              48.250043211556935,
+              28.699689110867546
+            ],
+            [
+              48.28995678844307,
+              28.699689110867546
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Doha Desalination\nWater capacity: 250,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 29.36,
+          "lon": 47.8,
+          "metric_text": "Water capacity: 250,000 m3/day",
+          "name": "Doha Desalination",
+          "notes": "Kuwait Bay desalination and power site",
+          "plot_lat": 29.36,
+          "plot_lon": 47.8,
+          "polygon": [
+            [
+              47.84015804765284,
+              29.36
+            ],
+            [
+              47.820079023826416,
+              29.390310889132454
+            ],
+            [
+              47.77992097617358,
+              29.390310889132454
+            ],
+            [
+              47.75984195234715,
+              29.36
+            ],
+            [
+              47.77992097617358,
+              29.329689110867545
+            ],
+            [
+              47.820079023826416,
+              29.329689110867545
+            ]
+          ],
+          "subtype": "MSF",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 30.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Shagaya Renewables\nRenewable capacity: 70 MW",
+          "label_z": 110000.0,
+          "lat": 29.2,
+          "lon": 46.67,
+          "metric_text": "Renewable capacity: 70 MW",
+          "name": "Shagaya Renewables",
+          "notes": "Renewable energy park in western Kuwait",
+          "plot_lat": 29.2,
+          "plot_lon": 46.67,
+          "polygon": [
+            [
+              46.71009521687144,
+              29.2
+            ],
+            [
+              46.69004760843572,
+              29.230310889132454
+            ],
+            [
+              46.649952391564284,
+              29.230310889132454
+            ],
+            [
+              46.629904783128566,
+              29.2
+            ],
+            [
+              46.649952391564284,
+              29.169689110867544
+            ],
+            [
+              46.69004760843572,
+              29.169689110867544
+            ]
+          ],
+          "subtype": "PV + CSP + Wind",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "d5a8e681-314f-430a-a830-a0531fee08ce",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

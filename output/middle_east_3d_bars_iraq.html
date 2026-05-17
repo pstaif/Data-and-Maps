@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 33.0,
+    "longitude": 43.5,
+    "pitch": 45,
+    "zoom": 5
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 95.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Rumaila\nOil capacity: 1.4 million bbl/d",
+          "label_z": 305000.0,
+          "lat": 30.48,
+          "lon": 47.36,
+          "metric_text": "Oil capacity: 1.4 million bbl/d",
+          "name": "Rumaila",
+          "notes": "Supergiant southern oil field near Basra",
+          "plot_lat": 30.48,
+          "plot_lon": 47.36,
+          "polygon": [
+            [
+              47.400612375573026,
+              30.48
+            ],
+            [
+              47.380306187786516,
+              30.510310889132455
+            ],
+            [
+              47.33969381221348,
+              30.510310889132455
+            ],
+            [
+              47.31938762442697,
+              30.48
+            ],
+            [
+              47.33969381221348,
+              30.449689110867546
+            ],
+            [
+              47.380306187786516,
+              30.449689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "West Qurna\nOil capacity: 550,000 bbl/d",
+          "label_z": 290000.0,
+          "lat": 31.02,
+          "lon": 47.43,
+          "metric_text": "Oil capacity: 550,000 bbl/d",
+          "name": "West Qurna",
+          "notes": "Large southern oil field complex",
+          "plot_lat": 31.02,
+          "plot_lon": 47.43,
+          "polygon": [
+            [
+              47.47084073732362,
+              31.02
+            ],
+            [
+              47.45042036866181,
+              31.050310889132454
+            ],
+            [
+              47.40957963133819,
+              31.050310889132454
+            ],
+            [
+              47.38915926267638,
+              31.02
+            ],
+            [
+              47.40957963133819,
+              30.989689110867545
+            ],
+            [
+              47.45042036866181,
+              30.989689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Majnoon\nOil capacity: 450,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 31.17,
+          "lon": 47.55,
+          "metric_text": "Oil capacity: 450,000 bbl/d",
+          "name": "Majnoon",
+          "notes": "Major field north of Basra",
+          "plot_lat": 31.17,
+          "plot_lon": 47.55,
+          "polygon": [
+            [
+              47.59090527433628,
+              31.17
+            ],
+            [
+              47.57045263716814,
+              31.200310889132457
+            ],
+            [
+              47.529547362831856,
+              31.200310889132457
+            ],
+            [
+              47.509094725663715,
+              31.17
+            ],
+            [
+              47.529547362831856,
+              31.139689110867547
+            ],
+            [
+              47.57045263716814,
+              31.139689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Kirkuk\nOil reserves: 8.7 billion bbl",
+          "label_z": 230000.0,
+          "lat": 35.47,
+          "lon": 44.39,
+          "metric_text": "Oil reserves: 8.7 billion bbl",
+          "name": "Kirkuk",
+          "notes": "Historic giant oil field in northern Iraq",
+          "plot_lat": 35.47,
+          "plot_lon": 44.39,
+          "polygon": [
+            [
+              44.432975397358106,
+              35.47
+            ],
+            [
+              44.41148769867905,
+              35.50031088913246
+            ],
+            [
+              44.36851230132095,
+              35.50031088913246
+            ],
+            [
+              44.347024602641895,
+              35.47
+            ],
+            [
+              44.36851230132095,
+              35.43968911086754
+            ],
+            [
+              44.41148769867905,
+              35.43968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Zubair\nOil capacity: 475,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 30.36,
+          "lon": 47.63,
+          "metric_text": "Oil capacity: 475,000 bbl/d",
+          "name": "Zubair",
+          "notes": "Basra-area oil field",
+          "plot_lat": 30.36,
+          "plot_lon": 47.63,
+          "polygon": [
+            [
+              47.670562462882174,
+              30.36
+            ],
+            [
+              47.650281231441085,
+              30.390310889132454
+            ],
+            [
+              47.60971876855892,
+              30.390310889132454
+            ],
+            [
+              47.58943753711783,
+              30.36
+            ],
+            [
+              47.60971876855892,
+              30.329689110867545
+            ],
+            [
+              47.650281231441085,
+              30.329689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Halfaya\nOil capacity: 400,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 31.65,
+          "lon": 47.31,
+          "metric_text": "Oil capacity: 400,000 bbl/d",
+          "name": "Halfaya",
+          "notes": "Maysan governorate oil field",
+          "plot_lat": 31.65,
+          "plot_lon": 47.31,
+          "polygon": [
+            [
+              47.35111507147254,
+              31.65
+            ],
+            [
+              47.33055753573627,
+              31.680310889132453
+            ],
+            [
+              47.289442464263736,
+              31.680310889132453
+            ],
+            [
+              47.26888492852746,
+              31.65
+            ],
+            [
+              47.289442464263736,
+              31.619689110867544
+            ],
+            [
+              47.33055753573627,
+              31.619689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Akkas\nGas reserves: 5.6 Tcf",
+          "label_z": 125000.0,
+          "lat": 34.04,
+          "lon": 41.05,
+          "metric_text": "Gas reserves: 5.6 Tcf",
+          "name": "Akkas",
+          "notes": "Western Iraq gas field",
+          "plot_lat": 34.04,
+          "plot_lon": 41.05,
+          "polygon": [
+            [
+              41.09223752796264,
+              34.04
+            ],
+            [
+              41.07111876398132,
+              34.07031088913246
+            ],
+            [
+              41.02888123601868,
+              34.07031088913246
+            ],
+            [
+              41.007762472037356,
+              34.04
+            ],
+            [
+              41.02888123601868,
+              34.00968911086754
+            ],
+            [
+              41.07111876398132,
+              34.00968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Mansuriya\nGas reserves: 4.5 Tcf",
+          "label_z": 116000.0,
+          "lat": 34.19,
+          "lon": 44.69,
+          "metric_text": "Gas reserves: 4.5 Tcf",
+          "name": "Mansuriya",
+          "notes": "Diyala province gas field",
+          "plot_lat": 34.19,
+          "plot_lon": 44.69,
+          "polygon": [
+            [
+              44.73231250337387,
+              34.19
+            ],
+            [
+              44.71115625168694,
+              34.220310889132456
+            ],
+            [
+              44.66884374831306,
+              34.220310889132456
+            ],
+            [
+              44.647687496626126,
+              34.19
+            ],
+            [
+              44.66884374831306,
+              34.15968911086754
+            ],
+            [
+              44.71115625168694,
+              34.15968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Baiji Refinery\nRefining capacity: 310,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 34.93,
+          "lon": 43.49,
+          "metric_text": "Refining capacity: 310,000 bbl/d",
+          "name": "Baiji Refinery",
+          "notes": "Large northern refining complex",
+          "plot_lat": 34.93,
+          "plot_lon": 43.49,
+          "polygon": [
+            [
+              43.53269062214794,
+              34.93
+            ],
+            [
+              43.511345311073974,
+              34.96031088913246
+            ],
+            [
+              43.46865468892603,
+              34.96031088913246
+            ],
+            [
+              43.447309377852065,
+              34.93
+            ],
+            [
+              43.46865468892603,
+              34.89968911086754
+            ],
+            [
+              43.511345311073974,
+              34.89968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Karbala Refinery\nRefining capacity: 140,000 bbl/d",
+          "label_z": 134000.0,
+          "lat": 32.46,
+          "lon": 43.87,
+          "metric_text": "Refining capacity: 140,000 bbl/d",
+          "name": "Karbala Refinery",
+          "notes": "Modern refinery serving central Iraq",
+          "plot_lat": 32.46,
+          "plot_lon": 43.87,
+          "polygon": [
+            [
+              43.911480677867765,
+              32.46
+            ],
+            [
+              43.89074033893388,
+              32.49031088913246
+            ],
+            [
+              43.849259661066114,
+              32.49031088913246
+            ],
+            [
+              43.82851932213223,
+              32.46
+            ],
+            [
+              43.849259661066114,
+              32.42968911086754
+            ],
+            [
+              43.89074033893388,
+              32.42968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "0fed9d0f-52d8-451e-9ffe-d768df7a910c",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 95.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Rumaila\nOil capacity: 1.4 million bbl/d",
+          "label_z": 305000.0,
+          "lat": 30.48,
+          "lon": 47.36,
+          "metric_text": "Oil capacity: 1.4 million bbl/d",
+          "name": "Rumaila",
+          "notes": "Supergiant southern oil field near Basra",
+          "plot_lat": 30.48,
+          "plot_lon": 47.36,
+          "polygon": [
+            [
+              47.400612375573026,
+              30.48
+            ],
+            [
+              47.380306187786516,
+              30.510310889132455
+            ],
+            [
+              47.33969381221348,
+              30.510310889132455
+            ],
+            [
+              47.31938762442697,
+              30.48
+            ],
+            [
+              47.33969381221348,
+              30.449689110867546
+            ],
+            [
+              47.380306187786516,
+              30.449689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "West Qurna\nOil capacity: 550,000 bbl/d",
+          "label_z": 290000.0,
+          "lat": 31.02,
+          "lon": 47.43,
+          "metric_text": "Oil capacity: 550,000 bbl/d",
+          "name": "West Qurna",
+          "notes": "Large southern oil field complex",
+          "plot_lat": 31.02,
+          "plot_lon": 47.43,
+          "polygon": [
+            [
+              47.47084073732362,
+              31.02
+            ],
+            [
+              47.45042036866181,
+              31.050310889132454
+            ],
+            [
+              47.40957963133819,
+              31.050310889132454
+            ],
+            [
+              47.38915926267638,
+              31.02
+            ],
+            [
+              47.40957963133819,
+              30.989689110867545
+            ],
+            [
+              47.45042036866181,
+              30.989689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Majnoon\nOil capacity: 450,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 31.17,
+          "lon": 47.55,
+          "metric_text": "Oil capacity: 450,000 bbl/d",
+          "name": "Majnoon",
+          "notes": "Major field north of Basra",
+          "plot_lat": 31.17,
+          "plot_lon": 47.55,
+          "polygon": [
+            [
+              47.59090527433628,
+              31.17
+            ],
+            [
+              47.57045263716814,
+              31.200310889132457
+            ],
+            [
+              47.529547362831856,
+              31.200310889132457
+            ],
+            [
+              47.509094725663715,
+              31.17
+            ],
+            [
+              47.529547362831856,
+              31.139689110867547
+            ],
+            [
+              47.57045263716814,
+              31.139689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Kirkuk\nOil reserves: 8.7 billion bbl",
+          "label_z": 230000.0,
+          "lat": 35.47,
+          "lon": 44.39,
+          "metric_text": "Oil reserves: 8.7 billion bbl",
+          "name": "Kirkuk",
+          "notes": "Historic giant oil field in northern Iraq",
+          "plot_lat": 35.47,
+          "plot_lon": 44.39,
+          "polygon": [
+            [
+              44.432975397358106,
+              35.47
+            ],
+            [
+              44.41148769867905,
+              35.50031088913246
+            ],
+            [
+              44.36851230132095,
+              35.50031088913246
+            ],
+            [
+              44.347024602641895,
+              35.47
+            ],
+            [
+              44.36851230132095,
+              35.43968911086754
+            ],
+            [
+              44.41148769867905,
+              35.43968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Zubair\nOil capacity: 475,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 30.36,
+          "lon": 47.63,
+          "metric_text": "Oil capacity: 475,000 bbl/d",
+          "name": "Zubair",
+          "notes": "Basra-area oil field",
+          "plot_lat": 30.36,
+          "plot_lon": 47.63,
+          "polygon": [
+            [
+              47.670562462882174,
+              30.36
+            ],
+            [
+              47.650281231441085,
+              30.390310889132454
+            ],
+            [
+              47.60971876855892,
+              30.390310889132454
+            ],
+            [
+              47.58943753711783,
+              30.36
+            ],
+            [
+              47.60971876855892,
+              30.329689110867545
+            ],
+            [
+              47.650281231441085,
+              30.329689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Halfaya\nOil capacity: 400,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 31.65,
+          "lon": 47.31,
+          "metric_text": "Oil capacity: 400,000 bbl/d",
+          "name": "Halfaya",
+          "notes": "Maysan governorate oil field",
+          "plot_lat": 31.65,
+          "plot_lon": 47.31,
+          "polygon": [
+            [
+              47.35111507147254,
+              31.65
+            ],
+            [
+              47.33055753573627,
+              31.680310889132453
+            ],
+            [
+              47.289442464263736,
+              31.680310889132453
+            ],
+            [
+              47.26888492852746,
+              31.65
+            ],
+            [
+              47.289442464263736,
+              31.619689110867544
+            ],
+            [
+              47.33055753573627,
+              31.619689110867544
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Akkas\nGas reserves: 5.6 Tcf",
+          "label_z": 125000.0,
+          "lat": 34.04,
+          "lon": 41.05,
+          "metric_text": "Gas reserves: 5.6 Tcf",
+          "name": "Akkas",
+          "notes": "Western Iraq gas field",
+          "plot_lat": 34.04,
+          "plot_lon": 41.05,
+          "polygon": [
+            [
+              41.09223752796264,
+              34.04
+            ],
+            [
+              41.07111876398132,
+              34.07031088913246
+            ],
+            [
+              41.02888123601868,
+              34.07031088913246
+            ],
+            [
+              41.007762472037356,
+              34.04
+            ],
+            [
+              41.02888123601868,
+              34.00968911086754
+            ],
+            [
+              41.07111876398132,
+              34.00968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Mansuriya\nGas reserves: 4.5 Tcf",
+          "label_z": 116000.0,
+          "lat": 34.19,
+          "lon": 44.69,
+          "metric_text": "Gas reserves: 4.5 Tcf",
+          "name": "Mansuriya",
+          "notes": "Diyala province gas field",
+          "plot_lat": 34.19,
+          "plot_lon": 44.69,
+          "polygon": [
+            [
+              44.73231250337387,
+              34.19
+            ],
+            [
+              44.71115625168694,
+              34.220310889132456
+            ],
+            [
+              44.66884374831306,
+              34.220310889132456
+            ],
+            [
+              44.647687496626126,
+              34.19
+            ],
+            [
+              44.66884374831306,
+              34.15968911086754
+            ],
+            [
+              44.71115625168694,
+              34.15968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Baiji Refinery\nRefining capacity: 310,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 34.93,
+          "lon": 43.49,
+          "metric_text": "Refining capacity: 310,000 bbl/d",
+          "name": "Baiji Refinery",
+          "notes": "Large northern refining complex",
+          "plot_lat": 34.93,
+          "plot_lon": 43.49,
+          "polygon": [
+            [
+              43.53269062214794,
+              34.93
+            ],
+            [
+              43.511345311073974,
+              34.96031088913246
+            ],
+            [
+              43.46865468892603,
+              34.96031088913246
+            ],
+            [
+              43.447309377852065,
+              34.93
+            ],
+            [
+              43.46865468892603,
+              34.89968911086754
+            ],
+            [
+              43.511345311073974,
+              34.89968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Karbala Refinery\nRefining capacity: 140,000 bbl/d",
+          "label_z": 134000.0,
+          "lat": 32.46,
+          "lon": 43.87,
+          "metric_text": "Refining capacity: 140,000 bbl/d",
+          "name": "Karbala Refinery",
+          "notes": "Modern refinery serving central Iraq",
+          "plot_lat": 32.46,
+          "plot_lon": 43.87,
+          "polygon": [
+            [
+              43.911480677867765,
+              32.46
+            ],
+            [
+              43.89074033893388,
+              32.49031088913246
+            ],
+            [
+              43.849259661066114,
+              32.49031088913246
+            ],
+            [
+              43.82851932213223,
+              32.46
+            ],
+            [
+              43.849259661066114,
+              32.42968911086754
+            ],
+            [
+              43.89074033893388,
+              32.42968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "aee77368-a446-4c05-af00-817f2d6f87c1",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

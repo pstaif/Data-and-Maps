@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 24.2,
+    "longitude": 54.3,
+    "pitch": 45,
+    "zoom": 6
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Upper Zakum\nOil capacity: 750,000 bbl/d",
+          "label_z": 290000.0,
+          "lat": 25.05,
+          "lon": 53.48,
+          "metric_text": "Oil capacity: 750,000 bbl/d",
+          "name": "Upper Zakum",
+          "notes": "Large Abu Dhabi offshore oil field",
+          "plot_lat": 25.05,
+          "plot_lon": 53.48,
+          "polygon": [
+            [
+              53.51863396319871,
+              25.05
+            ],
+            [
+              53.49931698159935,
+              25.080310889132456
+            ],
+            [
+              53.460683018400644,
+              25.080310889132456
+            ],
+            [
+              53.441366036801284,
+              25.05
+            ],
+            [
+              53.460683018400644,
+              25.019689110867546
+            ],
+            [
+              53.49931698159935,
+              25.019689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Lower Zakum\nOil capacity: 450,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 24.73,
+          "lon": 53.68,
+          "metric_text": "Oil capacity: 450,000 bbl/d",
+          "name": "Lower Zakum",
+          "notes": "Major offshore oil field",
+          "plot_lat": 24.73,
+          "plot_lon": 53.68,
+          "polygon": [
+            [
+              53.71853397987447,
+              24.73
+            ],
+            [
+              53.699266989937236,
+              24.760310889132455
+            ],
+            [
+              53.66073301006276,
+              24.760310889132455
+            ],
+            [
+              53.64146602012553,
+              24.73
+            ],
+            [
+              53.66073301006276,
+              24.699689110867546
+            ],
+            [
+              53.699266989937236,
+              24.699689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bab\nOil capacity: 420,000 bbl/d",
+          "label_z": 230000.0,
+          "lat": 23.6,
+          "lon": 54.1,
+          "metric_text": "Oil capacity: 420,000 bbl/d",
+          "name": "Bab",
+          "notes": "Large Abu Dhabi onshore field",
+          "plot_lat": 23.6,
+          "plot_lon": 54.1,
+          "polygon": [
+            [
+              54.13819448224037,
+              23.6
+            ],
+            [
+              54.11909724112019,
+              23.630310889132456
+            ],
+            [
+              54.080902758879816,
+              23.630310889132456
+            ],
+            [
+              54.06180551775963,
+              23.6
+            ],
+            [
+              54.080902758879816,
+              23.569689110867547
+            ],
+            [
+              54.11909724112019,
+              23.569689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bu Hasa\nOil capacity: 650,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 23.55,
+          "lon": 53.4,
+          "metric_text": "Oil capacity: 650,000 bbl/d",
+          "name": "Bu Hasa",
+          "notes": "Major onshore oil field",
+          "plot_lat": 23.55,
+          "plot_lon": 53.4,
+          "polygon": [
+            [
+              53.43817994037996,
+              23.55
+            ],
+            [
+              53.41908997018998,
+              23.580310889132456
+            ],
+            [
+              53.38091002981002,
+              23.580310889132456
+            ],
+            [
+              53.36182005962004,
+              23.55
+            ],
+            [
+              53.38091002981002,
+              23.519689110867546
+            ],
+            [
+              53.41908997018998,
+              23.519689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Shah Gas\nGas capacity: 1.0 Bcf/d",
+          "label_z": 185000.0,
+          "lat": 23.07,
+          "lon": 53.73,
+          "metric_text": "Gas capacity: 1.0 Bcf/d",
+          "name": "Shah Gas",
+          "notes": "Sour gas development in Abu Dhabi",
+          "plot_lat": 23.07,
+          "plot_lon": 53.73,
+          "polygon": [
+            [
+              53.7680423701338,
+              23.07
+            ],
+            [
+              53.7490211850669,
+              23.100310889132455
+            ],
+            [
+              53.71097881493309,
+              23.100310889132455
+            ],
+            [
+              53.691957629866195,
+              23.07
+            ],
+            [
+              53.71097881493309,
+              23.039689110867545
+            ],
+            [
+              53.7490211850669,
+              23.039689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ruwais Refinery\nRefining capacity: 837,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 24.12,
+          "lon": 52.73,
+          "metric_text": "Refining capacity: 837,000 bbl/d",
+          "name": "Ruwais Refinery",
+          "notes": "Large downstream hub in western Abu Dhabi",
+          "plot_lat": 24.12,
+          "plot_lon": 52.73,
+          "polygon": [
+            [
+              52.76834811285986,
+              24.12
+            ],
+            [
+              52.74917405642993,
+              24.150310889132456
+            ],
+            [
+              52.710825943570065,
+              24.150310889132456
+            ],
+            [
+              52.69165188714013,
+              24.12
+            ],
+            [
+              52.710825943570065,
+              24.089689110867546
+            ],
+            [
+              52.74917405642993,
+              24.089689110867546
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Jebel Ali Desalination\nWater capacity: 2.2 million m3/day",
+          "label_z": 200000.0,
+          "lat": 24.99,
+          "lon": 55.07,
+          "metric_text": "Water capacity: 2.2 million m3/day",
+          "name": "Jebel Ali Desalination",
+          "notes": "Major Dubai water and power complex",
+          "plot_lat": 24.99,
+          "plot_lon": 55.07,
+          "polygon": [
+            [
+              55.108615085023004,
+              24.99
+            ],
+            [
+              55.089307542511506,
+              25.020310889132453
+            ],
+            [
+              55.050692457488495,
+              25.020310889132453
+            ],
+            [
+              55.031384914977,
+              24.99
+            ],
+            [
+              55.050692457488495,
+              24.959689110867544
+            ],
+            [
+              55.089307542511506,
+              24.959689110867544
+            ]
+          ],
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Taweelah Desalination\nWater capacity: 909,000 m3/day",
+          "label_z": 185000.0,
+          "lat": 24.78,
+          "lon": 54.7,
+          "metric_text": "Water capacity: 909,000 m3/day",
+          "name": "Taweelah Desalination",
+          "notes": "Large Abu Dhabi desalination complex",
+          "plot_lat": 24.78,
+          "plot_lon": 54.7,
+          "polygon": [
+            [
+              54.73854948892469,
+              24.78
+            ],
+            [
+              54.719274744462346,
+              24.810310889132456
+            ],
+            [
+              54.68072525553766,
+              24.810310889132456
+            ],
+            [
+              54.661450511075316,
+              24.78
+            ],
+            [
+              54.68072525553766,
+              24.749689110867546
+            ],
+            [
+              54.719274744462346,
+              24.749689110867546
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Dhafra Solar\nSolar capacity: 2,000 MW",
+          "label_z": 215000.0,
+          "lat": 24.4,
+          "lon": 54.45,
+          "metric_text": "Solar capacity: 2,000 MW",
+          "name": "Al Dhafra Solar",
+          "notes": "Utility-scale solar PV project near Abu Dhabi",
+          "plot_lat": 24.4,
+          "plot_lon": 54.45,
+          "polygon": [
+            [
+              54.4884326649377,
+              24.4
+            ],
+            [
+              54.469216332468854,
+              24.430310889132453
+            ],
+            [
+              54.43078366753115,
+              24.430310889132453
+            ],
+            [
+              54.41156733506231,
+              24.4
+            ],
+            [
+              54.43078366753115,
+              24.369689110867544
+            ],
+            [
+              54.469216332468854,
+              24.369689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "MBR Solar Park\nSolar target: 5,000 MW",
+          "label_z": 200000.0,
+          "lat": 24.77,
+          "lon": 55.36,
+          "metric_text": "Solar target: 5,000 MW",
+          "name": "MBR Solar Park",
+          "notes": "Mohammed bin Rashid Al Maktoum Solar Park",
+          "plot_lat": 24.77,
+          "plot_lon": 55.36,
+          "polygon": [
+            [
+              55.39854638376743,
+              24.77
+            ],
+            [
+              55.37927319188371,
+              24.800310889132454
+            ],
+            [
+              55.34072680811629,
+              24.800310889132454
+            ],
+            [
+              55.32145361623257,
+              24.77
+            ],
+            [
+              55.34072680811629,
+              24.739689110867545
+            ],
+            [
+              55.37927319188371,
+              24.739689110867545
+            ]
+          ],
+          "subtype": "PV + CSP",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "efb3d9c4-1ea1-4e7a-af97-b06ad23c5885",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Upper Zakum\nOil capacity: 750,000 bbl/d",
+          "label_z": 290000.0,
+          "lat": 25.05,
+          "lon": 53.48,
+          "metric_text": "Oil capacity: 750,000 bbl/d",
+          "name": "Upper Zakum",
+          "notes": "Large Abu Dhabi offshore oil field",
+          "plot_lat": 25.05,
+          "plot_lon": 53.48,
+          "polygon": [
+            [
+              53.51863396319871,
+              25.05
+            ],
+            [
+              53.49931698159935,
+              25.080310889132456
+            ],
+            [
+              53.460683018400644,
+              25.080310889132456
+            ],
+            [
+              53.441366036801284,
+              25.05
+            ],
+            [
+              53.460683018400644,
+              25.019689110867546
+            ],
+            [
+              53.49931698159935,
+              25.019689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Lower Zakum\nOil capacity: 450,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 24.73,
+          "lon": 53.68,
+          "metric_text": "Oil capacity: 450,000 bbl/d",
+          "name": "Lower Zakum",
+          "notes": "Major offshore oil field",
+          "plot_lat": 24.73,
+          "plot_lon": 53.68,
+          "polygon": [
+            [
+              53.71853397987447,
+              24.73
+            ],
+            [
+              53.699266989937236,
+              24.760310889132455
+            ],
+            [
+              53.66073301006276,
+              24.760310889132455
+            ],
+            [
+              53.64146602012553,
+              24.73
+            ],
+            [
+              53.66073301006276,
+              24.699689110867546
+            ],
+            [
+              53.699266989937236,
+              24.699689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bab\nOil capacity: 420,000 bbl/d",
+          "label_z": 230000.0,
+          "lat": 23.6,
+          "lon": 54.1,
+          "metric_text": "Oil capacity: 420,000 bbl/d",
+          "name": "Bab",
+          "notes": "Large Abu Dhabi onshore field",
+          "plot_lat": 23.6,
+          "plot_lon": 54.1,
+          "polygon": [
+            [
+              54.13819448224037,
+              23.6
+            ],
+            [
+              54.11909724112019,
+              23.630310889132456
+            ],
+            [
+              54.080902758879816,
+              23.630310889132456
+            ],
+            [
+              54.06180551775963,
+              23.6
+            ],
+            [
+              54.080902758879816,
+              23.569689110867547
+            ],
+            [
+              54.11909724112019,
+              23.569689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bu Hasa\nOil capacity: 650,000 bbl/d",
+          "label_z": 215000.0,
+          "lat": 23.55,
+          "lon": 53.4,
+          "metric_text": "Oil capacity: 650,000 bbl/d",
+          "name": "Bu Hasa",
+          "notes": "Major onshore oil field",
+          "plot_lat": 23.55,
+          "plot_lon": 53.4,
+          "polygon": [
+            [
+              53.43817994037996,
+              23.55
+            ],
+            [
+              53.41908997018998,
+              23.580310889132456
+            ],
+            [
+              53.38091002981002,
+              23.580310889132456
+            ],
+            [
+              53.36182005962004,
+              23.55
+            ],
+            [
+              53.38091002981002,
+              23.519689110867546
+            ],
+            [
+              53.41908997018998,
+              23.519689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Shah Gas\nGas capacity: 1.0 Bcf/d",
+          "label_z": 185000.0,
+          "lat": 23.07,
+          "lon": 53.73,
+          "metric_text": "Gas capacity: 1.0 Bcf/d",
+          "name": "Shah Gas",
+          "notes": "Sour gas development in Abu Dhabi",
+          "plot_lat": 23.07,
+          "plot_lon": 53.73,
+          "polygon": [
+            [
+              53.7680423701338,
+              23.07
+            ],
+            [
+              53.7490211850669,
+              23.100310889132455
+            ],
+            [
+              53.71097881493309,
+              23.100310889132455
+            ],
+            [
+              53.691957629866195,
+              23.07
+            ],
+            [
+              53.71097881493309,
+              23.039689110867545
+            ],
+            [
+              53.7490211850669,
+              23.039689110867545
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 75.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ruwais Refinery\nRefining capacity: 837,000 bbl/d",
+          "label_z": 245000.0,
+          "lat": 24.12,
+          "lon": 52.73,
+          "metric_text": "Refining capacity: 837,000 bbl/d",
+          "name": "Ruwais Refinery",
+          "notes": "Large downstream hub in western Abu Dhabi",
+          "plot_lat": 24.12,
+          "plot_lon": 52.73,
+          "polygon": [
+            [
+              52.76834811285986,
+              24.12
+            ],
+            [
+              52.74917405642993,
+              24.150310889132456
+            ],
+            [
+              52.710825943570065,
+              24.150310889132456
+            ],
+            [
+              52.69165188714013,
+              24.12
+            ],
+            [
+              52.710825943570065,
+              24.089689110867546
+            ],
+            [
+              52.74917405642993,
+              24.089689110867546
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Jebel Ali Desalination\nWater capacity: 2.2 million m3/day",
+          "label_z": 200000.0,
+          "lat": 24.99,
+          "lon": 55.07,
+          "metric_text": "Water capacity: 2.2 million m3/day",
+          "name": "Jebel Ali Desalination",
+          "notes": "Major Dubai water and power complex",
+          "plot_lat": 24.99,
+          "plot_lon": 55.07,
+          "polygon": [
+            [
+              55.108615085023004,
+              24.99
+            ],
+            [
+              55.089307542511506,
+              25.020310889132453
+            ],
+            [
+              55.050692457488495,
+              25.020310889132453
+            ],
+            [
+              55.031384914977,
+              24.99
+            ],
+            [
+              55.050692457488495,
+              24.959689110867544
+            ],
+            [
+              55.089307542511506,
+              24.959689110867544
+            ]
+          ],
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Taweelah Desalination\nWater capacity: 909,000 m3/day",
+          "label_z": 185000.0,
+          "lat": 24.78,
+          "lon": 54.7,
+          "metric_text": "Water capacity: 909,000 m3/day",
+          "name": "Taweelah Desalination",
+          "notes": "Large Abu Dhabi desalination complex",
+          "plot_lat": 24.78,
+          "plot_lon": 54.7,
+          "polygon": [
+            [
+              54.73854948892469,
+              24.78
+            ],
+            [
+              54.719274744462346,
+              24.810310889132456
+            ],
+            [
+              54.68072525553766,
+              24.810310889132456
+            ],
+            [
+              54.661450511075316,
+              24.78
+            ],
+            [
+              54.68072525553766,
+              24.749689110867546
+            ],
+            [
+              54.719274744462346,
+              24.749689110867546
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Dhafra Solar\nSolar capacity: 2,000 MW",
+          "label_z": 215000.0,
+          "lat": 24.4,
+          "lon": 54.45,
+          "metric_text": "Solar capacity: 2,000 MW",
+          "name": "Al Dhafra Solar",
+          "notes": "Utility-scale solar PV project near Abu Dhabi",
+          "plot_lat": 24.4,
+          "plot_lon": 54.45,
+          "polygon": [
+            [
+              54.4884326649377,
+              24.4
+            ],
+            [
+              54.469216332468854,
+              24.430310889132453
+            ],
+            [
+              54.43078366753115,
+              24.430310889132453
+            ],
+            [
+              54.41156733506231,
+              24.4
+            ],
+            [
+              54.43078366753115,
+              24.369689110867544
+            ],
+            [
+              54.469216332468854,
+              24.369689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "MBR Solar Park\nSolar target: 5,000 MW",
+          "label_z": 200000.0,
+          "lat": 24.77,
+          "lon": 55.36,
+          "metric_text": "Solar target: 5,000 MW",
+          "name": "MBR Solar Park",
+          "notes": "Mohammed bin Rashid Al Maktoum Solar Park",
+          "plot_lat": 24.77,
+          "plot_lon": 55.36,
+          "polygon": [
+            [
+              55.39854638376743,
+              24.77
+            ],
+            [
+              55.37927319188371,
+              24.800310889132454
+            ],
+            [
+              55.34072680811629,
+              24.800310889132454
+            ],
+            [
+              55.32145361623257,
+              24.77
+            ],
+            [
+              55.34072680811629,
+              24.739689110867545
+            ],
+            [
+              55.37927319188371,
+              24.739689110867545
+            ]
+          ],
+          "subtype": "PV + CSP",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "7e0c8683-cd38-42ef-9c6d-1b02acf7ccfa",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

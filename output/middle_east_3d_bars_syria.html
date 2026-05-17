@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 35.0,
+    "longitude": 38.5,
+    "pitch": 45,
+    "zoom": 5.6
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al-Omar\nOil capacity: 80,000 bbl/d peak",
+          "label_z": 185000.0,
+          "lat": 35.07,
+          "lon": 40.92,
+          "metric_text": "Oil capacity: 80,000 bbl/d peak",
+          "name": "Al-Omar",
+          "notes": "Large oil field in eastern Syria",
+          "plot_lat": 35.07,
+          "plot_lon": 40.92,
+          "polygon": [
+            [
+              40.96276372537825,
+              35.07
+            ],
+            [
+              40.94138186268913,
+              35.10031088913246
+            ],
+            [
+              40.898618137310876,
+              35.10031088913246
+            ],
+            [
+              40.87723627462175,
+              35.07
+            ],
+            [
+              40.898618137310876,
+              35.03968911086754
+            ],
+            [
+              40.94138186268913,
+              35.03968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al-Tanak\nOil capacity: 40,000 bbl/d peak",
+          "label_z": 155000.0,
+          "lat": 35.1,
+          "lon": 40.45,
+          "metric_text": "Oil capacity: 40,000 bbl/d peak",
+          "name": "Al-Tanak",
+          "notes": "Deir ez-Zor oil field",
+          "plot_lat": 35.1,
+          "plot_lon": 40.45,
+          "polygon": [
+            [
+              40.492779456198015,
+              35.1
+            ],
+            [
+              40.47138972809901,
+              35.13031088913246
+            ],
+            [
+              40.42861027190099,
+              35.13031088913246
+            ],
+            [
+              40.40722054380199,
+              35.1
+            ],
+            [
+              40.42861027190099,
+              35.06968911086754
+            ],
+            [
+              40.47138972809901,
+              35.06968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Rmelan\nOil capacity: 90,000 bbl/d peak",
+          "label_z": 155000.0,
+          "lat": 37.05,
+          "lon": 41.95,
+          "metric_text": "Oil capacity: 90,000 bbl/d peak",
+          "name": "Rmelan",
+          "notes": "Northeastern oil production area",
+          "plot_lat": 37.05,
+          "plot_lon": 41.95,
+          "polygon": [
+            [
+              41.993853602857655,
+              37.05
+            ],
+            [
+              41.97192680142883,
+              37.080310889132456
+            ],
+            [
+              41.92807319857118,
+              37.080310889132456
+            ],
+            [
+              41.90614639714235,
+              37.05
+            ],
+            [
+              41.92807319857118,
+              37.01968911086754
+            ],
+            [
+              41.97192680142883,
+              37.01968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Jbessa\nOil capacity: 35,000 bbl/d peak",
+          "label_z": 125000.0,
+          "lat": 36.4,
+          "lon": 40.75,
+          "metric_text": "Oil capacity: 35,000 bbl/d peak",
+          "name": "Jbessa",
+          "notes": "Hasakah province oil field area",
+          "plot_lat": 36.4,
+          "plot_lon": 40.75,
+          "polygon": [
+            [
+              40.79348399765904,
+              36.4
+            ],
+            [
+              40.77174199882952,
+              36.43031088913246
+            ],
+            [
+              40.72825800117048,
+              36.43031088913246
+            ],
+            [
+              40.70651600234096,
+              36.4
+            ],
+            [
+              40.72825800117048,
+              36.36968911086754
+            ],
+            [
+              40.77174199882952,
+              36.36968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Al-Shaer Gas\nGas output: 3 million m3/day peak",
+          "label_z": 134000.0,
+          "lat": 34.82,
+          "lon": 37.5,
+          "metric_text": "Gas output: 3 million m3/day peak",
+          "name": "Al-Shaer Gas",
+          "notes": "Central Syria gas field",
+          "plot_lat": 34.82,
+          "plot_lon": 37.5,
+          "polygon": [
+            [
+              37.542633537306415,
+              34.82
+            ],
+            [
+              37.52131676865321,
+              34.85031088913246
+            ],
+            [
+              37.47868323134679,
+              34.85031088913246
+            ],
+            [
+              37.457366462693585,
+              34.82
+            ],
+            [
+              37.47868323134679,
+              34.78968911086754
+            ],
+            [
+              37.52131676865321,
+              34.78968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Conoco Gas Plant\nGas processing: 450 MMcf/d",
+          "label_z": 146000.0,
+          "lat": 35.23,
+          "lon": 40.32,
+          "metric_text": "Gas processing: 450 MMcf/d",
+          "name": "Conoco Gas Plant",
+          "notes": "Major gas processing plant near Deir ez-Zor",
+          "plot_lat": 35.23,
+          "plot_lon": 40.32,
+          "polygon": [
+            [
+              40.36284789293718,
+              35.23
+            ],
+            [
+              40.341423946468595,
+              35.260310889132455
+            ],
+            [
+              40.298576053531406,
+              35.260310889132455
+            ],
+            [
+              40.27715210706282,
+              35.23
+            ],
+            [
+              40.298576053531406,
+              35.19968911086754
+            ],
+            [
+              40.341423946468595,
+              35.19968911086754
+            ]
+          ],
+          "subtype": "Processing",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Banias Refinery\nRefining capacity: 130,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 35.18,
+          "lon": 35.95,
+          "metric_text": "Refining capacity: 130,000 bbl/d",
+          "name": "Banias Refinery",
+          "notes": "Mediterranean coastal refinery",
+          "plot_lat": 35.18,
+          "plot_lon": 35.95,
+          "polygon": [
+            [
+              35.99282151912584,
+              35.18
+            ],
+            [
+              35.97141075956292,
+              35.21031088913246
+            ],
+            [
+              35.928589240437084,
+              35.21031088913246
+            ],
+            [
+              35.907178480874165,
+              35.18
+            ],
+            [
+              35.928589240437084,
+              35.14968911086754
+            ],
+            [
+              35.97141075956292,
+              35.14968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Homs Refinery\nRefining capacity: 107,000 bbl/d",
+          "label_z": 116000.0,
+          "lat": 34.75,
+          "lon": 36.7,
+          "metric_text": "Refining capacity: 107,000 bbl/d",
+          "name": "Homs Refinery",
+          "notes": "Inland refinery near Homs",
+          "plot_lat": 34.75,
+          "plot_lon": 36.7,
+          "polygon": [
+            [
+              36.742597371673604,
+              34.75
+            ],
+            [
+              36.72129868583681,
+              34.78031088913246
+            ],
+            [
+              36.6787013141632,
+              34.78031088913246
+            ],
+            [
+              36.6574026283264,
+              34.75
+            ],
+            [
+              36.6787013141632,
+              34.71968911086754
+            ],
+            [
+              36.72129868583681,
+              34.71968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Palmyra Phosphate\nPhosphate output: 2 million t/yr",
+          "label_z": 134000.0,
+          "lat": 34.57,
+          "lon": 38.28,
+          "metric_text": "Phosphate output: 2 million t/yr",
+          "name": "Palmyra Phosphate",
+          "notes": "Central Syria phosphate deposits",
+          "plot_lat": 34.57,
+          "plot_lon": 38.28,
+          "polygon": [
+            [
+              38.32250494628359,
+              34.57
+            ],
+            [
+              38.301252473141794,
+              34.60031088913246
+            ],
+            [
+              38.25874752685821,
+              34.60031088913246
+            ],
+            [
+              38.237495053716415,
+              34.57
+            ],
+            [
+              38.25874752685821,
+              34.53968911086754
+            ],
+            [
+              38.301252473141794,
+              34.53968911086754
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Khnifis Phosphate\nPhosphate output: 1 million t/yr",
+          "label_z": 116000.0,
+          "lat": 34.06,
+          "lon": 37.05,
+          "metric_text": "Phosphate output: 1 million t/yr",
+          "name": "Khnifis Phosphate",
+          "notes": "Phosphate mining area south of Homs",
+          "plot_lat": 34.06,
+          "plot_lon": 37.05,
+          "polygon": [
+            [
+              37.09224749260581,
+              34.06
+            ],
+            [
+              37.0711237463029,
+              34.09031088913246
+            ],
+            [
+              37.02887625369709,
+              34.09031088913246
+            ],
+            [
+              37.00775250739419,
+              34.06
+            ],
+            [
+              37.02887625369709,
+              34.029689110867544
+            ],
+            [
+              37.0711237463029,
+              34.029689110867544
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "32618bc0-b752-4273-9732-f0db2febf454",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al-Omar\nOil capacity: 80,000 bbl/d peak",
+          "label_z": 185000.0,
+          "lat": 35.07,
+          "lon": 40.92,
+          "metric_text": "Oil capacity: 80,000 bbl/d peak",
+          "name": "Al-Omar",
+          "notes": "Large oil field in eastern Syria",
+          "plot_lat": 35.07,
+          "plot_lon": 40.92,
+          "polygon": [
+            [
+              40.96276372537825,
+              35.07
+            ],
+            [
+              40.94138186268913,
+              35.10031088913246
+            ],
+            [
+              40.898618137310876,
+              35.10031088913246
+            ],
+            [
+              40.87723627462175,
+              35.07
+            ],
+            [
+              40.898618137310876,
+              35.03968911086754
+            ],
+            [
+              40.94138186268913,
+              35.03968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al-Tanak\nOil capacity: 40,000 bbl/d peak",
+          "label_z": 155000.0,
+          "lat": 35.1,
+          "lon": 40.45,
+          "metric_text": "Oil capacity: 40,000 bbl/d peak",
+          "name": "Al-Tanak",
+          "notes": "Deir ez-Zor oil field",
+          "plot_lat": 35.1,
+          "plot_lon": 40.45,
+          "polygon": [
+            [
+              40.492779456198015,
+              35.1
+            ],
+            [
+              40.47138972809901,
+              35.13031088913246
+            ],
+            [
+              40.42861027190099,
+              35.13031088913246
+            ],
+            [
+              40.40722054380199,
+              35.1
+            ],
+            [
+              40.42861027190099,
+              35.06968911086754
+            ],
+            [
+              40.47138972809901,
+              35.06968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Rmelan\nOil capacity: 90,000 bbl/d peak",
+          "label_z": 155000.0,
+          "lat": 37.05,
+          "lon": 41.95,
+          "metric_text": "Oil capacity: 90,000 bbl/d peak",
+          "name": "Rmelan",
+          "notes": "Northeastern oil production area",
+          "plot_lat": 37.05,
+          "plot_lon": 41.95,
+          "polygon": [
+            [
+              41.993853602857655,
+              37.05
+            ],
+            [
+              41.97192680142883,
+              37.080310889132456
+            ],
+            [
+              41.92807319857118,
+              37.080310889132456
+            ],
+            [
+              41.90614639714235,
+              37.05
+            ],
+            [
+              41.92807319857118,
+              37.01968911086754
+            ],
+            [
+              41.97192680142883,
+              37.01968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Jbessa\nOil capacity: 35,000 bbl/d peak",
+          "label_z": 125000.0,
+          "lat": 36.4,
+          "lon": 40.75,
+          "metric_text": "Oil capacity: 35,000 bbl/d peak",
+          "name": "Jbessa",
+          "notes": "Hasakah province oil field area",
+          "plot_lat": 36.4,
+          "plot_lon": 40.75,
+          "polygon": [
+            [
+              40.79348399765904,
+              36.4
+            ],
+            [
+              40.77174199882952,
+              36.43031088913246
+            ],
+            [
+              40.72825800117048,
+              36.43031088913246
+            ],
+            [
+              40.70651600234096,
+              36.4
+            ],
+            [
+              40.72825800117048,
+              36.36968911086754
+            ],
+            [
+              40.77174199882952,
+              36.36968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Al-Shaer Gas\nGas output: 3 million m3/day peak",
+          "label_z": 134000.0,
+          "lat": 34.82,
+          "lon": 37.5,
+          "metric_text": "Gas output: 3 million m3/day peak",
+          "name": "Al-Shaer Gas",
+          "notes": "Central Syria gas field",
+          "plot_lat": 34.82,
+          "plot_lon": 37.5,
+          "polygon": [
+            [
+              37.542633537306415,
+              34.82
+            ],
+            [
+              37.52131676865321,
+              34.85031088913246
+            ],
+            [
+              37.47868323134679,
+              34.85031088913246
+            ],
+            [
+              37.457366462693585,
+              34.82
+            ],
+            [
+              37.47868323134679,
+              34.78968911086754
+            ],
+            [
+              37.52131676865321,
+              34.78968911086754
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Conoco Gas Plant\nGas processing: 450 MMcf/d",
+          "label_z": 146000.0,
+          "lat": 35.23,
+          "lon": 40.32,
+          "metric_text": "Gas processing: 450 MMcf/d",
+          "name": "Conoco Gas Plant",
+          "notes": "Major gas processing plant near Deir ez-Zor",
+          "plot_lat": 35.23,
+          "plot_lon": 40.32,
+          "polygon": [
+            [
+              40.36284789293718,
+              35.23
+            ],
+            [
+              40.341423946468595,
+              35.260310889132455
+            ],
+            [
+              40.298576053531406,
+              35.260310889132455
+            ],
+            [
+              40.27715210706282,
+              35.23
+            ],
+            [
+              40.298576053531406,
+              35.19968911086754
+            ],
+            [
+              40.341423946468595,
+              35.19968911086754
+            ]
+          ],
+          "subtype": "Processing",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Banias Refinery\nRefining capacity: 130,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 35.18,
+          "lon": 35.95,
+          "metric_text": "Refining capacity: 130,000 bbl/d",
+          "name": "Banias Refinery",
+          "notes": "Mediterranean coastal refinery",
+          "plot_lat": 35.18,
+          "plot_lon": 35.95,
+          "polygon": [
+            [
+              35.99282151912584,
+              35.18
+            ],
+            [
+              35.97141075956292,
+              35.21031088913246
+            ],
+            [
+              35.928589240437084,
+              35.21031088913246
+            ],
+            [
+              35.907178480874165,
+              35.18
+            ],
+            [
+              35.928589240437084,
+              35.14968911086754
+            ],
+            [
+              35.97141075956292,
+              35.14968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Homs Refinery\nRefining capacity: 107,000 bbl/d",
+          "label_z": 116000.0,
+          "lat": 34.75,
+          "lon": 36.7,
+          "metric_text": "Refining capacity: 107,000 bbl/d",
+          "name": "Homs Refinery",
+          "notes": "Inland refinery near Homs",
+          "plot_lat": 34.75,
+          "plot_lon": 36.7,
+          "polygon": [
+            [
+              36.742597371673604,
+              34.75
+            ],
+            [
+              36.72129868583681,
+              34.78031088913246
+            ],
+            [
+              36.6787013141632,
+              34.78031088913246
+            ],
+            [
+              36.6574026283264,
+              34.75
+            ],
+            [
+              36.6787013141632,
+              34.71968911086754
+            ],
+            [
+              36.72129868583681,
+              34.71968911086754
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 38.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Palmyra Phosphate\nPhosphate output: 2 million t/yr",
+          "label_z": 134000.0,
+          "lat": 34.57,
+          "lon": 38.28,
+          "metric_text": "Phosphate output: 2 million t/yr",
+          "name": "Palmyra Phosphate",
+          "notes": "Central Syria phosphate deposits",
+          "plot_lat": 34.57,
+          "plot_lon": 38.28,
+          "polygon": [
+            [
+              38.32250494628359,
+              34.57
+            ],
+            [
+              38.301252473141794,
+              34.60031088913246
+            ],
+            [
+              38.25874752685821,
+              34.60031088913246
+            ],
+            [
+              38.237495053716415,
+              34.57
+            ],
+            [
+              38.25874752685821,
+              34.53968911086754
+            ],
+            [
+              38.301252473141794,
+              34.53968911086754
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 32.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Khnifis Phosphate\nPhosphate output: 1 million t/yr",
+          "label_z": 116000.0,
+          "lat": 34.06,
+          "lon": 37.05,
+          "metric_text": "Phosphate output: 1 million t/yr",
+          "name": "Khnifis Phosphate",
+          "notes": "Phosphate mining area south of Homs",
+          "plot_lat": 34.06,
+          "plot_lon": 37.05,
+          "polygon": [
+            [
+              37.09224749260581,
+              34.06
+            ],
+            [
+              37.0711237463029,
+              34.09031088913246
+            ],
+            [
+              37.02887625369709,
+              34.09031088913246
+            ],
+            [
+              37.00775250739419,
+              34.06
+            ],
+            [
+              37.02887625369709,
+              34.029689110867544
+            ],
+            [
+              37.0711237463029,
+              34.029689110867544
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "ba724789-209c-48c8-a281-06d3ecc9acd6",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

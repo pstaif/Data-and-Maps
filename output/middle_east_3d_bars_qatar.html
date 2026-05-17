@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 25.3,
+    "longitude": 51.2,
+    "pitch": 45,
+    "zoom": 7
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "North Field\nGas reserves: 900 Tcf",
+          "label_z": 320000.0,
+          "lat": 26.5,
+          "lon": 51.9,
+          "metric_text": "Gas reserves: 900 Tcf",
+          "name": "North Field",
+          "notes": "Qatar side of the worlds largest gas field",
+          "plot_lat": 26.5,
+          "plot_lon": 51.9,
+          "polygon": [
+            [
+              51.939109013467025,
+              26.5
+            ],
+            [
+              51.91955450673351,
+              26.530310889132455
+            ],
+            [
+              51.880445493266485,
+              26.530310889132455
+            ],
+            [
+              51.86089098653297,
+              26.5
+            ],
+            [
+              51.880445493266485,
+              26.469689110867545
+            ],
+            [
+              51.91955450673351,
+              26.469689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Dukhan\nOil capacity: 300,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 25.42,
+          "lon": 50.78,
+          "metric_text": "Oil capacity: 300,000 bbl/d",
+          "name": "Dukhan",
+          "notes": "Historic onshore oil field",
+          "plot_lat": 25.42,
+          "plot_lon": 50.78,
+          "polygon": [
+            [
+              50.81875172881431,
+              25.42
+            ],
+            [
+              50.79937586440715,
+              25.450310889132457
+            ],
+            [
+              50.76062413559285,
+              25.450310889132457
+            ],
+            [
+              50.74124827118569,
+              25.42
+            ],
+            [
+              50.76062413559285,
+              25.389689110867547
+            ],
+            [
+              50.79937586440715,
+              25.389689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al Shaheen\nOil capacity: 300,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 26.58,
+          "lon": 52.35,
+          "metric_text": "Oil capacity: 300,000 bbl/d",
+          "name": "Al Shaheen",
+          "notes": "Large offshore oil field above the North Field",
+          "plot_lat": 26.58,
+          "plot_lon": 52.35,
+          "polygon": [
+            [
+              52.38913629638901,
+              26.58
+            ],
+            [
+              52.36956814819451,
+              26.610310889132453
+            ],
+            [
+              52.33043185180549,
+              26.610310889132453
+            ],
+            [
+              52.31086370361099,
+              26.58
+            ],
+            [
+              52.33043185180549,
+              26.549689110867543
+            ],
+            [
+              52.36956814819451,
+              26.549689110867543
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Idd El-Shargi\nOil capacity: 100,000 bbl/d",
+          "label_z": 140000.0,
+          "lat": 26.55,
+          "lon": 52.0,
+          "metric_text": "Oil capacity: 100,000 bbl/d",
+          "name": "Idd El-Shargi",
+          "notes": "Offshore oil field east of Qatar",
+          "plot_lat": 26.55,
+          "plot_lon": 52.0,
+          "polygon": [
+            [
+              52.03912605189422,
+              26.55
+            ],
+            [
+              52.01956302594711,
+              26.580310889132456
+            ],
+            [
+              51.98043697405289,
+              26.580310889132456
+            ],
+            [
+              51.96087394810578,
+              26.55
+            ],
+            [
+              51.98043697405289,
+              26.519689110867546
+            ],
+            [
+              52.01956302594711,
+              26.519689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bul Hanine\nOil capacity: 45,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 25.6,
+          "lon": 52.1,
+          "metric_text": "Oil capacity: 45,000 bbl/d",
+          "name": "Bul Hanine",
+          "notes": "Offshore oil and gas field",
+          "plot_lat": 25.6,
+          "plot_lon": 52.1,
+          "polygon": [
+            [
+              52.13880986654974,
+              25.6
+            ],
+            [
+              52.11940493327487,
+              25.630310889132456
+            ],
+            [
+              52.08059506672513,
+              25.630310889132456
+            ],
+            [
+              52.06119013345026,
+              25.6
+            ],
+            [
+              52.08059506672513,
+              25.569689110867547
+            ],
+            [
+              52.11940493327487,
+              25.569689110867547
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Pearl GTL\nGTL output: 140,000 bbl/d",
+          "label_z": 230000.0,
+          "lat": 25.93,
+          "lon": 51.56,
+          "metric_text": "GTL output: 140,000 bbl/d",
+          "name": "Pearl GTL",
+          "notes": "Large gas-to-liquids complex at Ras Laffan",
+          "plot_lat": 25.93,
+          "plot_lon": 51.6267164114034,
+          "polygon": [
+            [
+              51.66563431805538,
+              25.93
+            ],
+            [
+              51.646175364729395,
+              25.960310889132455
+            ],
+            [
+              51.607257458077406,
+              25.960310889132455
+            ],
+            [
+              51.58779850475142,
+              25.93
+            ],
+            [
+              51.607257458077406,
+              25.899689110867545
+            ],
+            [
+              51.646175364729395,
+              25.899689110867545
+            ]
+          ],
+          "subtype": "Gas-to-Liquids",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ras Laffan Refinery\nRefining capacity: 292,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 25.93,
+          "lon": 51.55,
+          "metric_text": "Refining capacity: 292,000 bbl/d",
+          "name": "Ras Laffan Refinery",
+          "notes": "Ras Laffan condensate refining complex",
+          "plot_lat": 25.93,
+          "plot_lon": 51.4832835885966,
+          "polygon": [
+            [
+              51.52220149524858,
+              25.93
+            ],
+            [
+              51.50274254192259,
+              25.960310889132455
+            ],
+            [
+              51.463824635270605,
+              25.960310889132455
+            ],
+            [
+              51.44436568194462,
+              25.93
+            ],
+            [
+              51.463824635270605,
+              25.899689110867545
+            ],
+            [
+              51.50274254192259,
+              25.899689110867545
+            ]
+          ],
+          "subtype": "Condensate Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Ras Abu Fontas Desal\nWater capacity: 160,000 m3/day",
+          "label_z": 155000.0,
+          "lat": 25.17,
+          "lon": 51.56,
+          "metric_text": "Water capacity: 160,000 m3/day",
+          "name": "Ras Abu Fontas Desal",
+          "notes": "Major desalination and power complex near Doha",
+          "plot_lat": 25.17,
+          "plot_lon": 51.56,
+          "polygon": [
+            [
+              51.59867190230856,
+              25.17
+            ],
+            [
+              51.579335951154285,
+              25.200310889132457
+            ],
+            [
+              51.54066404884572,
+              25.200310889132457
+            ],
+            [
+              51.521328097691445,
+              25.17
+            ],
+            [
+              51.54066404884572,
+              25.139689110867547
+            ],
+            [
+              51.579335951154285,
+              25.139689110867547
+            ]
+          ],
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Kharsaah Solar\nSolar capacity: 800 MW",
+          "label_z": 125000.0,
+          "lat": 25.43,
+          "lon": 51.07,
+          "metric_text": "Solar capacity: 800 MW",
+          "name": "Al Kharsaah Solar",
+          "notes": "Large utility-scale solar PV plant",
+          "plot_lat": 25.43,
+          "plot_lon": 51.07,
+          "polygon": [
+            [
+              51.10875494408835,
+              25.43
+            ],
+            [
+              51.08937747204418,
+              25.460310889132455
+            ],
+            [
+              51.050622527955824,
+              25.460310889132455
+            ],
+            [
+              51.03124505591165,
+              25.43
+            ],
+            [
+              51.050622527955824,
+              25.399689110867545
+            ],
+            [
+              51.08937747204418,
+              25.399689110867545
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "a83fb90b-a683-4a9e-826d-d5bd1ae25caa",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 100.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "North Field\nGas reserves: 900 Tcf",
+          "label_z": 320000.0,
+          "lat": 26.5,
+          "lon": 51.9,
+          "metric_text": "Gas reserves: 900 Tcf",
+          "name": "North Field",
+          "notes": "Qatar side of the worlds largest gas field",
+          "plot_lat": 26.5,
+          "plot_lon": 51.9,
+          "polygon": [
+            [
+              51.939109013467025,
+              26.5
+            ],
+            [
+              51.91955450673351,
+              26.530310889132455
+            ],
+            [
+              51.880445493266485,
+              26.530310889132455
+            ],
+            [
+              51.86089098653297,
+              26.5
+            ],
+            [
+              51.880445493266485,
+              26.469689110867545
+            ],
+            [
+              51.91955450673351,
+              26.469689110867545
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Dukhan\nOil capacity: 300,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 25.42,
+          "lon": 50.78,
+          "metric_text": "Oil capacity: 300,000 bbl/d",
+          "name": "Dukhan",
+          "notes": "Historic onshore oil field",
+          "plot_lat": 25.42,
+          "plot_lon": 50.78,
+          "polygon": [
+            [
+              50.81875172881431,
+              25.42
+            ],
+            [
+              50.79937586440715,
+              25.450310889132457
+            ],
+            [
+              50.76062413559285,
+              25.450310889132457
+            ],
+            [
+              50.74124827118569,
+              25.42
+            ],
+            [
+              50.76062413559285,
+              25.389689110867547
+            ],
+            [
+              50.79937586440715,
+              25.389689110867547
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Al Shaheen\nOil capacity: 300,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 26.58,
+          "lon": 52.35,
+          "metric_text": "Oil capacity: 300,000 bbl/d",
+          "name": "Al Shaheen",
+          "notes": "Large offshore oil field above the North Field",
+          "plot_lat": 26.58,
+          "plot_lon": 52.35,
+          "polygon": [
+            [
+              52.38913629638901,
+              26.58
+            ],
+            [
+              52.36956814819451,
+              26.610310889132453
+            ],
+            [
+              52.33043185180549,
+              26.610310889132453
+            ],
+            [
+              52.31086370361099,
+              26.58
+            ],
+            [
+              52.33043185180549,
+              26.549689110867543
+            ],
+            [
+              52.36956814819451,
+              26.549689110867543
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 40.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Idd El-Shargi\nOil capacity: 100,000 bbl/d",
+          "label_z": 140000.0,
+          "lat": 26.55,
+          "lon": 52.0,
+          "metric_text": "Oil capacity: 100,000 bbl/d",
+          "name": "Idd El-Shargi",
+          "notes": "Offshore oil field east of Qatar",
+          "plot_lat": 26.55,
+          "plot_lon": 52.0,
+          "polygon": [
+            [
+              52.03912605189422,
+              26.55
+            ],
+            [
+              52.01956302594711,
+              26.580310889132456
+            ],
+            [
+              51.98043697405289,
+              26.580310889132456
+            ],
+            [
+              51.96087394810578,
+              26.55
+            ],
+            [
+              51.98043697405289,
+              26.519689110867546
+            ],
+            [
+              52.01956302594711,
+              26.519689110867546
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Bul Hanine\nOil capacity: 45,000 bbl/d",
+          "label_z": 125000.0,
+          "lat": 25.6,
+          "lon": 52.1,
+          "metric_text": "Oil capacity: 45,000 bbl/d",
+          "name": "Bul Hanine",
+          "notes": "Offshore oil and gas field",
+          "plot_lat": 25.6,
+          "plot_lon": 52.1,
+          "polygon": [
+            [
+              52.13880986654974,
+              25.6
+            ],
+            [
+              52.11940493327487,
+              25.630310889132456
+            ],
+            [
+              52.08059506672513,
+              25.630310889132456
+            ],
+            [
+              52.06119013345026,
+              25.6
+            ],
+            [
+              52.08059506672513,
+              25.569689110867547
+            ],
+            [
+              52.11940493327487,
+              25.569689110867547
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Pearl GTL\nGTL output: 140,000 bbl/d",
+          "label_z": 230000.0,
+          "lat": 25.93,
+          "lon": 51.56,
+          "metric_text": "GTL output: 140,000 bbl/d",
+          "name": "Pearl GTL",
+          "notes": "Large gas-to-liquids complex at Ras Laffan",
+          "plot_lat": 25.93,
+          "plot_lon": 51.6267164114034,
+          "polygon": [
+            [
+              51.66563431805538,
+              25.93
+            ],
+            [
+              51.646175364729395,
+              25.960310889132455
+            ],
+            [
+              51.607257458077406,
+              25.960310889132455
+            ],
+            [
+              51.58779850475142,
+              25.93
+            ],
+            [
+              51.607257458077406,
+              25.899689110867545
+            ],
+            [
+              51.646175364729395,
+              25.899689110867545
+            ]
+          ],
+          "subtype": "Gas-to-Liquids",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Ras Laffan Refinery\nRefining capacity: 292,000 bbl/d",
+          "label_z": 185000.0,
+          "lat": 25.93,
+          "lon": 51.55,
+          "metric_text": "Refining capacity: 292,000 bbl/d",
+          "name": "Ras Laffan Refinery",
+          "notes": "Ras Laffan condensate refining complex",
+          "plot_lat": 25.93,
+          "plot_lon": 51.4832835885966,
+          "polygon": [
+            [
+              51.52220149524858,
+              25.93
+            ],
+            [
+              51.50274254192259,
+              25.960310889132455
+            ],
+            [
+              51.463824635270605,
+              25.960310889132455
+            ],
+            [
+              51.44436568194462,
+              25.93
+            ],
+            [
+              51.463824635270605,
+              25.899689110867545
+            ],
+            [
+              51.50274254192259,
+              25.899689110867545
+            ]
+          ],
+          "subtype": "Condensate Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Ras Abu Fontas Desal\nWater capacity: 160,000 m3/day",
+          "label_z": 155000.0,
+          "lat": 25.17,
+          "lon": 51.56,
+          "metric_text": "Water capacity: 160,000 m3/day",
+          "name": "Ras Abu Fontas Desal",
+          "notes": "Major desalination and power complex near Doha",
+          "plot_lat": 25.17,
+          "plot_lon": 51.56,
+          "polygon": [
+            [
+              51.59867190230856,
+              25.17
+            ],
+            [
+              51.579335951154285,
+              25.200310889132457
+            ],
+            [
+              51.54066404884572,
+              25.200310889132457
+            ],
+            [
+              51.521328097691445,
+              25.17
+            ],
+            [
+              51.54066404884572,
+              25.139689110867547
+            ],
+            [
+              51.579335951154285,
+              25.139689110867547
+            ]
+          ],
+          "subtype": "MSF + RO",
+          "type": "Desalination"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Al Kharsaah Solar\nSolar capacity: 800 MW",
+          "label_z": 125000.0,
+          "lat": 25.43,
+          "lon": 51.07,
+          "metric_text": "Solar capacity: 800 MW",
+          "name": "Al Kharsaah Solar",
+          "notes": "Large utility-scale solar PV plant",
+          "plot_lat": 25.43,
+          "plot_lon": 51.07,
+          "polygon": [
+            [
+              51.10875494408835,
+              25.43
+            ],
+            [
+              51.08937747204418,
+              25.460310889132455
+            ],
+            [
+              51.050622527955824,
+              25.460310889132455
+            ],
+            [
+              51.03124505591165,
+              25.43
+            ],
+            [
+              51.050622527955824,
+              25.399689110867545
+            ],
+            [
+              51.08937747204418,
+              25.399689110867545
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "3acb7f45-e34a-4192-9c70-1955d80b18d6",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  <div id='resource-legend' style='position:fixed;bottom:24px;left:24px;z-index:10;max-width:430px;background:rgba(8,10,20,0.88);border:1px solid rgba(72,210,255,0.62);border-radius:8px;padding:11px 13px;color:#f3f4f8;font-family:Inter,Arial,sans-serif;font-size:11px;line-height:1.25;box-shadow:0 0 22px rgba(0,235,255,0.18),0 8px 24px rgba(0,0,0,0.38);'><div style='font-weight:800;margin-bottom:7px;color:#ffffff;'>Resource metrics</div><div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFDA40;box-shadow:0 0 8px #FFDA40;'></span><span style='font-weight:700;color:#f7f8ff;'>Oil</span><span style='color:#b9c0d4;'>barrels per day or barrels of reserves</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#48D2FF;box-shadow:0 0 8px #48D2FF;'></span><span style='font-weight:700;color:#f7f8ff;'>Gas</span><span style='color:#b9c0d4;'>billion/million cubic feet per day; trillion cubic feet; billion cubic meters</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FF8448;box-shadow:0 0 8px #FF8448;'></span><span style='font-weight:700;color:#f7f8ff;'>Mineral</span><span style='color:#b9c0d4;'>tonnes per year or troy ounces per year</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#FFF554;box-shadow:0 0 8px #FFF554;'></span><span style='font-weight:700;color:#f7f8ff;'>Solar</span><span style='color:#b9c0d4;'>megawatts or gigawatts</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#00EBFF;box-shadow:0 0 8px #00EBFF;'></span><span style='font-weight:700;color:#f7f8ff;'>Desalination</span><span style='color:#b9c0d4;'>cubic meters per day</span></div>
+<div style='display:grid;grid-template-columns:10px 82px 1fr;align-items:center;gap:8px;margin:4px 0;'><span style='width:10px;height:10px;border-radius:2px;display:inline-block;background:#DCE2EE;box-shadow:0 0 8px #DCE2EE;'></span><span style='font-weight:700;color:#f7f8ff;'>Refinery</span><span style='color:#b9c0d4;'>barrels per day or tonnes per year</span></div><div style='margin-top:8px;color:#c7cad4;font-size:10px;'>Height = normalized; hex polygons are offset for colocated sites.</div></div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": 0,
+    "latitude": 26.8,
+    "longitude": 30.8,
+    "pitch": 45,
+    "zoom": 5
+  },
+  "layers": [
+    {
+      "@@type": "PolygonLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Zohr\nGas reserves: 30 Tcf",
+          "label_z": 290000.0,
+          "lat": 31.95,
+          "lon": 32.3,
+          "metric_text": "Gas reserves: 30 Tcf",
+          "name": "Zohr",
+          "notes": "Large Mediterranean offshore gas field",
+          "plot_lat": 31.95,
+          "plot_lon": 32.3,
+          "polygon": [
+            [
+              32.34124876681745,
+              31.95
+            ],
+            [
+              32.32062438340873,
+              31.980310889132454
+            ],
+            [
+              32.27937561659127,
+              31.980310889132454
+            ],
+            [
+              32.258751233182544,
+              31.95
+            ],
+            [
+              32.27937561659127,
+              31.919689110867544
+            ],
+            [
+              32.32062438340873,
+              31.919689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "West Delta Deep Marine\nGas output: 1.5 Bcf/d",
+          "label_z": 215000.0,
+          "lat": 31.7,
+          "lon": 30.8,
+          "metric_text": "Gas output: 1.5 Bcf/d",
+          "name": "West Delta Deep Marine",
+          "notes": "Mediterranean offshore gas development",
+          "plot_lat": 31.7,
+          "plot_lon": 30.8,
+          "polygon": [
+            [
+              30.841137215549164,
+              31.7
+            ],
+            [
+              30.820568607774582,
+              31.730310889132454
+            ],
+            [
+              30.77943139222542,
+              31.730310889132454
+            ],
+            [
+              30.758862784450837,
+              31.7
+            ],
+            [
+              30.77943139222542,
+              31.669689110867544
+            ],
+            [
+              30.820568607774582,
+              31.669689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Abu Madi\nGas reserves: 10 Tcf",
+          "label_z": 155000.0,
+          "lat": 31.28,
+          "lon": 31.36,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Abu Madi",
+          "notes": "Nile Delta gas field area",
+          "plot_lat": 31.28,
+          "plot_lon": 31.36,
+          "polygon": [
+            [
+              31.400952909884026,
+              31.28
+            ],
+            [
+              31.380476454942013,
+              31.310310889132456
+            ],
+            [
+              31.339523545057986,
+              31.310310889132456
+            ],
+            [
+              31.319047090115973,
+              31.28
+            ],
+            [
+              31.339523545057986,
+              31.249689110867546
+            ],
+            [
+              31.380476454942013,
+              31.249689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Belayim\nOil output: 90,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 28.6,
+          "lon": 33.2,
+          "metric_text": "Oil output: 90,000 bbl/d",
+          "name": "Belayim",
+          "notes": "Major Gulf of Suez oil field area",
+          "plot_lat": 28.6,
+          "plot_lon": 33.2,
+          "polygon": [
+            [
+              33.2398640987121,
+              28.6
+            ],
+            [
+              33.21993204935605,
+              28.630310889132456
+            ],
+            [
+              33.18006795064395,
+              28.630310889132456
+            ],
+            [
+              33.16013590128791,
+              28.6
+            ],
+            [
+              33.18006795064395,
+              28.569689110867547
+            ],
+            [
+              33.21993204935605,
+              28.569689110867547
+            ]
+          ],
+          "subtype": "Gulf of Suez",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Ras Gharib\nOil output: 25,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 28.36,
+          "lon": 33.08,
+          "metric_text": "Oil output: 25,000 bbl/d",
+          "name": "Ras Gharib",
+          "notes": "Historic oil production area",
+          "plot_lat": 28.36,
+          "plot_lon": 33.08,
+          "polygon": [
+            [
+              33.119773612831644,
+              28.36
+            ],
+            [
+              33.099886806415824,
+              28.390310889132454
+            ],
+            [
+              33.06011319358417,
+              28.390310889132454
+            ],
+            [
+              33.04022638716835,
+              28.36
+            ],
+            [
+              33.06011319358417,
+              28.329689110867545
+            ],
+            [
+              33.099886806415824,
+              28.329689110867545
+            ]
+          ],
+          "subtype": "Gulf of Suez",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sukari Gold Mine\nGold output: 450,000 oz/yr",
+          "label_z": 185000.0,
+          "lat": 24.95,
+          "lon": 34.72,
+          "metric_text": "Gold output: 450,000 oz/yr",
+          "name": "Sukari Gold Mine",
+          "notes": "Large modern gold mine in the Eastern Desert",
+          "plot_lat": 24.95,
+          "plot_lon": 34.72,
+          "polygon": [
+            [
+              34.7586025333279,
+              24.95
+            ],
+            [
+              34.73930126666395,
+              24.980310889132454
+            ],
+            [
+              34.70069873333605,
+              24.980310889132454
+            ],
+            [
+              34.681397466672095,
+              24.95
+            ],
+            [
+              34.70069873333605,
+              24.919689110867544
+            ],
+            [
+              34.73930126666395,
+              24.919689110867544
+            ]
+          ],
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Abu Tartur Phosphate\nPhosphate reserves: 1 billion t",
+          "label_z": 146000.0,
+          "lat": 25.5,
+          "lon": 30.08,
+          "metric_text": "Phosphate reserves: 1 billion t",
+          "name": "Abu Tartur Phosphate",
+          "notes": "Western Desert phosphate deposit",
+          "plot_lat": 25.5,
+          "plot_lon": 30.08,
+          "polygon": [
+            [
+              30.118777499042885,
+              25.5
+            ],
+            [
+              30.09938874952144,
+              25.530310889132455
+            ],
+            [
+              30.060611250478555,
+              25.530310889132455
+            ],
+            [
+              30.04122250095711,
+              25.5
+            ],
+            [
+              30.060611250478555,
+              25.469689110867545
+            ],
+            [
+              30.09938874952144,
+              25.469689110867545
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Benban Solar Park\nSolar capacity: 1,650 MW",
+          "label_z": 230000.0,
+          "lat": 24.45,
+          "lon": 32.75,
+          "metric_text": "Solar capacity: 1,650 MW",
+          "name": "Benban Solar Park",
+          "notes": "Large solar PV park near Aswan",
+          "plot_lat": 24.45,
+          "plot_lon": 32.75,
+          "polygon": [
+            [
+              32.78844789949311,
+              24.45
+            ],
+            [
+              32.769223949746554,
+              24.480310889132454
+            ],
+            [
+              32.730776050253446,
+              24.480310889132454
+            ],
+            [
+              32.71155210050689,
+              24.45
+            ],
+            [
+              32.730776050253446,
+              24.419689110867544
+            ],
+            [
+              32.769223949746554,
+              24.419689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Suez Refinery\nRefining capacity: 68,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 29.97,
+          "lon": 32.55,
+          "metric_text": "Refining capacity: 68,000 bbl/d",
+          "name": "Suez Refinery",
+          "notes": "Refining complex near the Suez Canal",
+          "plot_lat": 29.97,
+          "plot_lon": 32.55,
+          "polygon": [
+            [
+              32.59040231076783,
+              29.97
+            ],
+            [
+              32.57020115538391,
+              30.000310889132454
+            ],
+            [
+              32.52979884461608,
+              30.000310889132454
+            ],
+            [
+              32.509597689232166,
+              29.97
+            ],
+            [
+              32.52979884461608,
+              29.939689110867544
+            ],
+            [
+              32.57020115538391,
+              29.939689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 48.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "MIDOR Refinery\nRefining capacity: 160,000 bbl/d",
+          "label_z": 164000.0,
+          "lat": 31.0,
+          "lon": 29.8,
+          "metric_text": "Refining capacity: 160,000 bbl/d",
+          "name": "MIDOR Refinery",
+          "notes": "Alexandria-area refining complex",
+          "plot_lat": 31.0,
+          "plot_lon": 29.8,
+          "polygon": [
+            [
+              29.840832168902537,
+              31.0
+            ],
+            [
+              29.82041608445127,
+              31.030310889132455
+            ],
+            [
+              29.77958391554873,
+              31.030310889132455
+            ],
+            [
+              29.759167831097464,
+              31.0
+            ],
+            [
+              29.77958391554873,
+              30.969689110867545
+            ],
+            [
+              29.82041608445127,
+              30.969689110867545
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Al Galala Desalination\nWater capacity: 150,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 29.45,
+          "lon": 32.35,
+          "metric_text": "Water capacity: 150,000 m3/day",
+          "name": "Al Galala Desalination",
+          "notes": "Representative Red Sea desalination site",
+          "plot_lat": 29.45,
+          "plot_lon": 32.35,
+          "polygon": [
+            [
+              32.39019361447373,
+              29.45
+            ],
+            [
+              32.37009680723687,
+              29.480310889132454
+            ],
+            [
+              32.32990319276313,
+              29.480310889132454
+            ],
+            [
+              32.30980638552627,
+              29.45
+            ],
+            [
+              32.32990319276313,
+              29.419689110867544
+            ],
+            [
+              32.37009680723687,
+              29.419689110867544
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        }
+      ],
+      "elevationScale": 3000,
+      "extruded": true,
+      "getElevation": "@@=capacity_scale",
+      "getFillColor": "@@=color_rgb",
+      "getPolygon": "@@=polygon",
+      "id": "7ef4867c-5b4b-4ba8-b39b-8dc2c81d84d5",
+      "pickable": true
+    },
+    {
+      "@@type": "TextLayer",
+      "billboard": true,
+      "data": [
+        {
+          "capacity_scale": 90.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Zohr\nGas reserves: 30 Tcf",
+          "label_z": 290000.0,
+          "lat": 31.95,
+          "lon": 32.3,
+          "metric_text": "Gas reserves: 30 Tcf",
+          "name": "Zohr",
+          "notes": "Large Mediterranean offshore gas field",
+          "plot_lat": 31.95,
+          "plot_lon": 32.3,
+          "polygon": [
+            [
+              32.34124876681745,
+              31.95
+            ],
+            [
+              32.32062438340873,
+              31.980310889132454
+            ],
+            [
+              32.27937561659127,
+              31.980310889132454
+            ],
+            [
+              32.258751233182544,
+              31.95
+            ],
+            [
+              32.27937561659127,
+              31.919689110867544
+            ],
+            [
+              32.32062438340873,
+              31.919689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 65.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "West Delta Deep Marine\nGas output: 1.5 Bcf/d",
+          "label_z": 215000.0,
+          "lat": 31.7,
+          "lon": 30.8,
+          "metric_text": "Gas output: 1.5 Bcf/d",
+          "name": "West Delta Deep Marine",
+          "notes": "Mediterranean offshore gas development",
+          "plot_lat": 31.7,
+          "plot_lon": 30.8,
+          "polygon": [
+            [
+              30.841137215549164,
+              31.7
+            ],
+            [
+              30.820568607774582,
+              31.730310889132454
+            ],
+            [
+              30.77943139222542,
+              31.730310889132454
+            ],
+            [
+              30.758862784450837,
+              31.7
+            ],
+            [
+              30.77943139222542,
+              31.669689110867544
+            ],
+            [
+              30.820568607774582,
+              31.669689110867544
+            ]
+          ],
+          "subtype": "Offshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            72,
+            210,
+            255,
+            95
+          ],
+          "label_text": "Abu Madi\nGas reserves: 10 Tcf",
+          "label_z": 155000.0,
+          "lat": 31.28,
+          "lon": 31.36,
+          "metric_text": "Gas reserves: 10 Tcf",
+          "name": "Abu Madi",
+          "notes": "Nile Delta gas field area",
+          "plot_lat": 31.28,
+          "plot_lon": 31.36,
+          "polygon": [
+            [
+              31.400952909884026,
+              31.28
+            ],
+            [
+              31.380476454942013,
+              31.310310889132456
+            ],
+            [
+              31.339523545057986,
+              31.310310889132456
+            ],
+            [
+              31.319047090115973,
+              31.28
+            ],
+            [
+              31.339523545057986,
+              31.249689110867546
+            ],
+            [
+              31.380476454942013,
+              31.249689110867546
+            ]
+          ],
+          "subtype": "Onshore",
+          "type": "Gas"
+        },
+        {
+          "capacity_scale": 60.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Belayim\nOil output: 90,000 bbl/d",
+          "label_z": 200000.0,
+          "lat": 28.6,
+          "lon": 33.2,
+          "metric_text": "Oil output: 90,000 bbl/d",
+          "name": "Belayim",
+          "notes": "Major Gulf of Suez oil field area",
+          "plot_lat": 28.6,
+          "plot_lon": 33.2,
+          "polygon": [
+            [
+              33.2398640987121,
+              28.6
+            ],
+            [
+              33.21993204935605,
+              28.630310889132456
+            ],
+            [
+              33.18006795064395,
+              28.630310889132456
+            ],
+            [
+              33.16013590128791,
+              28.6
+            ],
+            [
+              33.18006795064395,
+              28.569689110867547
+            ],
+            [
+              33.21993204935605,
+              28.569689110867547
+            ]
+          ],
+          "subtype": "Gulf of Suez",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            255,
+            218,
+            64,
+            95
+          ],
+          "label_text": "Ras Gharib\nOil output: 25,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 28.36,
+          "lon": 33.08,
+          "metric_text": "Oil output: 25,000 bbl/d",
+          "name": "Ras Gharib",
+          "notes": "Historic oil production area",
+          "plot_lat": 28.36,
+          "plot_lon": 33.08,
+          "polygon": [
+            [
+              33.119773612831644,
+              28.36
+            ],
+            [
+              33.099886806415824,
+              28.390310889132454
+            ],
+            [
+              33.06011319358417,
+              28.390310889132454
+            ],
+            [
+              33.04022638716835,
+              28.36
+            ],
+            [
+              33.06011319358417,
+              28.329689110867545
+            ],
+            [
+              33.099886806415824,
+              28.329689110867545
+            ]
+          ],
+          "subtype": "Gulf of Suez",
+          "type": "Oil"
+        },
+        {
+          "capacity_scale": 55.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Sukari Gold Mine\nGold output: 450,000 oz/yr",
+          "label_z": 185000.0,
+          "lat": 24.95,
+          "lon": 34.72,
+          "metric_text": "Gold output: 450,000 oz/yr",
+          "name": "Sukari Gold Mine",
+          "notes": "Large modern gold mine in the Eastern Desert",
+          "plot_lat": 24.95,
+          "plot_lon": 34.72,
+          "polygon": [
+            [
+              34.7586025333279,
+              24.95
+            ],
+            [
+              34.73930126666395,
+              24.980310889132454
+            ],
+            [
+              34.70069873333605,
+              24.980310889132454
+            ],
+            [
+              34.681397466672095,
+              24.95
+            ],
+            [
+              34.70069873333605,
+              24.919689110867544
+            ],
+            [
+              34.73930126666395,
+              24.919689110867544
+            ]
+          ],
+          "subtype": "Gold",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 42.0,
+          "color_rgb": [
+            255,
+            132,
+            72,
+            95
+          ],
+          "label_text": "Abu Tartur Phosphate\nPhosphate reserves: 1 billion t",
+          "label_z": 146000.0,
+          "lat": 25.5,
+          "lon": 30.08,
+          "metric_text": "Phosphate reserves: 1 billion t",
+          "name": "Abu Tartur Phosphate",
+          "notes": "Western Desert phosphate deposit",
+          "plot_lat": 25.5,
+          "plot_lon": 30.08,
+          "polygon": [
+            [
+              30.118777499042885,
+              25.5
+            ],
+            [
+              30.09938874952144,
+              25.530310889132455
+            ],
+            [
+              30.060611250478555,
+              25.530310889132455
+            ],
+            [
+              30.04122250095711,
+              25.5
+            ],
+            [
+              30.060611250478555,
+              25.469689110867545
+            ],
+            [
+              30.09938874952144,
+              25.469689110867545
+            ]
+          ],
+          "subtype": "Phosphate",
+          "type": "Mineral"
+        },
+        {
+          "capacity_scale": 70.0,
+          "color_rgb": [
+            255,
+            245,
+            84,
+            95
+          ],
+          "label_text": "Benban Solar Park\nSolar capacity: 1,650 MW",
+          "label_z": 230000.0,
+          "lat": 24.45,
+          "lon": 32.75,
+          "metric_text": "Solar capacity: 1,650 MW",
+          "name": "Benban Solar Park",
+          "notes": "Large solar PV park near Aswan",
+          "plot_lat": 24.45,
+          "plot_lon": 32.75,
+          "polygon": [
+            [
+              32.78844789949311,
+              24.45
+            ],
+            [
+              32.769223949746554,
+              24.480310889132454
+            ],
+            [
+              32.730776050253446,
+              24.480310889132454
+            ],
+            [
+              32.71155210050689,
+              24.45
+            ],
+            [
+              32.730776050253446,
+              24.419689110867544
+            ],
+            [
+              32.769223949746554,
+              24.419689110867544
+            ]
+          ],
+          "subtype": "PV",
+          "type": "Solar"
+        },
+        {
+          "capacity_scale": 45.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "Suez Refinery\nRefining capacity: 68,000 bbl/d",
+          "label_z": 155000.0,
+          "lat": 29.97,
+          "lon": 32.55,
+          "metric_text": "Refining capacity: 68,000 bbl/d",
+          "name": "Suez Refinery",
+          "notes": "Refining complex near the Suez Canal",
+          "plot_lat": 29.97,
+          "plot_lon": 32.55,
+          "polygon": [
+            [
+              32.59040231076783,
+              29.97
+            ],
+            [
+              32.57020115538391,
+              30.000310889132454
+            ],
+            [
+              32.52979884461608,
+              30.000310889132454
+            ],
+            [
+              32.509597689232166,
+              29.97
+            ],
+            [
+              32.52979884461608,
+              29.939689110867544
+            ],
+            [
+              32.57020115538391,
+              29.939689110867544
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 48.0,
+          "color_rgb": [
+            220,
+            226,
+            238,
+            95
+          ],
+          "label_text": "MIDOR Refinery\nRefining capacity: 160,000 bbl/d",
+          "label_z": 164000.0,
+          "lat": 31.0,
+          "lon": 29.8,
+          "metric_text": "Refining capacity: 160,000 bbl/d",
+          "name": "MIDOR Refinery",
+          "notes": "Alexandria-area refining complex",
+          "plot_lat": 31.0,
+          "plot_lon": 29.8,
+          "polygon": [
+            [
+              29.840832168902537,
+              31.0
+            ],
+            [
+              29.82041608445127,
+              31.030310889132455
+            ],
+            [
+              29.77958391554873,
+              31.030310889132455
+            ],
+            [
+              29.759167831097464,
+              31.0
+            ],
+            [
+              29.77958391554873,
+              30.969689110867545
+            ],
+            [
+              29.82041608445127,
+              30.969689110867545
+            ]
+          ],
+          "subtype": "Oil Refinery",
+          "type": "Refinery"
+        },
+        {
+          "capacity_scale": 35.0,
+          "color_rgb": [
+            0,
+            235,
+            255,
+            95
+          ],
+          "label_text": "Al Galala Desalination\nWater capacity: 150,000 m3/day",
+          "label_z": 125000.0,
+          "lat": 29.45,
+          "lon": 32.35,
+          "metric_text": "Water capacity: 150,000 m3/day",
+          "name": "Al Galala Desalination",
+          "notes": "Representative Red Sea desalination site",
+          "plot_lat": 29.45,
+          "plot_lon": 32.35,
+          "polygon": [
+            [
+              32.39019361447373,
+              29.45
+            ],
+            [
+              32.37009680723687,
+              29.480310889132454
+            ],
+            [
+              32.32990319276313,
+              29.480310889132454
+            ],
+            [
+              32.30980638552627,
+              29.45
+            ],
+            [
+              32.32990319276313,
+              29.419689110867544
+            ],
+            [
+              32.37009680723687,
+              29.419689110867544
+            ]
+          ],
+          "subtype": "RO",
+          "type": "Desalination"
+        }
+      ],
+      "getColor": [
+        245,
+        245,
+        245,
+        230
+      ],
+      "getPixelOffset": [
+        0,
+        -6
+      ],
+      "getPosition": "@@=[plot_lon, plot_lat, label_z]",
+      "getSize": 9,
+      "getText": "@@=label_text",
+      "id": "44600b6b-e53c-4546-9f1b-d35843c50490",
+      "pickable": false
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': '<b>{name}</b><br>Type: {type} - {subtype}<br>Metric: {metric_text}<br>Original location: {lat}, {lon}', 'style': {'backgroundColor': '#1a1a2e', 'color': 'white', 'border': '1px solid #48d2ff'}};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>
